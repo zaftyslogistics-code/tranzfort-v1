@@ -1,0 +1,498 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/otp_verification_screen.dart';
+import '../../features/auth/presentation/screens/intent_selection_screen.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_dimensions.dart';
+import '../../features/loads/presentation/screens/supplier_dashboard_screen.dart';
+import '../../features/loads/presentation/screens/post_load_step1_screen.dart';
+import '../../features/loads/presentation/screens/post_load_step2_screen.dart';
+import '../../features/loads/presentation/screens/trucker_feed_screen.dart';
+import '../../features/loads/presentation/screens/load_detail_supplier_screen.dart';
+import '../../features/loads/presentation/screens/load_detail_trucker_screen.dart';
+import '../../features/loads/presentation/screens/filters_screen.dart';
+import '../../features/chat/presentation/screens/chat_list_screen.dart';
+import '../../features/chat/presentation/screens/chat_screen.dart';
+import '../../shared/widgets/bottom_nav_bar.dart';
+import '../../shared/widgets/glassmorphic_button.dart';
+import '../../shared/widgets/glassmorphic_card.dart';
+import '../../shared/widgets/gradient_text.dart';
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final authNotifier = ref.read(authNotifierProvider.notifier);
+
+  return GoRouter(
+    initialLocation: '/splash',
+    refreshListenable: GoRouterRefreshStream(authNotifier.stream),
+    redirect: (context, state) {
+      final authState = ref.read(authNotifierProvider);
+      final isAuthenticated = authState.isAuthenticated;
+      final user = authState.user;
+      final isLoading = authState.isLoading;
+      final hasCheckedAuth = authState.hasCheckedAuth;
+
+      if (!hasCheckedAuth) {
+        return state.matchedLocation == '/splash' ? null : '/splash';
+      }
+
+      if (isLoading) return null;
+
+      final isOnSplash = state.matchedLocation == '/splash';
+      final isOnLogin = state.matchedLocation == '/login';
+      final isOnOtp = state.matchedLocation == '/otp';
+      final isOnIntent = state.matchedLocation == '/intent-selection';
+
+      if (!isAuthenticated) {
+        return (isOnLogin || isOnOtp) ? null : '/login';
+      }
+
+      if (isAuthenticated && user != null) {
+        final needsIntentSelection =
+            !user.isSupplierEnabled && !user.isTruckerEnabled;
+
+        if (needsIntentSelection && !isOnIntent) {
+          return '/intent-selection';
+        }
+
+        if (!needsIntentSelection && (isOnLogin || isOnOtp || isOnIntent || isOnSplash)) {
+          return '/home';
+        }
+      }
+
+      return null;
+    },
+    routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/otp',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return OtpVerificationScreen(
+            mobileNumber: extra?['mobileNumber'] ?? '',
+            countryCode: extra?['countryCode'] ?? '+91',
+          );
+        },
+      ),
+      GoRoute(
+        path: '/intent-selection',
+        builder: (context, state) => const IntentSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/supplier-dashboard',
+        builder: (context, state) => const SupplierDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/post-load-step1',
+        builder: (context, state) => PostLoadStep1Screen(
+          existingLoad: state.extra as dynamic,
+        ),
+      ),
+      GoRoute(
+        path: '/post-load-step2',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return PostLoadStep2Screen(
+            loadData: extra?['loadData'] ?? {},
+            existingLoad: extra?['existingLoad'],
+          );
+        },
+      ),
+      GoRoute(
+        path: '/load-detail-supplier',
+        builder: (context, state) => LoadDetailSupplierScreen(
+          loadId: state.extra as String,
+        ),
+      ),
+      GoRoute(
+        path: '/trucker-feed',
+        builder: (context, state) => const TruckerFeedScreen(),
+      ),
+      GoRoute(
+        path: '/load-detail-trucker',
+        builder: (context, state) => LoadDetailTruckerScreen(
+          loadId: state.extra as String,
+        ),
+      ),
+      GoRoute(
+        path: '/filters',
+        builder: (context, state) => const FiltersScreen(),
+      ),
+      GoRoute(
+        path: '/chats',
+        builder: (context, state) => const ChatListScreen(),
+      ),
+      GoRoute(
+        path: '/chat',
+        builder: (context, state) => ChatScreen(
+          chatId: state.extra as String,
+        ),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const PlaceholderScreen(
+          title: 'Profile',
+          message: 'Profile screen coming soon',
+          icon: Icons.person_outline,
+        ),
+      ),
+    ],
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text('Error: ${state.error}'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => context.go('/login'),
+              child: const Text('Go to Login'),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+});
+
+class SplashScreen extends ConsumerStatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _checkAuth();
+    });
+  }
+
+  Future<void> _checkAuth() async {
+    await ref.read(authNotifierProvider.notifier).checkAuthStatus();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.local_shipping,
+              size: 100,
+              color: Color(0xFF3B82F6),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Transfort',
+              style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                    color: const Color(0xFF3B82F6),
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 48),
+            const CircularProgressIndicator(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    _subscription = stream.listen((_) {
+      notifyListeners();
+    });
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
+
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authNotifierProvider).user;
+    final isSupplier = user?.isSupplierEnabled ?? false;
+    final isTrucker = user?.isTruckerEnabled ?? false;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await ref.read(authNotifierProvider.notifier).logout();
+              if (context.mounted) {
+                context.go('/login');
+              }
+            },
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.darkBackground,
+                    AppColors.secondaryBackground,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+          ),
+          const Positioned(
+            top: -140,
+            right: -120,
+            child: _GlowOrb(
+              size: 280,
+              color: AppColors.cyanGlowStrong,
+            ),
+          ),
+          const Positioned(
+            bottom: -160,
+            left: -140,
+            child: _GlowOrb(
+              size: 320,
+              color: AppColors.primary,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(AppDimensions.lg),
+            child: user == null
+                ? const Center(child: CircularProgressIndicator())
+                : ListView(
+                    children: [
+                      GlassmorphicCard(
+                        padding: const EdgeInsets.all(AppDimensions.lg),
+                        showGlow: true,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            GradientText(
+                              'Welcome back!',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: AppDimensions.xs),
+                            Text(
+                              '${user.countryCode} ${user.mobileNumber}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: AppColors.textSecondary),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: AppDimensions.lg),
+                      if (isSupplier) ...[
+                        GlassmorphicButton(
+                          variant: GlassmorphicButtonVariant.primary,
+                          onPressed: () => context.go('/supplier-dashboard'),
+                          child: const Text('View My Loads'),
+                        ),
+                        const SizedBox(height: AppDimensions.sm),
+                        GlassmorphicButton(
+                          showGlow: false,
+                          onPressed: () => context.go('/post-load-step1'),
+                          child: const Text('Post New Load'),
+                        ),
+                        const SizedBox(height: AppDimensions.lg),
+                      ],
+                      if (isTrucker) ...[
+                        GlassmorphicButton(
+                          variant: GlassmorphicButtonVariant.primary,
+                          onPressed: () => context.go('/trucker-feed'),
+                          child: const Text('Find Loads'),
+                        ),
+                        const SizedBox(height: AppDimensions.lg),
+                      ],
+                      GlassmorphicCard(
+                        padding: const EdgeInsets.all(AppDimensions.md),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.info_outline,
+                              color: AppColors.primary,
+                            ),
+                            const SizedBox(width: AppDimensions.sm),
+                            Expanded(
+                              child: Text(
+                                'Load management is now live in mock mode. Start by posting or browsing loads.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(color: AppColors.textSecondary),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: 0,
+        isSupplier: isSupplier,
+        onTap: (index) => handleBottomNavTap(context, isSupplier, index),
+      ),
+    );
+  }
+}
+
+class PlaceholderScreen extends StatelessWidget {
+  final String title;
+  final String message;
+  final IconData icon;
+
+  const PlaceholderScreen({
+    super.key,
+    required this.title,
+    required this.message,
+    this.icon = Icons.construction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.darkBackground,
+                    AppColors.secondaryBackground,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+          ),
+          const Positioned(
+            top: -140,
+            right: -120,
+            child: _GlowOrb(
+              size: 280,
+              color: AppColors.cyanGlowStrong,
+            ),
+          ),
+          const Positioned(
+            bottom: -160,
+            left: -140,
+            child: _GlowOrb(
+              size: 320,
+              color: AppColors.primary,
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimensions.lg),
+              child: GlassmorphicCard(
+                padding: const EdgeInsets.all(AppDimensions.lg),
+                showGlow: true,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, size: 64, color: AppColors.primary),
+                    const SizedBox(height: AppDimensions.md),
+                    GradientText(
+                      title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppDimensions.sm),
+                    Text(
+                      message,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppColors.textSecondary),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GlowOrb extends StatelessWidget {
+  final double size;
+  final Color color;
+
+  const _GlowOrb({
+    required this.size,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: RadialGradient(
+            colors: [
+              color.withAlpha((0.35 * 255).round()),
+              color.withAlpha(0),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

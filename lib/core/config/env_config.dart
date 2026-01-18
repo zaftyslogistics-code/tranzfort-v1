@@ -1,0 +1,29 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+class EnvConfig {
+  static String get supabaseUrl => dotenv.env['SUPABASE_URL'] ?? '';
+  static String get supabaseAnonKey => dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+  static String get environment => dotenv.env['ENVIRONMENT'] ?? 'local';
+  static int get apiTimeout =>
+      int.parse(dotenv.env['API_TIMEOUT'] ?? '30000');
+  static bool get enableAds => dotenv.env['ENABLE_ADS'] == 'true';
+  static bool get enableAnalytics => dotenv.env['ENABLE_ANALYTICS'] == 'true';
+
+  static bool get isProduction => environment == 'production';
+  static bool get isStaging => environment == 'staging';
+  static bool get isLocal => environment == 'local';
+
+  static String get admobAppId => dotenv.env['ADMOB_APP_ID'] ?? '';
+  static String get admobNativeAdUnitId =>
+      dotenv.env['ADMOB_NATIVE_AD_UNIT_ID'] ?? '';
+  static String get admobBannerAdUnitId =>
+      dotenv.env['ADMOB_BANNER_AD_UNIT_ID'] ?? '';
+
+  static String get razorpayKeyId => dotenv.env['RAZORPAY_KEY_ID'] ?? '';
+  static String get razorpayKeySecret =>
+      dotenv.env['RAZORPAY_KEY_SECRET'] ?? '';
+
+  static bool get useMockAuth => dotenv.env['USE_MOCK_AUTH'] == 'true';
+  static bool get useMockLoads => dotenv.env['USE_MOCK_LOADS'] == 'true';
+  static bool get useMockChat => dotenv.env['USE_MOCK_CHAT'] == 'true';
+}

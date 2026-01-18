@@ -1,0 +1,100 @@
+name: transfort_app
+description: Transport Load Marketplace - India's Open Load Marketplace
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State Management
+  flutter_riverpod: ^2.4.9
+  
+  # Supabase
+  supabase_flutter: ^2.0.0
+  
+  # UI Components
+  cupertino_icons: ^1.0.6
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
+  cached_network_image: ^3.3.0
+  
+  # Navigation
+  go_router: ^13.0.0
+  
+  # Forms & Validation
+  flutter_form_builder: ^10.2.0
+  form_builder_validators: ^11.0.0
+  pin_code_fields: ^8.0.1
+  
+  # Utilities
+  intl: any
+  uuid: ^4.2.2
+  shared_preferences: ^2.2.2
+  connectivity_plus: ^5.0.2
+  permission_handler: ^11.1.0
+  
+  # Image Handling
+  image_picker: ^1.0.5
+  flutter_image_compress: ^2.1.0
+  
+  # Notifications (DEFERRED TO PHASE 5 - causing build issues)
+  # firebase_core: ^2.24.2
+  # firebase_messaging: ^14.7.9
+  # flutter_local_notifications: ^16.3.0
+  
+  # Analytics & Monitoring (DEFERRED TO PHASE 5)
+  # firebase_analytics: ^10.8.0
+  # firebase_crashlytics: ^3.4.9
+  
+  # Ads
+  google_mobile_ads: ^4.0.0
+  
+  # Payment
+  razorpay_flutter: ^1.3.6
+  
+  # Environment
+  flutter_dotenv: ^5.1.0
+  
+  # HTTP
+  dio: ^5.4.0
+  
+  # Date & Time
+  timeago: ^3.6.0
+  
+  # Functional Programming
+  dartz: ^0.10.1
+  
+  # Code Generation
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  equatable: ^2.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  build_runner: ^2.4.7
+  freezed: ^2.4.6
+  json_serializable: ^6.7.1
+  mockito: ^5.4.4
+  integration_test:
+    sdk: flutter
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+    - .env.local
+    - .env.staging
+    - .env.production
