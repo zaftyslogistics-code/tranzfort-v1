@@ -8,6 +8,8 @@ import 'core/config/app_config.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/logger.dart';
 import 'core/router/app_router.dart';
+import 'core/services/ad_service.dart';
+import 'core/services/offline_cache_service.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 
 void main() async {
@@ -22,7 +24,12 @@ void main() async {
       anonKey: EnvConfig.supabaseAnonKey,
       debug: EnvConfig.isLocal,
     );
-    Logger.info('Supabase initialized (placeholder for Phase 5)');
+    Logger.info('Supabase initialized');
+
+    await OfflineCacheService().init();
+
+    // Initialize AdMob
+    await AdService().initialize();
 
     final sharedPreferences = await SharedPreferences.getInstance();
     Logger.info('SharedPreferences initialized');
@@ -60,8 +67,7 @@ class TransfortApp extends ConsumerWidget {
     return MaterialApp.router(
       title: AppConfig.appName,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
       routerConfig: router,
     );

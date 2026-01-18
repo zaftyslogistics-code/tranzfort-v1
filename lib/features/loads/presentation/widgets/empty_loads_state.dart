@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../shared/widgets/banner_ad_widget.dart';
 
 class EmptyLoadsState extends StatelessWidget {
   final String message;
@@ -27,6 +28,8 @@ class EmptyLoadsState extends StatelessWidget {
               size: 80,
               color: AppColors.textSecondary,
             ),
+            const SizedBox(height: AppDimensions.lg),
+            const BannerAdWidget(),
             const SizedBox(height: AppDimensions.lg),
             Text(
               message,

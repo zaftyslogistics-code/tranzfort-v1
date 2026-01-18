@@ -26,6 +26,18 @@ class Formatters {
     return '$countryCode $mobile';
   }
 
+  static String maskMobileNumber(String mobile, {int visibleDigits = 4}) {
+    final normalized = mobile.replaceAll(RegExp(r'\s+'), '');
+    if (normalized.isEmpty) return '';
+    if (visibleDigits <= 0) return '*' * normalized.length;
+    if (normalized.length <= visibleDigits) return normalized;
+
+    final maskedLength = normalized.length - visibleDigits;
+    final masked = '*' * maskedLength;
+    final visible = normalized.substring(normalized.length - visibleDigits);
+    return '$masked$visible';
+  }
+
   static String formatWeight(double weight) {
     return '${weight.toStringAsFixed(2)} tons';
   }

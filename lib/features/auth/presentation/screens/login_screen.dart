@@ -331,6 +331,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 },
                           child: const Text('Continue without OTP (Mock)'),
                         ),
+                        const SizedBox(height: AppDimensions.sm),
+                        TextButton(
+                          onPressed: authState.isLoading
+                              ? null
+                              : () => context.push('/dev-email-login'),
+                          child: const Text(
+                            'Dev: Login with Email OTP (Mailpit)',
+                          ),
+                        ),
                       ],
                     ),
                   ),

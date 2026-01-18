@@ -8,6 +8,9 @@ import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/empty_loads_state.dart';
+import '../widgets/bookmark_button.dart';
+import '../widgets/share_button.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 class LoadDetailTruckerScreen extends ConsumerStatefulWidget {
   final String loadId;
@@ -25,6 +28,7 @@ class LoadDetailTruckerScreen extends ConsumerStatefulWidget {
 class _LoadDetailTruckerScreenState
     extends ConsumerState<LoadDetailTruckerScreen> {
   bool _viewCountUpdated = false;
+  bool _isBookmarked = false;
 
   @override
   void initState() {
@@ -53,6 +57,8 @@ class _LoadDetailTruckerScreenState
   Widget build(BuildContext context) {
     final loadsState = ref.watch(loadsNotifierProvider);
     final load = loadsState.selectedLoad;
+    final user = ref.watch(authNotifierProvider).user;
+    final canContact = user?.isTruckerVerified ?? false;
 
     if (loadsState.isLoading) {
       return const Scaffold(
@@ -68,7 +74,34 @@ class _LoadDetailTruckerScreenState
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Load Details')),
+      appBar: AppBar(
+        title: const Text('Load Details'),
+        actions: [
+          BookmarkButton(
+            isBookmarked: _isBookmarked,
+            onToggle: () {
+              setState(() {
+                _isBookmarked = !_isBookmarked;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    _isBookmarked ? 'Load bookmarked' : 'Bookmark removed',
+                  ),
+                  duration: const Duration(seconds: 1),
+                ),
+              );
+            },
+          ),
+          ShareButton(
+            loadId: load.id,
+            fromCity: load.fromCity,
+            toCity: load.toCity,
+            truckType: load.truckTypeRequired,
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -183,20 +216,57 @@ class _LoadDetailTruckerScreenState
                       ),
                     const SizedBox(height: AppDimensions.xl),
                     ElevatedButton.icon(
-                      onPressed: () => context.go('/chats'),
+                      onPressed: canContact
+                          ? () => context.go('/chats')
+                          : null,
                       icon: const Icon(Icons.chat_bubble_outline),
                       label: const Text('Chat with Supplier'),
                     ),
                     const SizedBox(height: AppDimensions.sm),
                     OutlinedButton.icon(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Call feature coming soon')),
-                        );
-                      },
+                      onPressed: canContact
+                          ? () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Call feature coming soon'),
+                                ),
+                              );
+                            }
+                          : null,
                       icon: const Icon(Icons.call_outlined),
                       label: const Text('Call Supplier'),
                     ),
+                    if (!canContact) ...[
+                      const SizedBox(height: AppDimensions.md),
+                      GlassmorphicCard(
+                        padding: const EdgeInsets.all(AppDimensions.md),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              'Verification required',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: AppDimensions.xs),
+                            Text(
+                              'Get verified to unlock chat and call features.',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: AppColors.textSecondary),
+                            ),
+                            const SizedBox(height: AppDimensions.sm),
+                            ElevatedButton(
+                              onPressed: () => context.push('/verification'),
+                              child: const Text('Get Verified'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

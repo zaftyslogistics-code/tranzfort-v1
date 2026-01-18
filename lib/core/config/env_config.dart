@@ -20,6 +20,10 @@ class EnvConfig {
       dotenv.env['ADMOB_BANNER_AD_UNIT_ID'] ?? '';
 
   static String get razorpayKeyId => dotenv.env['RAZORPAY_KEY_ID'] ?? '';
+
+  // AdMob Configuration
+  static String? get adMobNativeAdUnitId => dotenv.env['ADMOB_NATIVE_AD_UNIT_ID'];
+  static String? get adMobBannerAdUnitId => dotenv.env['ADMOB_BANNER_AD_UNIT_ID'];
   static String get razorpayKeySecret =>
       dotenv.env['RAZORPAY_KEY_SECRET'] ?? '';
 

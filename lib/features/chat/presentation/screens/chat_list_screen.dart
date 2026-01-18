@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/gradient_text.dart';
+import '../../../../shared/widgets/banner_ad_widget.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/chat_provider.dart';
 import '../widgets/chat_preview_card.dart';
@@ -29,6 +30,14 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
   @override
   Widget build(BuildContext context) {
     final chatState = ref.watch(chatNotifierProvider);
+    final user = ref.watch(authNotifierProvider).user;
+    final isSupplier = user?.isSupplierEnabled ?? false;
+    final isTrucker = user?.isTruckerEnabled ?? false;
+    final isVerified = isSupplier
+        ? (user?.isSupplierVerified ?? false)
+        : isTrucker
+            ? (user?.isTruckerVerified ?? false)
+            : false;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,6 +77,46 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
           ),
           if (chatState.isLoading)
             const Center(child: CircularProgressIndicator())
+          else if (!isVerified)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(AppDimensions.xl),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const BannerAdWidget(),
+                    const SizedBox(height: AppDimensions.lg),
+                    const Icon(
+                      Icons.verified_user_outlined,
+                      size: 72,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(height: AppDimensions.lg),
+                    GradientText(
+                      'Verification required',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppDimensions.sm),
+                    Text(
+                      'Get verified to access chats and contact features.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppDimensions.lg),
+                    ElevatedButton(
+                      onPressed: () => context.push('/verification'),
+                      child: const Text('Get Verified'),
+                    ),
+                  ],
+                ),
+              ),
+            )
           else if (chatState.chats.isEmpty)
             Center(
               child: Padding(
@@ -75,6 +124,8 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const BannerAdWidget(),
+                    const SizedBox(height: AppDimensions.lg),
                     const Icon(
                       Icons.chat_bubble_outline,
                       size: 72,

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/services/ad_impression_tracker.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
+import '../../../../shared/widgets/native_ad_widget.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/load_card.dart';
 import '../widgets/empty_loads_state.dart';
 import '../widgets/filter_chip_group.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 class TruckerFeedScreen extends ConsumerStatefulWidget {
   const TruckerFeedScreen({super.key});
@@ -20,10 +24,12 @@ class TruckerFeedScreen extends ConsumerStatefulWidget {
 class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
   final _searchController = TextEditingController();
   String _filter = 'Active';
+  late final AdImpressionTracker _adImpressionTracker;
 
   @override
   void initState() {
     super.initState();
+    _adImpressionTracker = AdImpressionTracker(Supabase.instance.client);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _fetchLoads();
@@ -67,6 +73,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
   Widget build(BuildContext context) {
     final loadsState = ref.watch(loadsNotifierProvider);
     final filteredLoads = _applyFilters(loadsState.loads);
+    final user = ref.watch(authNotifierProvider).user;
 
     return Scaffold(
       appBar: AppBar(
@@ -168,6 +175,16 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
                               ),
                               itemCount: filteredLoads.length,
                               itemBuilder: (context, index) {
+                                // Show native ad every 5 loads (after 4th, 9th, 14th, etc.)
+                                if (index % 5 == 4 && index != filteredLoads.length - 1) {
+                                  return NativeAdWidget(
+                                    screenName: 'load_feed',
+                                    userId: user?.id,
+                                    isVerifiedUser: user?.isTruckerVerified ?? false,
+                                    impressionTracker: _adImpressionTracker,
+                                  );
+                                }
+
                                 final load = filteredLoads[index];
                                 return LoadCard(
                                   load: load,

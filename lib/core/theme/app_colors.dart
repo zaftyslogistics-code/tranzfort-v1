@@ -35,7 +35,7 @@ class AppColors {
   // Text Colors (for consistent readability)
   static const Color textPrimary = Color(0xFFF8F9FB);
   static const Color textSecondary = Color(0xFF9BA5B8);
-  static const Color textTertiary = Color(0xFF6B7280);
+  static const Color textTertiary = Color(0xFF87919F);
 
   // Accent + Focus
   static const Color focusRing = Color(0xFF00B3B3);

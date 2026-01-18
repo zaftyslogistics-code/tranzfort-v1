@@ -1,6 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/services/offline_cache_service.dart';
+import '../../../../core/utils/retry.dart';
 import '../models/load_model.dart';
 import '../models/material_type_model.dart';
 import '../models/truck_type_model.dart';
@@ -168,22 +170,42 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   @override
   Future<List<LoadModel>> getLoads({String? status, String? supplierId}) async {
     try {
-      var query = _client.from('loads').select();
+      final data = await retry(() async {
+        var query = _client.from('loads').select();
 
-      if (status != null) {
-        query = query.eq('status', status);
-      }
+        if (status != null) {
+          query = query.eq('status', status);
+        }
 
-      if (supplierId != null) {
-        query = query.eq('supplier_id', supplierId);
-      }
+        if (supplierId != null) {
+          query = query.eq('supplier_id', supplierId);
+        }
 
-      final data = await query.order('created_at', ascending: false) as List;
-      return data
+        return await query.order('created_at', ascending: false) as List;
+      });
+
+      final models = data
           .cast<Map<String, dynamic>>()
           .map(_toLoadModel)
           .toList(growable: false);
+
+      await OfflineCacheService().cacheList(
+        OfflineCacheService.loadsKey,
+        models.map((m) => m.toJson()).toList(growable: false),
+      );
+
+      return models;
     } catch (e) {
+      final cached = OfflineCacheService().getCachedList(
+        OfflineCacheService.loadsKey,
+      );
+
+      if (cached != null) {
+        return cached
+            .map((json) => LoadModel.fromJson(json))
+            .toList(growable: false);
+      }
+
       throw ServerException(e.toString());
     }
   }

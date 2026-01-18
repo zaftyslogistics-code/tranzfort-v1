@@ -6,6 +6,8 @@ import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../../features/auth/presentation/screens/intent_selection_screen.dart';
+import '../../features/auth/presentation/screens/dev_email_login_screen.dart';
+import '../../features/auth/presentation/screens/dev_email_otp_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimensions.dart';
 import '../../features/loads/presentation/screens/supplier_dashboard_screen.dart';
@@ -17,6 +19,11 @@ import '../../features/loads/presentation/screens/load_detail_trucker_screen.dar
 import '../../features/loads/presentation/screens/filters_screen.dart';
 import '../../features/chat/presentation/screens/chat_list_screen.dart';
 import '../../features/chat/presentation/screens/chat_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/verification/presentation/screens/verification_center_screen.dart';
+import '../../features/saved_searches/presentation/screens/saved_searches_screen.dart';
+import '../../features/notifications/presentation/screens/notifications_screen.dart';
+import '../../features/ratings/presentation/screens/ratings_screen.dart';
 import '../../shared/widgets/bottom_nav_bar.dart';
 import '../../shared/widgets/glassmorphic_button.dart';
 import '../../shared/widgets/glassmorphic_card.dart';
@@ -73,6 +80,19 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/dev-email-login',
+        builder: (context, state) => const DevEmailLoginScreen(),
+      ),
+      GoRoute(
+        path: '/dev-email-otp',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return DevEmailOtpScreen(
+            email: extra?['email'] ?? '',
+          );
+        },
       ),
       GoRoute(
         path: '/otp',
@@ -144,11 +164,23 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/profile',
-        builder: (context, state) => const PlaceholderScreen(
-          title: 'Profile',
-          message: 'Profile screen coming soon',
-          icon: Icons.person_outline,
-        ),
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/saved-searches',
+        builder: (context, state) => const SavedSearchesScreen(),
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: '/ratings',
+        builder: (context, state) => const RatingsScreen(),
+      ),
+      GoRoute(
+        path: '/verification',
+        builder: (context, state) => const VerificationCenterScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

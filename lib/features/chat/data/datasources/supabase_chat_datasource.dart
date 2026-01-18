@@ -49,17 +49,34 @@ class SupabaseChatDataSource implements ChatDataSource {
   }
 
   @override
-  Future<List<ChatMessageModel>> getMessages(String chatId) async {
+  Future<List<ChatMessageModel>> getMessages(
+    String chatId, {
+    int limit = 50,
+    DateTime? before,
+  }) async {
     try {
-      final data = await _supabase
+      // Build base query
+      var queryBuilder = _supabase
           .from('chat_messages')
           .select('*')
-          .eq('chat_id', chatId)
-          .order('created_at', ascending: true);
+          .eq('chat_id', chatId);
 
-      return (data as List)
+      // Add before filter if provided (for pagination)
+      if (before != null) {
+        queryBuilder = queryBuilder.lt('created_at', before.toIso8601String());
+      }
+
+      // Execute query with ordering and limit
+      final response = await queryBuilder
+          .order('created_at', ascending: false)
+          .limit(limit);
+
+      final messages = (response as List)
           .map((json) => ChatMessageModel.fromJson(json))
           .toList();
+
+      // Reverse to get chronological order (oldest first)
+      return messages.reversed.toList();
     } catch (e) {
       throw ServerException(e.toString());
     }
