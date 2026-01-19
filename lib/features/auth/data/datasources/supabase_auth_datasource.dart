@@ -1,4 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../models/admin_model.dart';
 import '../models/user_model.dart';
 import '../../../../core/utils/logger.dart';
 
@@ -46,22 +47,20 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
 
       Logger.info('OTP verified successfully, user ID: ${response.user!.id}');
 
-      // Fetch or create user profile
-      final userProfile = await _getUserProfile(response.user!.id);
+      // Fetch user profile
+      UserModel? userProfile = await _getUserProfile(response.user!.id);
       
+      // If profile not found immediately, retry a few times to allow DB trigger to complete
+      int retries = 3;
+      while (userProfile == null && retries > 0) {
+        Logger.info('User profile not found, retrying... ($retries retries left)');
+        await Future.delayed(const Duration(milliseconds: 500));
+        userProfile = await _getUserProfile(response.user!.id);
+        retries--;
+      }
+
       if (userProfile == null) {
-        // Profile should be auto-created by trigger, but create manually if needed
-        Logger.info('User profile not found, creating...');
-        await _createUserProfile(
-          userId: response.user!.id,
-          mobileNumber: mobileNumber,
-          countryCode: countryCode,
-        );
-        final newProfile = await _getUserProfile(response.user!.id);
-        if (newProfile == null) {
-          throw Exception('Failed to create user profile');
-        }
-        return newProfile;
+        throw Exception('User profile could not be found. Please contact support.');
       }
 
       return userProfile;
@@ -135,6 +134,22 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
     }
   }
 
+  @override
+  Future<AdminModel?> getAdminProfile(String userId) async {
+    try {
+      final response = await supabaseClient
+          .from('admin_profiles')
+          .select()
+          .eq('id', userId)
+          .maybeSingle();
+
+      if (response == null) return null;
+      return AdminModel.fromJson(response);
+    } catch (e) {
+      Logger.error('Failed to fetch admin profile', error: e);
+      return null;
+    }
+  }
   Future<UserModel?> _getUserProfile(String userId) async {
     try {
       final response = await supabaseClient
@@ -151,27 +166,6 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
     } catch (e) {
       Logger.error('Failed to fetch user profile', error: e);
       return null;
-    }
-  }
-
-  Future<void> _createUserProfile({
-    required String userId,
-    required String mobileNumber,
-    required String countryCode,
-  }) async {
-    try {
-      await supabaseClient.from('users').insert({
-        'id': userId,
-        'mobile_number': mobileNumber,
-        'country_code': countryCode,
-        'created_at': DateTime.now().toIso8601String(),
-        'last_login_at': DateTime.now().toIso8601String(),
-        'updated_at': DateTime.now().toIso8601String(),
-      });
-      Logger.info('User profile created successfully');
-    } catch (e) {
-      Logger.error('Failed to create user profile', error: e);
-      rethrow;
     }
   }
 }

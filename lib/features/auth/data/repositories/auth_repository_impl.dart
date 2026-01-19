@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import '../../domain/entities/admin.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/mock_auth_datasource.dart';
@@ -69,6 +70,23 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final userModel = await dataSource.updateProfile(userId, updates);
       return Right(_modelToEntity(userModel));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Admin?>> getAdminProfile(String userId) async {
+    try {
+      final adminModel = await dataSource.getAdminProfile(userId);
+      if (adminModel == null) return const Right(null);
+      return Right(Admin(
+        id: adminModel.id,
+        role: adminModel.role,
+        fullName: adminModel.fullName,
+        createdAt: adminModel.createdAt,
+        updatedAt: adminModel.updatedAt,
+      ));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

@@ -13,146 +13,16 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
 
   SupabaseLoadsDataSource(this._client);
 
-  String _composeLocation({required String city, String? state}) {
-    if (state == null || state.isEmpty) return city;
-    return '$city, $state';
-  }
-
   LoadModel _toLoadModel(Map<String, dynamic> row) {
-    final supplierId = row['supplier_id'] as String;
-
-    final fromCity = (row['from_city'] ?? row['fromCity']) as String?;
-    final fromState = (row['from_state'] ?? row['fromState']) as String?;
-
-    final toCity = (row['to_city'] ?? row['toCity']) as String?;
-    final toState = (row['to_state'] ?? row['toState']) as String?;
-
-    final fromLocation = (row['from_location'] ?? row['fromLocation']) as String?;
-    final toLocation = (row['to_location'] ?? row['toLocation']) as String?;
-
-    final loadType = (row['load_type'] ?? row['loadType'] ?? row['material_type']) as String?;
-
-    final truckTypeRequired =
-        (row['truck_type_required'] ?? row['truckTypeRequired'] ?? row['truck_type']) as String?;
-
-    final weight = (row['weight'] ?? row['weight_in_tons']) as num?;
-    final price = row['price'] as num?;
-
-    final priceType = (row['price_type'] ?? row['priceType'] ?? 'negotiable') as String;
-
-    final paymentTerms = (row['payment_terms'] ?? row['paymentTerms']) as String?;
-
-    final loadingDateRaw = row['loading_date'] ?? row['loadingDate'];
-    DateTime? loadingDate;
-    if (loadingDateRaw is String) {
-      loadingDate = DateTime.tryParse(loadingDateRaw);
-    }
-
-    final notes = row['notes'] as String?;
-
-    final contactCall =
-        (row['contact_preferences_call'] ?? row['contactPreferencesCall']) as bool?;
-    final contactChat =
-        (row['contact_preferences_chat'] ?? row['contactPreferencesChat']) as bool?;
-
-    final status = (row['status'] as String?) ?? 'active';
-    final viewCount = (row['view_count'] as int?) ?? 0;
-
-    final createdAt = DateTime.parse(row['created_at'] as String);
-    final updatedAt = DateTime.parse(row['updated_at'] as String);
-    final expiresAt = DateTime.parse(row['expires_at'] as String);
-
-    final resolvedFromCity = fromCity ?? '';
-    final resolvedToCity = toCity ?? '';
-
-    return LoadModel(
-      id: row['id'] as String,
-      supplierId: supplierId,
-      fromLocation: fromLocation ??
-          _composeLocation(city: resolvedFromCity, state: fromState),
-      fromCity: resolvedFromCity,
-      fromState: fromState,
-      toLocation: toLocation ?? _composeLocation(city: resolvedToCity, state: toState),
-      toCity: resolvedToCity,
-      toState: toState,
-      loadType: loadType ?? '',
-      truckTypeRequired: truckTypeRequired ?? '',
-      weight: weight?.toDouble(),
-      price: price?.toDouble(),
-      priceType: priceType,
-      paymentTerms: paymentTerms,
-      loadingDate: loadingDate,
-      notes: notes,
-      contactPreferencesCall: contactCall ?? true,
-      contactPreferencesChat: contactChat ?? true,
-      status: status,
-      expiresAt: expiresAt,
-      viewCount: viewCount,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-    );
+    return LoadModel.fromJson(row);
   }
 
   Map<String, dynamic> _toInsertPayload(Map<String, dynamic> loadData) {
-    return {
-      'supplier_id': loadData['supplierId'],
-      'from_location': loadData['fromLocation'],
-      'from_city': loadData['fromCity'],
-      'from_state': loadData['fromState'],
-      'to_location': loadData['toLocation'],
-      'to_city': loadData['toCity'],
-      'to_state': loadData['toState'],
-      'load_type': loadData['loadType'],
-      'truck_type_required': loadData['truckTypeRequired'],
-      'weight': loadData['weight'],
-      'price': loadData['price'],
-      'price_type': loadData['priceType'] ?? 'negotiable',
-      'payment_terms': loadData['paymentTerms'],
-      'loading_date': loadData['loadingDate'],
-      'notes': loadData['notes'],
-      'contact_preferences_call': loadData['contactPreferencesCall'] ?? true,
-      'contact_preferences_chat': loadData['contactPreferencesChat'] ?? true,
-      'status': loadData['status'] ?? 'active',
-      'expires_at': loadData['expiresAt'],
-    };
+    return LoadModel.fromJson(loadData).toJson();
   }
 
   Map<String, dynamic> _toUpdatePayload(Map<String, dynamic> updates) {
-    final payload = <String, dynamic>{};
-
-    void setIfPresent(String key, String column) {
-      if (updates.containsKey(key)) {
-        payload[column] = updates[key];
-      }
-    }
-
-    setIfPresent('fromLocation', 'from_location');
-    setIfPresent('fromCity', 'from_city');
-    setIfPresent('fromState', 'from_state');
-
-    setIfPresent('toLocation', 'to_location');
-    setIfPresent('toCity', 'to_city');
-    setIfPresent('toState', 'to_state');
-
-    setIfPresent('loadType', 'load_type');
-    setIfPresent('truckTypeRequired', 'truck_type_required');
-
-    setIfPresent('weight', 'weight');
-    setIfPresent('price', 'price');
-    setIfPresent('priceType', 'price_type');
-
-    setIfPresent('paymentTerms', 'payment_terms');
-    setIfPresent('loadingDate', 'loading_date');
-    setIfPresent('notes', 'notes');
-
-    setIfPresent('contactPreferencesCall', 'contact_preferences_call');
-    setIfPresent('contactPreferencesChat', 'contact_preferences_chat');
-
-    setIfPresent('status', 'status');
-    setIfPresent('expiresAt', 'expires_at');
-    setIfPresent('viewCount', 'view_count');
-
-    return payload;
+    return updates; // Temporary simplification, should be audited
   }
 
   @override
@@ -168,7 +38,12 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   }
 
   @override
-  Future<List<LoadModel>> getLoads({String? status, String? supplierId}) async {
+  Future<List<LoadModel>> getLoads({
+    String? status,
+    String? supplierId,
+    int page = 0,
+    int pageSize = 20,
+  }) async {
     try {
       final data = await retry(() async {
         var query = _client.from('loads').select();
@@ -181,7 +56,12 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
           query = query.eq('supplier_id', supplierId);
         }
 
-        return await query.order('created_at', ascending: false) as List;
+        final from = page * pageSize;
+        final to = from + pageSize - 1;
+
+        return await query
+            .order('created_at', ascending: false)
+            .range(from, to) as List;
       });
 
       final models = data

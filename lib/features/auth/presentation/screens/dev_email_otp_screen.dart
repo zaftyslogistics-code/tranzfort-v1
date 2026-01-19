@@ -49,7 +49,7 @@ class _DevEmailOtpScreenState extends ConsumerState<DevEmailOtpScreen> {
       );
 
       if (!mounted) return;
-      context.go('/home');
+      context.go('/splash');
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

@@ -21,15 +21,24 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserModel {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'mobile_number')
   String get mobileNumber => throw _privateConstructorUsedError;
+  @JsonKey(name: 'country_code')
   String get countryCode => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_supplier_enabled')
   bool get isSupplierEnabled => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_trucker_enabled')
   bool get isTruckerEnabled => throw _privateConstructorUsedError;
+  @JsonKey(name: 'supplier_verification_status')
   String get supplierVerificationStatus => throw _privateConstructorUsedError;
+  @JsonKey(name: 'trucker_verification_status')
   String get truckerVerificationStatus => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_login_at')
   DateTime get lastLoginAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
@@ -49,16 +58,18 @@ abstract class $UserModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String mobileNumber,
-      String countryCode,
+      @JsonKey(name: 'mobile_number') String mobileNumber,
+      @JsonKey(name: 'country_code') String countryCode,
       String? name,
-      bool isSupplierEnabled,
-      bool isTruckerEnabled,
+      @JsonKey(name: 'is_supplier_enabled') bool isSupplierEnabled,
+      @JsonKey(name: 'is_trucker_enabled') bool isTruckerEnabled,
+      @JsonKey(name: 'supplier_verification_status')
       String supplierVerificationStatus,
+      @JsonKey(name: 'trucker_verification_status')
       String truckerVerificationStatus,
-      DateTime createdAt,
-      DateTime lastLoginAt,
-      DateTime updatedAt});
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'last_login_at') DateTime lastLoginAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -147,16 +158,18 @@ abstract class _$$UserModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String mobileNumber,
-      String countryCode,
+      @JsonKey(name: 'mobile_number') String mobileNumber,
+      @JsonKey(name: 'country_code') String countryCode,
       String? name,
-      bool isSupplierEnabled,
-      bool isTruckerEnabled,
+      @JsonKey(name: 'is_supplier_enabled') bool isSupplierEnabled,
+      @JsonKey(name: 'is_trucker_enabled') bool isTruckerEnabled,
+      @JsonKey(name: 'supplier_verification_status')
       String supplierVerificationStatus,
+      @JsonKey(name: 'trucker_verification_status')
       String truckerVerificationStatus,
-      DateTime createdAt,
-      DateTime lastLoginAt,
-      DateTime updatedAt});
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'last_login_at') DateTime lastLoginAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -238,16 +251,18 @@ class __$$UserModelImplCopyWithImpl<$Res>
 class _$UserModelImpl implements _UserModel {
   const _$UserModelImpl(
       {required this.id,
-      required this.mobileNumber,
-      this.countryCode = '+91',
+      @JsonKey(name: 'mobile_number') required this.mobileNumber,
+      @JsonKey(name: 'country_code') this.countryCode = '+91',
       this.name,
-      this.isSupplierEnabled = false,
-      this.isTruckerEnabled = false,
+      @JsonKey(name: 'is_supplier_enabled') this.isSupplierEnabled = false,
+      @JsonKey(name: 'is_trucker_enabled') this.isTruckerEnabled = false,
+      @JsonKey(name: 'supplier_verification_status')
       this.supplierVerificationStatus = 'unverified',
+      @JsonKey(name: 'trucker_verification_status')
       this.truckerVerificationStatus = 'unverified',
-      required this.createdAt,
-      required this.lastLoginAt,
-      required this.updatedAt});
+      @JsonKey(name: 'created_at') required this.createdAt,
+      @JsonKey(name: 'last_login_at') required this.lastLoginAt,
+      @JsonKey(name: 'updated_at') required this.updatedAt});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -255,29 +270,33 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String id;
   @override
+  @JsonKey(name: 'mobile_number')
   final String mobileNumber;
   @override
-  @JsonKey()
+  @JsonKey(name: 'country_code')
   final String countryCode;
   @override
   final String? name;
   @override
-  @JsonKey()
+  @JsonKey(name: 'is_supplier_enabled')
   final bool isSupplierEnabled;
   @override
-  @JsonKey()
+  @JsonKey(name: 'is_trucker_enabled')
   final bool isTruckerEnabled;
   @override
-  @JsonKey()
+  @JsonKey(name: 'supplier_verification_status')
   final String supplierVerificationStatus;
   @override
-  @JsonKey()
+  @JsonKey(name: 'trucker_verification_status')
   final String truckerVerificationStatus;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @override
+  @JsonKey(name: 'last_login_at')
   final DateTime lastLoginAt;
   @override
+  @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
   @override
@@ -349,17 +368,20 @@ class _$UserModelImpl implements _UserModel {
 
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
-      {required final String id,
-      required final String mobileNumber,
-      final String countryCode,
-      final String? name,
-      final bool isSupplierEnabled,
-      final bool isTruckerEnabled,
-      final String supplierVerificationStatus,
-      final String truckerVerificationStatus,
-      required final DateTime createdAt,
-      required final DateTime lastLoginAt,
-      required final DateTime updatedAt}) = _$UserModelImpl;
+          {required final String id,
+          @JsonKey(name: 'mobile_number') required final String mobileNumber,
+          @JsonKey(name: 'country_code') final String countryCode,
+          final String? name,
+          @JsonKey(name: 'is_supplier_enabled') final bool isSupplierEnabled,
+          @JsonKey(name: 'is_trucker_enabled') final bool isTruckerEnabled,
+          @JsonKey(name: 'supplier_verification_status')
+          final String supplierVerificationStatus,
+          @JsonKey(name: 'trucker_verification_status')
+          final String truckerVerificationStatus,
+          @JsonKey(name: 'created_at') required final DateTime createdAt,
+          @JsonKey(name: 'last_login_at') required final DateTime lastLoginAt,
+          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
+      _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -367,24 +389,33 @@ abstract class _UserModel implements UserModel {
   @override
   String get id;
   @override
+  @JsonKey(name: 'mobile_number')
   String get mobileNumber;
   @override
+  @JsonKey(name: 'country_code')
   String get countryCode;
   @override
   String? get name;
   @override
+  @JsonKey(name: 'is_supplier_enabled')
   bool get isSupplierEnabled;
   @override
+  @JsonKey(name: 'is_trucker_enabled')
   bool get isTruckerEnabled;
   @override
+  @JsonKey(name: 'supplier_verification_status')
   String get supplierVerificationStatus;
   @override
+  @JsonKey(name: 'trucker_verification_status')
   String get truckerVerificationStatus;
   @override
+  @JsonKey(name: 'created_at')
   DateTime get createdAt;
   @override
+  @JsonKey(name: 'last_login_at')
   DateTime get lastLoginAt;
   @override
+  @JsonKey(name: 'updated_at')
   DateTime get updatedAt;
 
   /// Create a copy of UserModel

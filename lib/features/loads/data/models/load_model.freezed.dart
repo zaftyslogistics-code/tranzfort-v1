@@ -21,27 +21,45 @@ LoadModel _$LoadModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LoadModel {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'supplier_id')
   String get supplierId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'from_location')
   String get fromLocation => throw _privateConstructorUsedError;
+  @JsonKey(name: 'from_city')
   String get fromCity => throw _privateConstructorUsedError;
+  @JsonKey(name: 'from_state')
   String? get fromState => throw _privateConstructorUsedError;
+  @JsonKey(name: 'to_location')
   String get toLocation => throw _privateConstructorUsedError;
+  @JsonKey(name: 'to_city')
   String get toCity => throw _privateConstructorUsedError;
+  @JsonKey(name: 'to_state')
   String? get toState => throw _privateConstructorUsedError;
+  @JsonKey(name: 'load_type')
   String get loadType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'truck_type_required')
   String get truckTypeRequired => throw _privateConstructorUsedError;
   double? get weight => throw _privateConstructorUsedError;
   double? get price => throw _privateConstructorUsedError;
+  @JsonKey(name: 'price_type')
   String get priceType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'payment_terms')
   String? get paymentTerms => throw _privateConstructorUsedError;
+  @JsonKey(name: 'loading_date')
   DateTime? get loadingDate => throw _privateConstructorUsedError;
   String? get notes => throw _privateConstructorUsedError;
+  @JsonKey(name: 'contact_preferences_call')
   bool get contactPreferencesCall => throw _privateConstructorUsedError;
+  @JsonKey(name: 'contact_preferences_chat')
   bool get contactPreferencesChat => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
+  @JsonKey(name: 'expires_at')
   DateTime get expiresAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'view_count')
   int get viewCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this LoadModel to a JSON map.
@@ -61,28 +79,28 @@ abstract class $LoadModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String supplierId,
-      String fromLocation,
-      String fromCity,
-      String? fromState,
-      String toLocation,
-      String toCity,
-      String? toState,
-      String loadType,
-      String truckTypeRequired,
+      @JsonKey(name: 'supplier_id') String supplierId,
+      @JsonKey(name: 'from_location') String fromLocation,
+      @JsonKey(name: 'from_city') String fromCity,
+      @JsonKey(name: 'from_state') String? fromState,
+      @JsonKey(name: 'to_location') String toLocation,
+      @JsonKey(name: 'to_city') String toCity,
+      @JsonKey(name: 'to_state') String? toState,
+      @JsonKey(name: 'load_type') String loadType,
+      @JsonKey(name: 'truck_type_required') String truckTypeRequired,
       double? weight,
       double? price,
-      String priceType,
-      String? paymentTerms,
-      DateTime? loadingDate,
+      @JsonKey(name: 'price_type') String priceType,
+      @JsonKey(name: 'payment_terms') String? paymentTerms,
+      @JsonKey(name: 'loading_date') DateTime? loadingDate,
       String? notes,
-      bool contactPreferencesCall,
-      bool contactPreferencesChat,
+      @JsonKey(name: 'contact_preferences_call') bool contactPreferencesCall,
+      @JsonKey(name: 'contact_preferences_chat') bool contactPreferencesChat,
       String status,
-      DateTime expiresAt,
-      int viewCount,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @JsonKey(name: 'expires_at') DateTime expiresAt,
+      @JsonKey(name: 'view_count') int viewCount,
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -231,28 +249,28 @@ abstract class _$$LoadModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String supplierId,
-      String fromLocation,
-      String fromCity,
-      String? fromState,
-      String toLocation,
-      String toCity,
-      String? toState,
-      String loadType,
-      String truckTypeRequired,
+      @JsonKey(name: 'supplier_id') String supplierId,
+      @JsonKey(name: 'from_location') String fromLocation,
+      @JsonKey(name: 'from_city') String fromCity,
+      @JsonKey(name: 'from_state') String? fromState,
+      @JsonKey(name: 'to_location') String toLocation,
+      @JsonKey(name: 'to_city') String toCity,
+      @JsonKey(name: 'to_state') String? toState,
+      @JsonKey(name: 'load_type') String loadType,
+      @JsonKey(name: 'truck_type_required') String truckTypeRequired,
       double? weight,
       double? price,
-      String priceType,
-      String? paymentTerms,
-      DateTime? loadingDate,
+      @JsonKey(name: 'price_type') String priceType,
+      @JsonKey(name: 'payment_terms') String? paymentTerms,
+      @JsonKey(name: 'loading_date') DateTime? loadingDate,
       String? notes,
-      bool contactPreferencesCall,
-      bool contactPreferencesChat,
+      @JsonKey(name: 'contact_preferences_call') bool contactPreferencesCall,
+      @JsonKey(name: 'contact_preferences_chat') bool contactPreferencesChat,
       String status,
-      DateTime expiresAt,
-      int viewCount,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @JsonKey(name: 'expires_at') DateTime expiresAt,
+      @JsonKey(name: 'view_count') int viewCount,
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -394,28 +412,30 @@ class __$$LoadModelImplCopyWithImpl<$Res>
 class _$LoadModelImpl implements _LoadModel {
   const _$LoadModelImpl(
       {required this.id,
-      required this.supplierId,
-      required this.fromLocation,
-      required this.fromCity,
-      this.fromState,
-      required this.toLocation,
-      required this.toCity,
-      this.toState,
-      required this.loadType,
-      required this.truckTypeRequired,
+      @JsonKey(name: 'supplier_id') required this.supplierId,
+      @JsonKey(name: 'from_location') required this.fromLocation,
+      @JsonKey(name: 'from_city') required this.fromCity,
+      @JsonKey(name: 'from_state') this.fromState,
+      @JsonKey(name: 'to_location') required this.toLocation,
+      @JsonKey(name: 'to_city') required this.toCity,
+      @JsonKey(name: 'to_state') this.toState,
+      @JsonKey(name: 'load_type') required this.loadType,
+      @JsonKey(name: 'truck_type_required') required this.truckTypeRequired,
       this.weight,
       this.price,
-      this.priceType = 'negotiable',
-      this.paymentTerms,
-      this.loadingDate,
+      @JsonKey(name: 'price_type') this.priceType = 'negotiable',
+      @JsonKey(name: 'payment_terms') this.paymentTerms,
+      @JsonKey(name: 'loading_date') this.loadingDate,
       this.notes,
+      @JsonKey(name: 'contact_preferences_call')
       this.contactPreferencesCall = true,
+      @JsonKey(name: 'contact_preferences_chat')
       this.contactPreferencesChat = true,
       this.status = 'active',
-      required this.expiresAt,
-      this.viewCount = 0,
-      required this.createdAt,
-      required this.updatedAt});
+      @JsonKey(name: 'expires_at') required this.expiresAt,
+      @JsonKey(name: 'view_count') this.viewCount = 0,
+      @JsonKey(name: 'created_at') required this.createdAt,
+      @JsonKey(name: 'updated_at') required this.updatedAt});
 
   factory _$LoadModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoadModelImplFromJson(json);
@@ -423,53 +443,67 @@ class _$LoadModelImpl implements _LoadModel {
   @override
   final String id;
   @override
+  @JsonKey(name: 'supplier_id')
   final String supplierId;
   @override
+  @JsonKey(name: 'from_location')
   final String fromLocation;
   @override
+  @JsonKey(name: 'from_city')
   final String fromCity;
   @override
+  @JsonKey(name: 'from_state')
   final String? fromState;
   @override
+  @JsonKey(name: 'to_location')
   final String toLocation;
   @override
+  @JsonKey(name: 'to_city')
   final String toCity;
   @override
+  @JsonKey(name: 'to_state')
   final String? toState;
   @override
+  @JsonKey(name: 'load_type')
   final String loadType;
   @override
+  @JsonKey(name: 'truck_type_required')
   final String truckTypeRequired;
   @override
   final double? weight;
   @override
   final double? price;
   @override
-  @JsonKey()
+  @JsonKey(name: 'price_type')
   final String priceType;
   @override
+  @JsonKey(name: 'payment_terms')
   final String? paymentTerms;
   @override
+  @JsonKey(name: 'loading_date')
   final DateTime? loadingDate;
   @override
   final String? notes;
   @override
-  @JsonKey()
+  @JsonKey(name: 'contact_preferences_call')
   final bool contactPreferencesCall;
   @override
-  @JsonKey()
+  @JsonKey(name: 'contact_preferences_chat')
   final bool contactPreferencesChat;
   @override
   @JsonKey()
   final String status;
   @override
+  @JsonKey(name: 'expires_at')
   final DateTime expiresAt;
   @override
-  @JsonKey()
+  @JsonKey(name: 'view_count')
   final int viewCount;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
   @override
@@ -570,29 +604,33 @@ class _$LoadModelImpl implements _LoadModel {
 
 abstract class _LoadModel implements LoadModel {
   const factory _LoadModel(
-      {required final String id,
-      required final String supplierId,
-      required final String fromLocation,
-      required final String fromCity,
-      final String? fromState,
-      required final String toLocation,
-      required final String toCity,
-      final String? toState,
-      required final String loadType,
-      required final String truckTypeRequired,
-      final double? weight,
-      final double? price,
-      final String priceType,
-      final String? paymentTerms,
-      final DateTime? loadingDate,
-      final String? notes,
-      final bool contactPreferencesCall,
-      final bool contactPreferencesChat,
-      final String status,
-      required final DateTime expiresAt,
-      final int viewCount,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$LoadModelImpl;
+          {required final String id,
+          @JsonKey(name: 'supplier_id') required final String supplierId,
+          @JsonKey(name: 'from_location') required final String fromLocation,
+          @JsonKey(name: 'from_city') required final String fromCity,
+          @JsonKey(name: 'from_state') final String? fromState,
+          @JsonKey(name: 'to_location') required final String toLocation,
+          @JsonKey(name: 'to_city') required final String toCity,
+          @JsonKey(name: 'to_state') final String? toState,
+          @JsonKey(name: 'load_type') required final String loadType,
+          @JsonKey(name: 'truck_type_required')
+          required final String truckTypeRequired,
+          final double? weight,
+          final double? price,
+          @JsonKey(name: 'price_type') final String priceType,
+          @JsonKey(name: 'payment_terms') final String? paymentTerms,
+          @JsonKey(name: 'loading_date') final DateTime? loadingDate,
+          final String? notes,
+          @JsonKey(name: 'contact_preferences_call')
+          final bool contactPreferencesCall,
+          @JsonKey(name: 'contact_preferences_chat')
+          final bool contactPreferencesChat,
+          final String status,
+          @JsonKey(name: 'expires_at') required final DateTime expiresAt,
+          @JsonKey(name: 'view_count') final int viewCount,
+          @JsonKey(name: 'created_at') required final DateTime createdAt,
+          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
+      _$LoadModelImpl;
 
   factory _LoadModel.fromJson(Map<String, dynamic> json) =
       _$LoadModelImpl.fromJson;
@@ -600,48 +638,66 @@ abstract class _LoadModel implements LoadModel {
   @override
   String get id;
   @override
+  @JsonKey(name: 'supplier_id')
   String get supplierId;
   @override
+  @JsonKey(name: 'from_location')
   String get fromLocation;
   @override
+  @JsonKey(name: 'from_city')
   String get fromCity;
   @override
+  @JsonKey(name: 'from_state')
   String? get fromState;
   @override
+  @JsonKey(name: 'to_location')
   String get toLocation;
   @override
+  @JsonKey(name: 'to_city')
   String get toCity;
   @override
+  @JsonKey(name: 'to_state')
   String? get toState;
   @override
+  @JsonKey(name: 'load_type')
   String get loadType;
   @override
+  @JsonKey(name: 'truck_type_required')
   String get truckTypeRequired;
   @override
   double? get weight;
   @override
   double? get price;
   @override
+  @JsonKey(name: 'price_type')
   String get priceType;
   @override
+  @JsonKey(name: 'payment_terms')
   String? get paymentTerms;
   @override
+  @JsonKey(name: 'loading_date')
   DateTime? get loadingDate;
   @override
   String? get notes;
   @override
+  @JsonKey(name: 'contact_preferences_call')
   bool get contactPreferencesCall;
   @override
+  @JsonKey(name: 'contact_preferences_chat')
   bool get contactPreferencesChat;
   @override
   String get status;
   @override
+  @JsonKey(name: 'expires_at')
   DateTime get expiresAt;
   @override
+  @JsonKey(name: 'view_count')
   int get viewCount;
   @override
+  @JsonKey(name: 'created_at')
   DateTime get createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   DateTime get updatedAt;
 
   /// Create a copy of LoadModel

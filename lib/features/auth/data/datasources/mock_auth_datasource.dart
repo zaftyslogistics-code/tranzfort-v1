@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 import 'dart:convert';
 import '../../../../core/utils/logger.dart';
 import '../models/user_model.dart';
+import '../models/admin_model.dart';
 
 abstract class AuthDataSource {
   Future<void> sendOtp(String mobileNumber, String countryCode);
@@ -10,6 +11,7 @@ abstract class AuthDataSource {
   Future<UserModel?> getCurrentUser();
   Future<void> signOut();
   Future<UserModel> updateProfile(String userId, Map<String, dynamic> updates);
+  Future<AdminModel?> getAdminProfile(String userId);
 }
 
 class MockAuthDataSource implements AuthDataSource {
@@ -116,6 +118,22 @@ class MockAuthDataSource implements AuthDataSource {
     
     Logger.info('✅ MOCK: Profile updated successfully');
     return updatedUser;
+  }
+
+  @override
+  Future<AdminModel?> getAdminProfile(String userId) async {
+    // For mock purposes, if user exists, they are a super_admin
+    final user = await getCurrentUser();
+    if (user != null && user.id == userId) {
+      return AdminModel(
+        id: userId,
+        role: 'super_admin',
+        fullName: 'Mock Admin',
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+    }
+    return null;
   }
 
   Future<void> _saveUser(UserModel user) async {

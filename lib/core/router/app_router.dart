@@ -2,8 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
+import '../../features/admin/presentation/screens/admin_verification_screen.dart';
+import '../../features/admin/presentation/screens/admin_load_monitoring_screen.dart';
+import '../../features/admin/presentation/screens/admin_config_screen.dart';
+import '../../features/admin/presentation/screens/admin_user_management_screen.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/admin_email_password_login_screen.dart';
 import '../../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../../features/auth/presentation/screens/intent_selection_screen.dart';
 import '../../features/auth/presentation/screens/dev_email_login_screen.dart';
@@ -17,14 +23,11 @@ import '../../features/loads/presentation/screens/trucker_feed_screen.dart';
 import '../../features/loads/presentation/screens/load_detail_supplier_screen.dart';
 import '../../features/loads/presentation/screens/load_detail_trucker_screen.dart';
 import '../../features/loads/presentation/screens/filters_screen.dart';
-import '../../features/chat/presentation/screens/chat_list_screen.dart';
 import '../../features/chat/presentation/screens/chat_screen.dart';
-import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/verification/presentation/screens/verification_center_screen.dart';
 import '../../features/saved_searches/presentation/screens/saved_searches_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/ratings/presentation/screens/ratings_screen.dart';
-import '../../shared/widgets/bottom_nav_bar.dart';
 import '../../shared/widgets/glassmorphic_button.dart';
 import '../../shared/widgets/glassmorphic_card.dart';
 import '../../shared/widgets/gradient_text.dart';
@@ -52,12 +55,38 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isOnLogin = state.matchedLocation == '/login';
       final isOnOtp = state.matchedLocation == '/otp';
       final isOnIntent = state.matchedLocation == '/intent-selection';
+      final isOnDevEmailLogin = state.matchedLocation == '/dev-email-login';
+      final isOnDevEmailOtp = state.matchedLocation == '/dev-email-otp';
+      final isOnAdminLogin = state.matchedLocation == '/admin-login';
+
+      final isOnAdmin = state.matchedLocation.startsWith('/admin');
 
       if (!isAuthenticated) {
-        return (isOnLogin || isOnOtp) ? null : '/login';
+        return (isOnLogin ||
+                isOnOtp ||
+                isOnDevEmailLogin ||
+                isOnDevEmailOtp ||
+                isOnAdminLogin)
+            ? null
+            : '/login';
       }
 
       if (isAuthenticated && user != null) {
+        // Check for admin role first
+        if (authState.admin != null) {
+          if (!isOnAdmin) {
+            return '/admin/dashboard';
+          }
+          return null;
+        }
+
+        // Authenticated but NOT an admin: block /admin routes
+        if (isOnAdmin) {
+          if (user.isSupplierEnabled) return '/supplier-dashboard';
+          if (user.isTruckerEnabled) return '/trucker-feed';
+          return '/intent-selection';
+        }
+
         final needsIntentSelection =
             !user.isSupplierEnabled && !user.isTruckerEnabled;
 
@@ -66,7 +95,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
 
         if (!needsIntentSelection && (isOnLogin || isOnOtp || isOnIntent || isOnSplash)) {
-          return '/home';
+          if (user.isSupplierEnabled) {
+            return '/supplier-dashboard';
+          }
+          if (user.isTruckerEnabled) {
+            return '/trucker-feed';
+          }
         }
       }
 
@@ -80,6 +114,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/admin-login',
+        builder: (context, state) => const AdminEmailPasswordLoginScreen(),
       ),
       GoRoute(
         path: '/dev-email-login',
@@ -109,12 +147,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const IntentSelectionScreen(),
       ),
       GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomeScreen(),
-      ),
-      GoRoute(
         path: '/supplier-dashboard',
         builder: (context, state) => const SupplierDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/trucker-feed',
+        builder: (context, state) => const TruckerFeedScreen(),
       ),
       GoRoute(
         path: '/post-load-step1',
@@ -153,18 +191,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const FiltersScreen(),
       ),
       GoRoute(
-        path: '/chats',
-        builder: (context, state) => const ChatListScreen(),
-      ),
-      GoRoute(
         path: '/chat',
         builder: (context, state) => ChatScreen(
           chatId: state.extra as String,
         ),
-      ),
-      GoRoute(
-        path: '/profile',
-        builder: (context, state) => const ProfileScreen(),
       ),
       GoRoute(
         path: '/saved-searches',
@@ -177,6 +207,26 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/ratings',
         builder: (context, state) => const RatingsScreen(),
+      ),
+      GoRoute(
+        path: '/admin/dashboard',
+        builder: (context, state) => const AdminDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/admin/verifications',
+        builder: (context, state) => const AdminVerificationScreen(),
+      ),
+      GoRoute(
+        path: '/admin/loads',
+        builder: (context, state) => const AdminLoadMonitoringScreen(),
+      ),
+      GoRoute(
+        path: '/admin/config',
+        builder: (context, state) => const AdminConfigScreen(),
+      ),
+      GoRoute(
+        path: '/admin/users',
+        builder: (context, state) => const AdminUserManagementScreen(),
       ),
       GoRoute(
         path: '/verification',
@@ -359,7 +409,7 @@ class HomeScreen extends ConsumerWidget {
                       if (isSupplier) ...[
                         GlassmorphicButton(
                           variant: GlassmorphicButtonVariant.primary,
-                          onPressed: () => context.go('/supplier-dashboard'),
+                          onPressed: () => context.go('/feed'),
                           child: const Text('View My Loads'),
                         ),
                         const SizedBox(height: AppDimensions.sm),
@@ -373,7 +423,7 @@ class HomeScreen extends ConsumerWidget {
                       if (isTrucker) ...[
                         GlassmorphicButton(
                           variant: GlassmorphicButtonVariant.primary,
-                          onPressed: () => context.go('/trucker-feed'),
+                          onPressed: () => context.go('/feed'),
                           child: const Text('Find Loads'),
                         ),
                         const SizedBox(height: AppDimensions.lg),
@@ -403,11 +453,6 @@ class HomeScreen extends ConsumerWidget {
                   ),
           ),
         ],
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 0,
-        isSupplier: isSupplier,
-        onTap: (index) => handleBottomNavTap(context, isSupplier, index),
       ),
     );
   }

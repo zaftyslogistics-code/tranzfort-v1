@@ -5,28 +5,28 @@ void main() {
   group('LoadModel', () {
     final testJson = {
       'id': 'load-123',
-      'supplierId': 'user-456',
-      'fromLocation': 'Mumbai, Maharashtra',
-      'fromCity': 'Mumbai',
-      'fromState': 'Maharashtra',
-      'toLocation': 'Delhi, Delhi',
-      'toCity': 'Delhi',
-      'toState': 'Delhi',
-      'loadType': 'Electronics',
-      'truckTypeRequired': 'Container 20ft',
+      'supplier_id': 'user-456',
+      'from_location': 'Mumbai, Maharashtra',
+      'from_city': 'Mumbai',
+      'from_state': 'Maharashtra',
+      'to_location': 'Delhi, Delhi',
+      'to_city': 'Delhi',
+      'to_state': 'Delhi',
+      'load_type': 'Electronics',
+      'truck_type_required': 'Container 20ft',
       'weight': 15.5,
       'price': 50000.0,
-      'priceType': 'Fixed',
-      'paymentTerms': 'Advance 50%',
-      'loadingDate': '2026-01-25',
+      'price_type': 'Fixed',
+      'payment_terms': 'Advance 50%',
+      'loading_date': '2026-01-25T00:00:00.000Z',
       'notes': 'Handle with care',
-      'contactPreferencesCall': true,
-      'contactPreferencesChat': true,
+      'contact_preferences_call': true,
+      'contact_preferences_chat': true,
       'status': 'active',
-      'expiresAt': '2026-04-25T10:00:00.000Z',
-      'viewCount': 10,
-      'createdAt': '2026-01-18T10:00:00.000Z',
-      'updatedAt': '2026-01-18T10:00:00.000Z',
+      'expires_at': '2026-04-25T10:00:00.000Z',
+      'view_count': 10,
+      'created_at': '2026-01-18T10:00:00.000Z',
+      'updated_at': '2026-01-18T10:00:00.000Z',
     };
 
     test('fromJson creates LoadModel from JSON', () {
@@ -74,10 +74,10 @@ void main() {
       final json = loadModel.toJson();
 
       expect(json['id'], 'load-123');
-      expect(json['fromCity'], 'Mumbai');
-      expect(json['toCity'], 'Delhi');
-      expect(json['loadType'], 'Electronics');
-      expect(json['truckTypeRequired'], 'Container 20ft');
+      expect(json['from_city'], 'Mumbai');
+      expect(json['to_city'], 'Delhi');
+      expect(json['load_type'], 'Electronics');
+      expect(json['truck_type_required'], 'Container 20ft');
       expect(json['weight'], 15.5);
       expect(json['price'], 50000.0);
     });
@@ -119,28 +119,28 @@ void main() {
     test('handles null optional fields', () {
       final jsonWithNulls = {
         'id': 'load-123',
-        'supplierId': 'user-456',
-        'fromLocation': 'Mumbai, Maharashtra',
-        'fromCity': 'Mumbai',
-        'fromState': null,
-        'toLocation': 'Delhi, Delhi',
-        'toCity': 'Delhi',
-        'toState': null,
-        'loadType': 'Electronics',
-        'truckTypeRequired': 'Container 20ft',
+        'supplier_id': 'user-456',
+        'from_location': 'Mumbai, Maharashtra',
+        'from_city': 'Mumbai',
+        'from_state': null,
+        'to_location': 'Delhi, Delhi',
+        'to_city': 'Delhi',
+        'to_state': null,
+        'load_type': 'Electronics',
+        'truck_type_required': 'Container 20ft',
         'weight': null,
         'price': null,
-        'priceType': 'Fixed',
-        'paymentTerms': null,
-        'loadingDate': null,
+        'price_type': 'Fixed',
+        'payment_terms': null,
+        'loading_date': null,
         'notes': null,
-        'contactPreferencesCall': true,
-        'contactPreferencesChat': true,
+        'contact_preferences_call': true,
+        'contact_preferences_chat': true,
         'status': 'active',
-        'expiresAt': '2026-04-25T10:00:00.000Z',
-        'viewCount': 0,
-        'createdAt': '2026-01-18T10:00:00.000Z',
-        'updatedAt': '2026-01-18T10:00:00.000Z',
+        'expires_at': '2026-04-25T10:00:00.000Z',
+        'view_count': 0,
+        'created_at': '2026-01-18T10:00:00.000Z',
+        'updated_at': '2026-01-18T10:00:00.000Z',
       };
 
       final loadModel = LoadModel.fromJson(jsonWithNulls);

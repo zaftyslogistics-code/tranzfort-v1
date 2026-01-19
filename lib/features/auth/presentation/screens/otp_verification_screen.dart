@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import '../../../../core/config/env_config.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -272,35 +273,37 @@ class _OtpVerificationScreenState
                                 )
                               : const Text('Verify OTP'),
                         ),
-                        const SizedBox(height: AppDimensions.lg),
-                        Container(
-                          padding: const EdgeInsets.all(AppDimensions.md),
-                          decoration: BoxDecoration(
-                            color: AppColors.glassSurface,
-                            borderRadius:
-                                BorderRadius.circular(AppDimensions.radiusMd),
-                            border: Border.all(color: AppColors.glassBorder),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.info_outline,
-                                color: AppColors.info,
-                                size: 20,
-                              ),
-                              const SizedBox(width: AppDimensions.sm),
-                              Expanded(
-                                child: Text(
-                                  'MOCK MODE: Enter any 6-digit code to continue',
-                                  style:
-                                      Theme.of(context).textTheme.bodySmall?.copyWith(
-                                            color: AppColors.textSecondary,
-                                          ),
+                        if (EnvConfig.useMockAuth) ...[
+                          const SizedBox(height: AppDimensions.lg),
+                          Container(
+                            padding: const EdgeInsets.all(AppDimensions.md),
+                            decoration: BoxDecoration(
+                              color: AppColors.glassSurface,
+                              borderRadius:
+                                  BorderRadius.circular(AppDimensions.radiusMd),
+                              border: Border.all(color: AppColors.glassBorder),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline,
+                                  color: AppColors.info,
+                                  size: 20,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: AppDimensions.sm),
+                                Expanded(
+                                  child: Text(
+                                    'MOCK MODE: Enter any 6-digit code to continue',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall?.copyWith(
+                                              color: AppColors.textSecondary,
+                                            ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ],
                     ),
                   ),

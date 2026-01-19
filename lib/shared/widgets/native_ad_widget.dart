@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../core/ads/admob_compat.dart';
 import '../../core/services/ad_service.dart';
 import '../../core/services/ad_impression_tracker.dart';
 import '../../core/theme/app_colors.dart';

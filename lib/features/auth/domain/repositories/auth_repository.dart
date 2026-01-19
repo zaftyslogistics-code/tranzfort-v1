@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import '../entities/admin.dart';
 import '../entities/user.dart';
 import '../../../../core/errors/failures.dart';
 
@@ -21,4 +22,6 @@ abstract class AuthRepository {
     String userId,
     Map<String, dynamic> updates,
   );
+
+  Future<Either<Failure, Admin?>> getAdminProfile(String userId);
 }

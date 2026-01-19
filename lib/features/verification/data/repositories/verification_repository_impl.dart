@@ -38,4 +38,37 @@ class VerificationRepositoryImpl implements VerificationRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<VerificationRequestModel>>>
+      getPendingVerificationRequests() async {
+    try {
+      final requests = await _dataSource.getPendingVerificationRequests();
+      return Right(requests);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerificationRequestModel>> updateVerificationStatus({
+    required String requestId,
+    required String status,
+    String? rejectionReason,
+  }) async {
+    try {
+      final request = await _dataSource.updateVerificationStatus(
+        requestId: requestId,
+        status: status,
+        rejectionReason: rejectionReason,
+      );
+      return Right(request);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

@@ -28,7 +28,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ref.read(chatNotifierProvider.notifier).fetchMessages(widget.chatId);
+      final user = ref.read(authNotifierProvider).user;
+      if (user != null) {
+        ref.read(chatNotifierProvider.notifier).markAsRead(widget.chatId, user.id);
+      }
       ref.read(chatNotifierProvider.notifier).selectChat(widget.chatId);
     });
   }

@@ -36,7 +36,12 @@ class _IntentSelectionScreenState
 
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
-    context.go('/home');
+    
+    if (intent == 'supplier') {
+      context.go('/supplier-dashboard');
+    } else {
+      context.go('/trucker-feed');
+    }
   }
 
   @override

@@ -5,16 +5,16 @@ void main() {
   group('UserModel', () {
     final testJson = {
       'id': 'test-user-id',
-      'mobileNumber': '9876543210',
-      'countryCode': '+91',
+      'mobile_number': '9876543210',
+      'country_code': '+91',
       'name': 'Test User',
-      'isSupplierEnabled': true,
-      'isTruckerEnabled': false,
-      'supplierVerificationStatus': 'verified',
-      'truckerVerificationStatus': 'unverified',
-      'createdAt': '2026-01-18T10:00:00.000Z',
-      'updatedAt': '2026-01-18T10:00:00.000Z',
-      'lastLoginAt': '2026-01-18T10:00:00.000Z',
+      'is_supplier_enabled': true,
+      'is_trucker_enabled': false,
+      'supplier_verification_status': 'verified',
+      'trucker_verification_status': 'unverified',
+      'created_at': '2026-01-18T10:00:00.000Z',
+      'updated_at': '2026-01-18T10:00:00.000Z',
+      'last_login_at': '2026-01-18T10:00:00.000Z',
     };
 
     test('fromJson creates UserModel from JSON', () {
@@ -48,11 +48,11 @@ void main() {
       final json = userModel.toJson();
 
       expect(json['id'], 'test-user-id');
-      expect(json['mobileNumber'], '9876543210');
-      expect(json['countryCode'], '+91');
+      expect(json['mobile_number'], '9876543210');
+      expect(json['country_code'], '+91');
       expect(json['name'], 'Test User');
-      expect(json['isSupplierEnabled'], true);
-      expect(json['isTruckerEnabled'], false);
+      expect(json['is_supplier_enabled'], true);
+      expect(json['is_trucker_enabled'], false);
     });
 
     test('UserModel properties are accessible', () {
@@ -81,16 +81,16 @@ void main() {
     test('handles null optional fields', () {
       final jsonWithNulls = {
         'id': 'test-user-id',
-        'mobileNumber': '9876543210',
-        'countryCode': '+91',
+        'mobile_number': '9876543210',
+        'country_code': '+91',
         'name': null,
-        'isSupplierEnabled': false,
-        'isTruckerEnabled': false,
-        'supplierVerificationStatus': 'unverified',
-        'truckerVerificationStatus': 'unverified',
-        'createdAt': '2026-01-18T10:00:00.000Z',
-        'updatedAt': '2026-01-18T10:00:00.000Z',
-        'lastLoginAt': '2026-01-18T10:00:00.000Z',
+        'is_supplier_enabled': false,
+        'is_trucker_enabled': false,
+        'supplier_verification_status': 'unverified',
+        'trucker_verification_status': 'unverified',
+        'created_at': '2026-01-18T10:00:00.000Z',
+        'updated_at': '2026-01-18T10:00:00.000Z',
+        'last_login_at': '2026-01-18T10:00:00.000Z',
       };
 
       final userModel = UserModel.fromJson(jsonWithNulls);

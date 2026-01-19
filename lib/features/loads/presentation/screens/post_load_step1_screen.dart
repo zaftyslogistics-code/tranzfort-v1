@@ -185,11 +185,22 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                         materialTypes.when(
                           data: (types) => DropdownButtonFormField<String>(
                             initialValue: _selectedMaterial,
+                            dropdownColor: AppColors.darkSurface,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: AppColors.textPrimary),
                             items: types
                                 .map(
                                   (type) => DropdownMenuItem(
                                     value: type.name,
-                                    child: Text(type.name),
+                                    child: Text(
+                                      type.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(color: AppColors.textPrimary),
+                                    ),
                                   ),
                                 )
                                 .toList(),
@@ -222,11 +233,22 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                         truckTypes.when(
                           data: (types) => DropdownButtonFormField<String>(
                             initialValue: _selectedTruckType,
+                            dropdownColor: AppColors.darkSurface,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: AppColors.textPrimary),
                             items: types
                                 .map(
                                   (type) => DropdownMenuItem(
                                     value: type.name,
-                                    child: Text(type.name),
+                                    child: Text(
+                                      type.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(color: AppColors.textPrimary),
+                                    ),
                                   ),
                                 )
                                 .toList(),

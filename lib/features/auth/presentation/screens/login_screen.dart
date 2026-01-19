@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/config/env_config.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -9,9 +10,7 @@ import '../../../../core/utils/validators.dart';
 import '../../../../shared/widgets/cyan_glow_container.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
-import '../../../../shared/widgets/gradient_text.dart';
 import '../providers/auth_provider.dart';
-import '../widgets/auth_text_field.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -110,12 +109,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(
+              padding: EdgeInsets.fromLTRB(
                 AppDimensions.lg,
                 AppDimensions.xl,
                 AppDimensions.lg,
-                AppDimensions.xl,
+                AppDimensions.xl + MediaQuery.of(context).viewInsets.bottom,
               ),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -123,26 +123,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Column(
                       children: [
                         const CyanGlowContainer(
-                          padding: EdgeInsets.all(AppDimensions.md),
+                          padding: EdgeInsets.all(AppDimensions.sm),
                           borderRadius: AppDimensions.radiusFull,
                           backgroundColor: AppColors.glassSurfaceStrong,
                           borderColor: AppColors.glassBorderStrong,
-                          child: Icon(
-                            Icons.local_shipping,
-                            size: 40,
-                            color: AppColors.primary,
+                          child: Image(
+                            image: AssetImage('logo full.png'),
+                            width: 180,
+                            height: 56,
+                            fit: BoxFit.contain,
                           ),
                         ),
-                        const SizedBox(height: AppDimensions.md),
-                        GradientText(
-                          AppConfig.appName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .displaySmall
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: AppDimensions.xs),
+                        const SizedBox(height: AppDimensions.sm),
                         Text(
                           AppConfig.appTagline,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -171,65 +163,92 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const SizedBox(height: AppDimensions.lg),
                         Form(
                           key: _formKey,
-                          child: Row(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: 90,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: AppDimensions.sm,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.glassSurfaceStrong,
-                                  border: Border.all(
-                                    color: AppColors.glassBorder,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    AppDimensions.radiusMd,
-                                  ),
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: _countryCode,
-                                    isExpanded: true,
-                                    iconEnabledColor: AppColors.textSecondary,
-                                    dropdownColor: AppColors.darkSurface,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(color: AppColors.textPrimary),
-                                    items: const [
-                                      DropdownMenuItem(
-                                        value: '+91',
-                                        child: Text('+91'),
-                                      ),
-                                    ],
-                                    onChanged: (value) {
-                                      if (value != null) {
-                                        setState(() => _countryCode = value);
-                                      }
-                                    },
-                                  ),
-                                ),
+                              Text(
+                                'Mobile Number',
+                                style:
+                                    Theme.of(context).textTheme.labelLarge?.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.textSecondary,
+                                        ),
                               ),
-                              const SizedBox(width: AppDimensions.sm),
-                              Expanded(
-                                child: AuthTextField(
-                                  controller: _mobileController,
-                                  label: 'Mobile Number',
-                                  hint: '9876543210',
-                                  errorText: _mobileError,
-                                  keyboardType: TextInputType.phone,
-                                  maxLength: 10,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  onChanged: (_) {
-                                    if (_mobileError != null) {
-                                      setState(() => _mobileError = null);
-                                    }
-                                  },
-                                ),
+                              const SizedBox(height: AppDimensions.xs),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 90,
+                                    height: AppDimensions.buttonHeight,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: AppDimensions.sm,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.glassSurfaceStrong,
+                                      border: Border.all(
+                                        color: AppColors.glassBorder,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                        AppDimensions.radiusMd,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: _countryCode,
+                                          isExpanded: true,
+                                          iconEnabledColor: AppColors.textSecondary,
+                                          dropdownColor: AppColors.darkSurface,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                color: AppColors.textPrimary,
+                                              ),
+                                          items: const [
+                                            DropdownMenuItem(
+                                              value: '+91',
+                                              child: Text('+91'),
+                                            ),
+                                          ],
+                                          onChanged: (value) {
+                                            if (value != null) {
+                                              setState(() => _countryCode = value);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: AppDimensions.sm),
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _mobileController,
+                                      keyboardType: TextInputType.phone,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      maxLength: 10,
+                                      onChanged: (_) {
+                                        if (_mobileError != null) {
+                                          setState(() => _mobileError = null);
+                                        }
+                                      },
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: AppColors.textPrimary,
+                                          ),
+                                      decoration: InputDecoration(
+                                        hintText: '9876543210',
+                                        errorText: _mobileError,
+                                        counterText: '',
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -286,51 +305,53 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 )
                               : const Text('Send OTP'),
                         ),
-                        const SizedBox(height: AppDimensions.sm),
-                        GlassmorphicButton(
-                          showGlow: false,
-                          onPressed: authState.isLoading
-                              ? null
-                              : () async {
-                                  setState(() {
-                                    _mobileError = Validators
-                                        .validateMobileNumber(_mobileController.text);
-                                  });
+                        if (EnvConfig.useMockAuth) ...[
+                          const SizedBox(height: AppDimensions.sm),
+                          GlassmorphicButton(
+                            showGlow: false,
+                            onPressed: authState.isLoading
+                                ? null
+                                : () async {
+                                    setState(() {
+                                      _mobileError = Validators
+                                          .validateMobileNumber(_mobileController.text);
+                                    });
 
-                                  if (_mobileError != null) return;
+                                    if (_mobileError != null) return;
 
-                                  if (!_acceptedTerms) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content:
-                                            Text('Please accept Terms & Conditions'),
-                                        backgroundColor: AppColors.danger,
-                                      ),
-                                    );
-                                    return;
-                                  }
+                                    if (!_acceptedTerms) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content:
+                                              Text('Please accept Terms & Conditions'),
+                                          backgroundColor: AppColors.danger,
+                                        ),
+                                      );
+                                      return;
+                                    }
 
-                                  final messenger = ScaffoldMessenger.of(context);
-                                  final success = await ref
-                                      .read(authNotifierProvider.notifier)
-                                      .verifyOtp(_mobileController.text, '123456');
+                                    final messenger = ScaffoldMessenger.of(context);
+                                    final success = await ref
+                                        .read(authNotifierProvider.notifier)
+                                        .verifyOtp(_mobileController.text, '123456');
 
-                                  if (!mounted) return;
+                                    if (!mounted) return;
 
-                                  if (!success) {
-                                    final error =
-                                        ref.read(authNotifierProvider).error;
-                                    messenger.showSnackBar(
-                                      SnackBar(
-                                        content:
-                                            Text(error ?? 'Mock login failed'),
-                                        backgroundColor: AppColors.danger,
-                                      ),
-                                    );
-                                  }
-                                },
-                          child: const Text('Continue without OTP (Mock)'),
-                        ),
+                                    if (!success) {
+                                      final error =
+                                          ref.read(authNotifierProvider).error;
+                                      messenger.showSnackBar(
+                                        SnackBar(
+                                          content:
+                                              Text(error ?? 'Mock login failed'),
+                                          backgroundColor: AppColors.danger,
+                                        ),
+                                      );
+                                    }
+                                  },
+                            child: const Text('Continue without OTP (Mock)'),
+                          ),
+                        ],
                         const SizedBox(height: AppDimensions.sm),
                         TextButton(
                           onPressed: authState.isLoading
@@ -338,6 +359,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               : () => context.push('/dev-email-login'),
                           child: const Text(
                             'Dev: Login with Email OTP (Mailpit)',
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: authState.isLoading
+                              ? null
+                              : () => context.push('/admin-login'),
+                          child: const Text(
+                            'Admin: Login with Email & Password',
                           ),
                         ),
                       ],

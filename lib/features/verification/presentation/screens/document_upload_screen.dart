@@ -141,13 +141,36 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                     const SizedBox(height: AppDimensions.sm),
                     DropdownButtonFormField<String>(
                       initialValue: _documentType,
+                      dropdownColor: AppColors.darkSurface,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: AppColors.textPrimary),
                       decoration: const InputDecoration(
                         labelText: 'Document Type',
                       ),
                       items: const [
-                        DropdownMenuItem(value: 'aadhaar', child: Text('Aadhaar')),
-                        DropdownMenuItem(value: 'pan', child: Text('PAN')),
-                        DropdownMenuItem(value: 'manual', child: Text('Manual')),
+                        DropdownMenuItem(
+                          value: 'aadhaar',
+                          child: Text(
+                            'Aadhaar',
+                            style: TextStyle(color: AppColors.textPrimary),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'pan',
+                          child: Text(
+                            'PAN',
+                            style: TextStyle(color: AppColors.textPrimary),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'manual',
+                          child: Text(
+                            'Manual',
+                            style: TextStyle(color: AppColors.textPrimary),
+                          ),
+                        ),
                       ],
                       onChanged: (v) {
                         if (v == null) return;

@@ -1,7 +1,7 @@
 class AppConfig {
   static const String appName = 'Transfort';
   static const String appVersion = '1.0.0';
-  static const String appTagline = 'India\'s Open Load Marketplace';
+  static const String appTagline = 'Transport Open Market';
 
   static const int otpLength = 6;
   static const int otpExpirySeconds = 300;

@@ -85,4 +85,47 @@ class SupabaseVerificationDataSource {
           ),
         );
   }
+
+  Future<List<VerificationRequestModel>> getPendingVerificationRequests() async {
+    try {
+      final response = await _supabase
+          .from('verification_requests')
+          .select('*')
+          .eq('status', 'pending')
+          .order('created_at', ascending: true);
+
+      return (response as List)
+          .map((json) => VerificationRequestModel.fromJson(json))
+          .toList();
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  Future<VerificationRequestModel> updateVerificationStatus({
+    required String requestId,
+    required String status,
+    String? rejectionReason,
+  }) async {
+    try {
+      final updates = {
+        'status': status,
+        'updated_at': DateTime.now().toIso8601String(),
+      };
+      if (rejectionReason != null) {
+        updates['rejection_reason'] = rejectionReason;
+      }
+
+      final response = await _supabase
+          .from('verification_requests')
+          .update(updates)
+          .eq('id', requestId)
+          .select('*')
+          .single();
+
+      return VerificationRequestModel.fromJson(response);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
 }

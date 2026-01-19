@@ -130,10 +130,21 @@ class _FiltersScreenState extends ConsumerState<FiltersScreen> {
                     truckTypes.when(
                       data: (types) => DropdownButtonFormField<String>(
                         initialValue: _selectedTruckType,
+                        dropdownColor: AppColors.darkSurface,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: AppColors.textPrimary),
                         items: types
                             .map((type) => DropdownMenuItem(
                                   value: type.name,
-                                  child: Text(type.name),
+                                  child: Text(
+                                    type.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(color: AppColors.textPrimary),
+                                  ),
                                 ))
                             .toList(),
                         onChanged: (value) =>
@@ -163,10 +174,21 @@ class _FiltersScreenState extends ConsumerState<FiltersScreen> {
                     materialTypes.when(
                       data: (types) => DropdownButtonFormField<String>(
                         initialValue: _selectedMaterial,
+                        dropdownColor: AppColors.darkSurface,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: AppColors.textPrimary),
                         items: types
                             .map((type) => DropdownMenuItem(
                                   value: type.name,
-                                  child: Text(type.name),
+                                  child: Text(
+                                    type.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(color: AppColors.textPrimary),
+                                  ),
                                 ))
                             .toList(),
                         onChanged: (value) =>

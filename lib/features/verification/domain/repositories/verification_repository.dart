@@ -13,4 +13,12 @@ abstract class VerificationRepository {
     required XFile front,
     required XFile back,
   });
+
+  Future<Either<Failure, List<VerificationRequestModel>>> getPendingVerificationRequests();
+
+  Future<Either<Failure, VerificationRequestModel>> updateVerificationStatus({
+    required String requestId,
+    required String status,
+    String? rejectionReason,
+  });
 }

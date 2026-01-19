@@ -1,7 +1,22 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'platform/platform_info.dart';
 
 class EnvConfig {
-  static String get supabaseUrl => dotenv.env['SUPABASE_URL'] ?? '';
+  static String get supabaseUrl {
+    final raw = dotenv.env['SUPABASE_URL'] ?? '';
+    final web = dotenv.env['SUPABASE_URL_WEB'];
+    final android = dotenv.env['SUPABASE_URL_ANDROID'];
+
+    if (isAndroidPlatform && android != null && android.isNotEmpty) {
+      return android;
+    }
+
+    if (!isAndroidPlatform && web != null && web.isNotEmpty) {
+      return web;
+    }
+
+    return raw;
+  }
   static String get supabaseAnonKey => dotenv.env['SUPABASE_ANON_KEY'] ?? '';
   static String get environment => dotenv.env['ENVIRONMENT'] ?? 'local';
   static int get apiTimeout =>
