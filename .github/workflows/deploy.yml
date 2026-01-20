@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: Production Build
 
 on:
   push:
@@ -6,89 +6,58 @@ on:
       - 'v*'
 
 jobs:
-  deploy:
+  build-android:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.19.0'
-        channel: 'stable'
-        cache: true
-        cache-key: flutter-${{ runner.os }}-${{ hashFiles('**/pubspec.lock') }}
-    
-    - name: Setup Supabase CLI
-      run: |
-        curl -L https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz | tar xz
-        sudo mv supabase /usr/local/bin/
-        supabase --version
-    
-    - name: Decrypt environment files
-      run: |
-        echo "${{ secrets.ENCRYPTION_KEY }}" > key.txt
-        openssl aes-256-cbc -d -a -in .env.production.encrypted -out .env.production -kfile key.txt
-        rm key.txt
-    
-    - name: Deploy to Supabase Production
-      run: |
-        supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
-        supabase db push
-        supabase functions deploy
-      env:
-        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-    
-    - name: Build Production APK
-      run: |
-        flutter pub get
-        flutter packages pub run build_runner build --delete-conflicting-outputs
-        flutter build apk --release --shrink --obfuscate --split-debug-info=build/debug-info/
-      env:
-        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-    
-    - name: Build Production App Bundle
-      run: flutter build appbundle --release --shrink --obfuscate --split-debug-info=build/debug-info/
-    
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-    
-    - name: Upload Release APK
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/app/outputs/flutter-apk/app-release.apk
-        asset_name: transfort-${{ github.ref_name }}.apk
-        asset_content_type: application/vnd.android.package-archive
-    
-    - name: Upload Release App Bundle
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/app/outputs/bundle/release/app-release.aab
-        asset_name: transfort-${{ github.ref_name }}.aab
-        asset_content_type: application/vnd.android.package-archive
-    
-    - name: Notify Deployment Success
-      uses: 8398a7/action-slack@v3
-      with:
-        status: success
-        text: "🚀 Transfort app deployed to production successfully!"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      if: always()
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0' # Matches your local version
+          channel: 'stable'
+
+      # Here we build the .env file.
+      # Since you deferred ads, we inject TEST IDs so the app doesn't crash.
+      - name: Create .env file
+        run: |
+          echo "ENVIRONMENT=production" >> .env
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+          echo "USE_MOCK_AUTH=false" >> .env
+          echo "USE_MOCK_LOADS=false" >> .env
+          echo "USE_MOCK_CHAT=false" >> .env
+          echo "ENABLE_ADS=true" >> .env
+          echo "ADMOB_APP_ID=ca-app-pub-3940256099942544~3347511713" >> .env
+          echo "ADMOB_NATIVE_AD_UNIT_ID=ca-app-pub-3940256099942544/2247696110" >> .env
+          echo "ADMOB_BANNER_AD_UNIT_ID=ca-app-pub-3940256099942544/6300978111" >> .env
+
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=upload-keystore.jks" >> android/key.properties
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build App Bundle
+        run: flutter build appbundle --release --no-tree-shake-icons
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-bundle
+          path: build/app/outputs/bundle/release/app-release.aab
