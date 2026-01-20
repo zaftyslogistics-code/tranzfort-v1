@@ -9,6 +9,7 @@ import '../../features/admin/presentation/screens/admin_config_screen.dart';
 import '../../features/admin/presentation/screens/admin_user_management_screen.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/admin_email_password_login_screen.dart';
 import '../../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../../features/auth/presentation/screens/intent_selection_screen.dart';
@@ -17,6 +18,9 @@ import '../../features/auth/presentation/screens/dev_email_otp_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimensions.dart';
 import '../../features/loads/presentation/screens/supplier_dashboard_screen.dart';
+import '../../features/loads/presentation/screens/my_loads_screen.dart';
+import '../../features/fleet/presentation/screens/fleet_management_screen.dart';
+import '../../features/fleet/presentation/screens/add_truck_screen.dart';
 import '../../features/loads/presentation/screens/post_load_step1_screen.dart';
 import '../../features/loads/presentation/screens/post_load_step2_screen.dart';
 import '../../features/loads/presentation/screens/trucker_feed_screen.dart';
@@ -24,9 +28,11 @@ import '../../features/loads/presentation/screens/load_detail_supplier_screen.da
 import '../../features/loads/presentation/screens/load_detail_trucker_screen.dart';
 import '../../features/loads/presentation/screens/filters_screen.dart';
 import '../../features/chat/presentation/screens/chat_screen.dart';
+import '../../features/chat/presentation/screens/chat_list_screen.dart';
 import '../../features/verification/presentation/screens/verification_center_screen.dart';
 import '../../features/saved_searches/presentation/screens/saved_searches_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
+import '../../features/profile/presentation/screens/settings_screen.dart';
 import '../../features/ratings/presentation/screens/ratings_screen.dart';
 import '../../shared/widgets/glassmorphic_button.dart';
 import '../../shared/widgets/glassmorphic_card.dart';
@@ -94,12 +100,20 @@ final routerProvider = Provider<GoRouter>((ref) {
           return '/intent-selection';
         }
 
-        if (!needsIntentSelection && (isOnLogin || isOnOtp || isOnIntent || isOnSplash)) {
-          if (user.isSupplierEnabled) {
-            return '/supplier-dashboard';
-          }
-          if (user.isTruckerEnabled) {
-            return '/trucker-feed';
+        // If user has selected an intent, redirect to appropriate dashboard
+        if (!needsIntentSelection) {
+          // Only redirect if we're not already on the target page
+          final isOnSupplierDashboard = state.matchedLocation == '/supplier-dashboard';
+          final isOnTruckerFeed = state.matchedLocation == '/trucker-feed';
+          
+          if ((isOnIntent || isOnLogin || isOnOtp || isOnSplash) && 
+              !isOnSupplierDashboard && !isOnTruckerFeed) {
+            if (user.isSupplierEnabled) {
+              return '/supplier-dashboard';
+            }
+            if (user.isTruckerEnabled) {
+              return '/trucker-feed';
+            }
           }
         }
       }
@@ -148,10 +162,36 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/supplier-dashboard',
+        name: 'supplier-dashboard',
         builder: (context, state) => const SupplierDashboardScreen(),
       ),
       GoRoute(
+        path: '/my-loads',
+        name: 'my-loads',
+        builder: (context, state) => const MyLoadsScreen(),
+      ),
+      GoRoute(
+        path: '/fleet-management',
+        name: 'fleet-management',
+        builder: (context, state) => const FleetManagementScreen(),
+      ),
+      GoRoute(
+        path: '/add-truck',
+        name: 'add-truck',
+        builder: (context, state) => const AddTruckScreen(),
+      ),
+      GoRoute(
+        path: '/edit-truck/:truckId',
+        name: 'edit-truck',
+        builder: (context, state) {
+          final truckId = state.pathParameters['truckId']!;
+          // TODO: Fetch truck data and pass to AddTruckScreen
+          return AddTruckScreen();
+        },
+      ),
+      GoRoute(
         path: '/trucker-feed',
+        name: 'trucker-feed',
         builder: (context, state) => const TruckerFeedScreen(),
       ),
       GoRoute(
@@ -197,6 +237,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
+        path: '/chat-list',
+        builder: (context, state) => const ChatListScreen(),
+      ),
+      GoRoute(
         path: '/saved-searches',
         builder: (context, state) => const SavedSearchesScreen(),
       ),
@@ -231,6 +275,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/verification',
         builder: (context, state) => const VerificationCenterScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

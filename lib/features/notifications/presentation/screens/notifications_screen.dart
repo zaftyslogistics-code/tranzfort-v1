@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
+import '../../../../shared/widgets/app_bottom_navigation.dart';
 import '../providers/notifications_provider.dart';
 
 class NotificationsScreen extends ConsumerWidget {
@@ -107,6 +108,7 @@ class NotificationsScreen extends ConsumerWidget {
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavigation(),
     );
   }
 
@@ -166,26 +168,26 @@ class NotificationsScreen extends ConsumerWidget {
                       ),
                   ],
                 ),
-                const SizedBox(height: AppDimensions.xs),
-                Text(
-                  message,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                ),
-                const SizedBox(height: AppDimensions.xs),
-                Text(
-                  timeago.format(time),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textTertiary,
-                        fontSize: 12,
-                      ),
-                ),
-              ],
+                  const SizedBox(height: AppDimensions.xs),
+                  Text(
+                    message,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                  ),
+                  const SizedBox(height: AppDimensions.xs),
+                  Text(
+                    DateFormat('MMM d, h:mm a').format(time),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textTertiary,
+                          fontSize: 12,
+                        ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }

@@ -60,11 +60,8 @@ dependencies:
   # Environment
   flutter_dotenv: ^5.1.0
   
-  # HTTP
-  dio: ^5.4.0
-  
-  # Date & Time
-  timeago: ^3.6.0
+  # Biometric Authentication
+  local_auth: ^2.1.6
   
   # Functional Programming
   dartz: ^0.10.1

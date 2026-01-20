@@ -29,20 +29,22 @@ class IntentCard extends StatelessWidget {
             AppColors.glassSurface,
           ];
 
-    return GestureDetector(
-      onTap: onTap,
-      child: GlassmorphicCard(
-        blur: isSelected ? 16 : 12,
-        showGlow: isSelected,
-        borderRadius: AppDimensions.radiusLg,
-        padding: const EdgeInsets.all(AppDimensions.lg),
-        borderColor: borderColor,
-        backgroundColor: isSelected
-            ? AppColors.glassSurfaceStrong
-            : AppColors.glassSurface,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: GlassmorphicCard(
+          blur: isSelected ? 16 : 12,
+          showGlow: isSelected,
+          borderRadius: AppDimensions.radiusLg,
+          padding: const EdgeInsets.all(AppDimensions.lg),
+          borderColor: borderColor,
+          backgroundColor: isSelected
+              ? AppColors.glassSurfaceStrong
+              : AppColors.glassSurface,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
             Container(
               padding: const EdgeInsets.all(AppDimensions.md),
               decoration: BoxDecoration(
@@ -57,7 +59,7 @@ class IntentCard extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 44,
-                color: isSelected ? Colors.white : AppColors.textPrimary,
+                color: isSelected ? AppColors.darkOnSurface : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: AppDimensions.md),
@@ -78,6 +80,7 @@ class IntentCard extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ],
+          ),
         ),
       ),
     );

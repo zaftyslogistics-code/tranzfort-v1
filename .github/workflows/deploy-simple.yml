@@ -1,0 +1,63 @@
+name: Production Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0' # Matches your local version
+          channel: 'stable'
+
+      # Here we build the .env file.
+      # Since you deferred ads, we inject TEST IDs so the app doesn't crash.
+      - name: Create .env file
+        run: |
+          echo "ENVIRONMENT=production" >> .env
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+          echo "USE_MOCK_AUTH=false" >> .env
+          echo "USE_MOCK_LOADS=false" >> .env
+          echo "USE_MOCK_CHAT=false" >> .env
+          echo "ENABLE_ADS=true" >> .env
+          echo "ADMOB_APP_ID=ca-app-pub-3940256099942544~3347511713" >> .env
+          echo "ADMOB_NATIVE_AD_UNIT_ID=ca-app-pub-3940256099942544/2247696110" >> .env
+          echo "ADMOB_BANNER_AD_UNIT_ID=ca-app-pub-3940256099942544/6300978111" >> .env
+
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=upload-keystore.jks" >> android/key.properties
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build App Bundle
+        run: flutter build appbundle --release --no-tree-shake-icons
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-bundle
+          path: build/app/outputs/bundle/release/app-release.aab

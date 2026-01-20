@@ -6,6 +6,7 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
+import '../../../../shared/widgets/free_badge.dart';
 
 class VerificationSuccessScreen extends ConsumerWidget {
   final String roleType;
@@ -61,12 +62,26 @@ class VerificationSuccessScreen extends ConsumerWidget {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: AppDimensions.sm),
+                    const FreeBadge(text: 'FREE VERIFICATION'),
+                    const SizedBox(height: AppDimensions.sm),
                     Text(
                       'Your verification request has been submitted for review.',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
-                          ?.copyWith(color: AppColors.textSecondary),
+                          ?.copyWith(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppDimensions.sm),
+                    Text(
+                      'No payment required - completely free!',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(
+                            color: AppColors.freeModelGreen,
+                            fontWeight: FontWeight.bold,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: AppDimensions.lg),

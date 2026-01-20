@@ -1,23 +1,24 @@
 -- Create loads + master tables
--- Assumes uuid-ossp extension and update_updated_at_column() already exist (created in 20260117000001)
+-- Ensure UUID extension is properly enabled
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA public;
 
 -- Master table: truck types
 CREATE TABLE IF NOT EXISTS public.truck_types (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(80) UNIQUE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Master table: material types
 CREATE TABLE IF NOT EXISTS public.material_types (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(80) UNIQUE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Loads table
 CREATE TABLE public.loads (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   supplier_id UUID NOT NULL REFERENCES public.users(id),
 
   from_city VARCHAR(100) NOT NULL,

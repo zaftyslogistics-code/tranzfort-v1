@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
+import '../../../../shared/widgets/app_bottom_navigation.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/load_card.dart';
@@ -161,6 +162,7 @@ class _SupplierDashboardScreenState
           label: const Text('Post Load'),
           icon: const Icon(Icons.add),
         ),
+        bottomNavigationBar: const AppBottomNavigation(),
       ),
     );
   }

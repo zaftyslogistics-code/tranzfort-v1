@@ -82,8 +82,45 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
       final userId = session.user.id;
       Logger.info('Fetching current user profile: $userId');
 
+      // Check if this is an admin session by checking user metadata or email
+      final userEmail = session.user.email;
+      final isAdmin = userEmail != null && (userEmail.contains('admin') || userEmail.contains('super'));
+      
+      if (isAdmin) {
+        // For admin users, create a user model from session data
+        Logger.info('Admin session detected, creating user from session');
+        final createdAt = DateTime.tryParse(session.user.createdAt) ?? DateTime.now();
+        
+        return UserModel(
+          id: userId,
+          mobileNumber: 'admin', // Placeholder for admin
+          countryCode: '+91',
+          name: session.user.userMetadata?['name'] ?? session.user.email ?? 'Admin User',
+          createdAt: createdAt,
+          lastLoginAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+      }
+
+      // Try to get user profile from database
       final userProfile = await _getUserProfile(userId);
-      return userProfile;
+      if (userProfile != null) {
+        return userProfile;
+      }
+
+      // If no profile found but user is authenticated, create a basic user model
+      Logger.info('No user profile found, creating basic user from session');
+      final createdAt = DateTime.tryParse(session.user.createdAt) ?? DateTime.now();
+      
+      return UserModel(
+        id: userId,
+        mobileNumber: 'user', // Placeholder
+        countryCode: '+91',
+        name: session.user.userMetadata?['name'] ?? session.user.email ?? 'User',
+        createdAt: createdAt,
+        lastLoginAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
     } catch (e) {
       Logger.error('Failed to get current user', error: e);
       return null;

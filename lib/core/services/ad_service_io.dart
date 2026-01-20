@@ -20,8 +20,8 @@ class AdService {
       ? 'ca-app-pub-3940256099942544/6300978111'
       : 'ca-app-pub-3940256099942544/2934735716';
 
-  String get nativeAdUnitId => EnvConfig.adMobNativeAdUnitId ?? _testNativeAdUnitId;
-  String get bannerAdUnitId => EnvConfig.adMobBannerAdUnitId ?? _testBannerAdUnitId;
+  String get nativeAdUnitId => EnvConfig.admobNativeAdUnitId ?? _testNativeAdUnitId;
+  String get bannerAdUnitId => EnvConfig.admobBannerAdUnitId ?? _testBannerAdUnitId;
 
   Future<void> initialize() async {
     if (_isInitialized) {

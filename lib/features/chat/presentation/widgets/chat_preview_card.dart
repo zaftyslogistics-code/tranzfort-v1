@@ -94,7 +94,7 @@ class ChatPreviewCard extends StatelessWidget {
                       child: Text(
                         chat.unreadCount.toString(),
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Colors.white,
+                              color: AppColors.darkOnSurface,
                               fontWeight: FontWeight.bold,
                             ),
                       ),

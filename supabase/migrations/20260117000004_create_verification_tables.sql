@@ -1,9 +1,9 @@
 -- Create verification tables + storage bucket policies
--- Assumes uuid-ossp extension and update_updated_at_column() already exist (created in 20260117000001)
+-- Ensure UUID extension is available (created in previous migration)
 
 -- verification_requests
 CREATE TABLE IF NOT EXISTS public.verification_requests (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   role_type VARCHAR(20) NOT NULL CHECK (role_type IN ('supplier', 'trucker')),
   document_type VARCHAR(20) NOT NULL CHECK (document_type IN ('aadhaar', 'pan', 'manual')),
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.verification_requests (
 
 -- verification_payments
 CREATE TABLE IF NOT EXISTS public.verification_payments (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   verification_request_id UUID REFERENCES public.verification_requests(id) ON DELETE SET NULL,
   role_type VARCHAR(20) NOT NULL CHECK (role_type IN ('supplier', 'trucker')),

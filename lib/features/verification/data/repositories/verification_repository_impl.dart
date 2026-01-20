@@ -4,10 +4,11 @@ import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/repositories/verification_repository.dart';
 import '../datasources/supabase_verification_datasource.dart';
+import '../datasources/mock_verification_datasource.dart';
 import '../models/verification_request_model.dart';
 
 class VerificationRepositoryImpl implements VerificationRepository {
-  final SupabaseVerificationDataSource _dataSource;
+  final dynamic _dataSource;
 
   VerificationRepositoryImpl(this._dataSource);
 
@@ -35,7 +36,7 @@ class VerificationRepositoryImpl implements VerificationRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('Unexpected error: $e'));
     }
   }
 
@@ -48,7 +49,7 @@ class VerificationRepositoryImpl implements VerificationRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('Unexpected error: $e'));
     }
   }
 
@@ -62,13 +63,13 @@ class VerificationRepositoryImpl implements VerificationRepository {
       final request = await _dataSource.updateVerificationStatus(
         requestId: requestId,
         status: status,
-        rejectionReason: rejectionReason,
+        adminNotes: rejectionReason, // Note: using adminNotes parameter name
       );
       return Right(request);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('Unexpected error: $e'));
     }
   }
 }

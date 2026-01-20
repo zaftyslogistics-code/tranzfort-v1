@@ -12,6 +12,8 @@ class LoadFormField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final Widget? suffixIcon;
+  final String? helperText;
+  final String? errorText;
 
   const LoadFormField({
     super.key,
@@ -24,6 +26,8 @@ class LoadFormField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.suffixIcon,
+    this.helperText,
+    this.errorText,
   });
 
   @override
@@ -52,6 +56,8 @@ class LoadFormField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hint,
             suffixIcon: suffixIcon,
+            errorText: errorText,
+            helperText: helperText,
           ),
         ),
       ],

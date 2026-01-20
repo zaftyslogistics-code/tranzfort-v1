@@ -37,24 +37,26 @@ class GlassmorphicButton extends StatelessWidget {
     final isPrimary = variant == GlassmorphicButtonVariant.primary;
 
     final Color backgroundColor = isPrimary
-        ? AppColors.primary.withAlpha(((enabled ? 0.9 : 0.3) * 255).round())
-        : AppColors.glassSurface.withAlpha(((enabled ? 0.6 : 0.25) * 255).round());
+        ? AppColors.primary.withAlpha(((enabled ? 0.9 : 0.4) * 255).round())
+        : AppColors.glassSurface.withAlpha(((enabled ? 0.6 : 0.3) * 255).round());
 
     final Color borderColor = isPrimary
         ? AppColors.primaryVariant
             .withAlpha(((enabled ? 0.7 : 0.3) * 255).round())
-        : AppColors.glassBorder;
+        : AppColors.glassBorder.withAlpha(((enabled ? 1.0 : 0.5) * 255).round());
 
-    final Color textColor = isPrimary ? Colors.white : AppColors.textPrimary;
+    final Color textColor = isPrimary 
+        ? AppColors.darkOnSurface 
+        : enabled ? AppColors.textPrimary : AppColors.textTertiary;
 
     final List<BoxShadow> shadows = [
-      const BoxShadow(
+      BoxShadow(
         color: AppColors.glassShadow,
-        blurRadius: 18,
-        offset: Offset(0, 8),
+        blurRadius: enabled ? 18 : 8,
+        offset: Offset(0, enabled ? 8 : 4),
       ),
       if (isPrimary && showGlow && enabled)
-        const BoxShadow(
+        BoxShadow(
           color: AppColors.cyanGlowStrong,
           blurRadius: 30,
           spreadRadius: 1,
@@ -71,10 +73,10 @@ class GlassmorphicButton extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: onPressed,
+              onTap: enabled ? onPressed : null,
               borderRadius: BorderRadius.circular(borderRadius),
-              splashColor: AppColors.primary.withAlpha((0.2 * 255).round()),
-              highlightColor: AppColors.primary.withAlpha((0.1 * 255).round()),
+              splashColor: enabled ? AppColors.primary.withAlpha((0.2 * 255).round()) : Colors.transparent,
+              highlightColor: enabled ? AppColors.primary.withAlpha((0.1 * 255).round()) : Colors.transparent,
               child: Container(
                 padding: padding,
                 decoration: BoxDecoration(

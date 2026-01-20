@@ -6,17 +6,24 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/config/env_config.dart';
 import 'core/config/app_config.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/app_colors.dart';
 import 'core/utils/logger.dart';
 import 'core/router/app_router.dart';
 import 'core/services/ad_service.dart';
 import 'core/services/offline_cache_service.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
+import 'features/auth/data/datasources/mock_auth_datasource.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    await dotenv.load(fileName: '.env.local');
+    // We prioritize .env (Production), fallback to .env.local (Dev)
+    try {
+      await dotenv.load(fileName: '.env');
+    } catch (e) {
+      await dotenv.load(fileName: '.env.local');
+    }
     Logger.info('Environment loaded: ${EnvConfig.environment}');
 
     await Supabase.initialize(
@@ -33,6 +40,74 @@ void main() async {
 
     final sharedPreferences = await SharedPreferences.getInstance();
     Logger.info('SharedPreferences initialized');
+
+    // Clear mock data in development mode for fresh testing
+    if (EnvConfig.isLocal) {
+      try {
+        final mockAuth = MockAuthDataSource(sharedPreferences);
+        await mockAuth.clearMockData();
+        Logger.info('🧹 Mock data cleared for fresh testing');
+      } catch (e) {
+        Logger.error('Failed to clear mock data', error: e);
+      }
+    }
+
+    // Set up global error handling
+    ErrorWidget.builder = (FlutterErrorDetails details) {
+      Logger.error('Flutter Error', error: details.exception);
+      Logger.error('Stack trace', error: details.stack);
+
+      return MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: AppColors.danger,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Oops! Something went wrong',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Please restart the app. If the problem persists, contact support.',
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Restart app (not perfect, but better than crash)
+                      runApp(
+                        MaterialApp(
+                          home: Scaffold(
+                            body: const Center(
+                              child: Text('Restarting...'),
+                            ),
+                          ),
+                        ),
+                      );
+                      // In a real app, you'd use a proper restart mechanism
+                    },
+                    child: const Text('Restart App'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    };
 
     runApp(
       ProviderScope(

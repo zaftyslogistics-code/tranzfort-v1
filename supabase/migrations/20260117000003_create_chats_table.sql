@@ -1,8 +1,8 @@
 -- Create chats + chat_messages tables
--- Assumes uuid-ossp extension and update_updated_at_column() already exist (created in 20260117000001)
+-- Ensure UUID extension is available (created in previous migration)
 
 CREATE TABLE IF NOT EXISTS public.chats (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   load_id UUID REFERENCES public.loads(id) ON DELETE SET NULL,
   trucker_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   supplier_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS public.chats (
 );
 
 CREATE TABLE IF NOT EXISTS public.chat_messages (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   chat_id UUID NOT NULL REFERENCES public.chats(id) ON DELETE CASCADE,
   sender_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   message_text TEXT NOT NULL,

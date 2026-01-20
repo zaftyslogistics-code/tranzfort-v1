@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/utils/logger.dart';
 import '../../../../shared/widgets/cyan_glow_container.dart';
 import '../../../../shared/widgets/gradient_text.dart';
+import '../../../../shared/widgets/glow_orb.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/intent_card.dart';
 
@@ -21,26 +23,80 @@ class _IntentSelectionScreenState
   String? _selectedIntent;
 
   Future<void> _selectIntent(String intent) async {
+    Logger.info('🎯 INTENT: User selected intent: $intent');
     setState(() => _selectedIntent = intent);
 
     final updates = intent == 'supplier'
         ? {'isSupplierEnabled': true}
         : {'isTruckerEnabled': true};
 
-    final success = await ref
-        .read(authNotifierProvider.notifier)
-        .updateUserProfile(updates);
+    Logger.info('🎯 INTENT: Updating profile with updates: $updates');
 
-    if (!success) return;
-    if (!mounted) return;
+    try {
+      final success = await ref
+          .read(authNotifierProvider.notifier)
+          .updateUserProfile(updates);
 
-    await Future.delayed(const Duration(milliseconds: 300));
-    if (!mounted) return;
-    
-    if (intent == 'supplier') {
-      context.go('/supplier-dashboard');
-    } else {
-      context.go('/trucker-feed');
+      Logger.info('🎯 INTENT: Profile update result: $success');
+
+      // Even if profile update fails, allow navigation
+      // The profile update can be retried later
+      if (!success) {
+        Logger.error('❌ INTENT: Profile update failed, but proceeding with navigation');
+        if (!mounted) return;
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile update failed, but you can continue. Settings will be updated later.'),
+          ),
+        );
+      }
+
+      Logger.info('✅ INTENT: Profile updated successfully, navigating to dashboard');
+      
+      // Wait for the state to update
+      await Future.delayed(const Duration(milliseconds: 100));
+      if (!mounted) return;
+
+      // Check the updated user state
+      final updatedAuthState = ref.read(authNotifierProvider);
+      Logger.info('🎯 INTENT: Updated user state - Supplier: ${updatedAuthState.user?.isSupplierEnabled}, Trucker: ${updatedAuthState.user?.isTruckerEnabled}');
+
+      // Use a more direct navigation approach
+      await Future.delayed(const Duration(milliseconds: 400));
+      if (!mounted) return;
+      
+      // Use goNamed for more reliable navigation
+      if (intent == 'supplier') {
+        Logger.info('🚚 INTENT: Navigating to supplier dashboard');
+        try {
+          // Clear the stack and navigate to dashboard
+          context.goNamed('supplier-dashboard');
+        } catch (e) {
+          Logger.error('❌ INTENT: goNamed error to supplier dashboard: $e');
+          // Fallback: try push
+          if (mounted) context.push('/supplier-dashboard');
+        }
+      } else {
+        Logger.info('🚚 INTENT: Navigating to trucker feed');
+        try {
+          // Clear the stack and navigate to trucker feed
+          context.goNamed('trucker-feed');
+        } catch (e) {
+          Logger.error('❌ INTENT: goNamed error to trucker feed: $e');
+          // Fallback: try push
+          if (mounted) context.push('/trucker-feed');
+        }
+      }
+    } catch (e) {
+      Logger.error('❌ INTENT: Error during intent selection: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An error occurred. Please try again.'),
+          ),
+        );
+      }
     }
   }
 
@@ -49,6 +105,11 @@ class _IntentSelectionScreenState
     final authState = ref.watch(authNotifierProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Choose Your Role'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -65,22 +126,7 @@ class _IntentSelectionScreenState
               ),
             ),
           ),
-          const Positioned(
-            top: -140,
-            right: -120,
-            child: _GlowOrb(
-              size: 280,
-              color: AppColors.cyanGlowStrong,
-            ),
-          ),
-          const Positioned(
-            bottom: -160,
-            left: -140,
-            child: _GlowOrb(
-              size: 320,
-              color: AppColors.primary,
-            ),
-          ),
+          ...GlowOrbPresets.getGlowOrbsForScreen('auth'),
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(
@@ -156,35 +202,6 @@ class _IntentSelectionScreenState
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _GlowOrb extends StatelessWidget {
-  final double size;
-  final Color color;
-
-  const _GlowOrb({
-    required this.size,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: RadialGradient(
-            colors: [
-              color.withAlpha((0.35 * 255).round()),
-              color.withAlpha(0),
-            ],
-          ),
-        ),
       ),
     );
   }

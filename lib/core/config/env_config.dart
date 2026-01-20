@@ -34,15 +34,16 @@ class EnvConfig {
   static String get admobBannerAdUnitId =>
       dotenv.env['ADMOB_BANNER_AD_UNIT_ID'] ?? '';
 
-  static String get razorpayKeyId => dotenv.env['RAZORPAY_KEY_ID'] ?? '';
+  // REMOVED: Razorpay Configuration (Free Model Implementation)
+  // static String get razorpayKeyId => dotenv.env['RAZORPAY_KEY_ID'] ?? '';
+  // static String get razorpayKeySecret => dotenv.env['RAZORPAY_KEY_SECRET'] ?? '';
 
   // AdMob Configuration
-  static String? get adMobNativeAdUnitId => dotenv.env['ADMOB_NATIVE_AD_UNIT_ID'];
-  static String? get adMobBannerAdUnitId => dotenv.env['ADMOB_BANNER_AD_UNIT_ID'];
-  static String get razorpayKeySecret =>
-      dotenv.env['RAZORPAY_KEY_SECRET'] ?? '';
 
   static bool get useMockAuth => dotenv.env['USE_MOCK_AUTH'] == 'true';
   static bool get useMockLoads => dotenv.env['USE_MOCK_LOADS'] == 'true';
   static bool get useMockChat => dotenv.env['USE_MOCK_CHAT'] == 'true';
+
+  // Free Model Configuration
+  static bool get isFreeModel => true; // Always true - payment system removed
 }

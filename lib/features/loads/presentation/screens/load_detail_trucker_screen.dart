@@ -6,6 +6,7 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
+import '../../../../shared/widgets/app_bottom_navigation.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/empty_loads_state.dart';
 import '../widgets/bookmark_button.dart';
@@ -274,6 +275,7 @@ class _LoadDetailTruckerScreenState
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavigation(),
     );
   }
 }

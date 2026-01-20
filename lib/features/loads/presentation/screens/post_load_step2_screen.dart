@@ -6,6 +6,7 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
+import '../../../../shared/widgets/app_bottom_navigation.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/entities/load.dart';
 import '../providers/loads_provider.dart';
@@ -249,6 +250,7 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavigation(),
     );
   }
 }

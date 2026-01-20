@@ -17,9 +17,9 @@ class AppColors {
   static const Color lightBackground = Color(0xFF050A1E);
   static const Color lightSurface = Color(0xFF0A0F24);
   static const Color lightOnSurface = Color(0xFFF8F9FB);
-  static const Color lightOnBackground = Color(0xFF9BA5B8);
+  static const Color lightOnBackground = Color(0xFFCBD5E1); // Improved contrast
   static const Color lightBorder = Color(0xFF1E2738);
-  static const Color lightDisabled = Color(0xFF6B7280);
+  static const Color lightDisabled = Color(0xFF64748B); // Better contrast
 
   // Dark Theme Colors
   static const Color darkBackground = Color(0xFF050A1E);
@@ -34,11 +34,17 @@ class AppColors {
 
   // Text Colors (for consistent readability)
   static const Color textPrimary = Color(0xFFF8F9FB);
-  static const Color textSecondary = Color(0xFF9BA5B8);
-  static const Color textTertiary = Color(0xFF87919F);
+  static const Color textSecondary = Color(0xFFCBD5E1); // Improved contrast
+  static const Color textTertiary = Color(0xFF94A3B8);  // Better visibility
 
   // Accent + Focus
   static const Color focusRing = Color(0xFF00B3B3);
+
+  // Semantic Colors for Accessibility
+  static const Color errorBackground = Color(0x1AE74C3C);
+  static const Color successBackground = Color(0x1A10B981);
+  static const Color warningBackground = Color(0x1AF59E0B);
+  static const Color infoBackground = Color(0x1A00D1FF);
 
   // Gradient Colors
   static const List<Color> textGradient = [
@@ -78,8 +84,8 @@ class AppColors {
   ];
 
   // Glassmorphic Surfaces
-  static const Color glassSurface = Color(0x0DFFFFFF);
-  static const Color glassSurfaceStrong = Color(0x1AFFFFFF);
+  static const Color glassSurface = Color(0x1AFFFFFF); // Improved contrast
+  static const Color glassSurfaceStrong = Color(0x26FFFFFF); // Better visibility
   static const Color glassBorder = Color(0x1AFFFFFF);
   static const Color glassBorderStrong = Color(0x33FFFFFF);
   static const Color glassShadow = Color(0x66000000);
@@ -94,4 +100,10 @@ class AppColors {
   static Color get adBackground => Colors.black.withAlpha((0.08 * 255).round());
   static Color get darkAdBackground =>
       Colors.white.withAlpha((0.08 * 255).round());
+
+  // Free Model Colors
+  static const Color freeModelGreen = Color(0xFF10B981);
+  static const Color freeModelBadge = Color(0xFF059669);
+  static const Color truckPrimary = Color(0xFF3B82F6);
+  static const Color truckSecondary = Color(0xFF6366F1);
 }

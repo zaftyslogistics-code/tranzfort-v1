@@ -6,7 +6,7 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../providers/verification_provider.dart';
-import 'verification_payment_screen.dart';
+import 'verification_success_screen.dart';
 
 class DocumentUploadScreen extends ConsumerStatefulWidget {
   final String roleType;
@@ -28,6 +28,23 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
   XFile? _back;
 
   bool _isSubmitting = false;
+
+  // Role-specific document requirements
+  List<String> get _requiredDocuments {
+    if (widget.roleType == 'supplier') {
+      return ['Aadhaar Card', 'PAN Card', 'Transport License'];
+    } else {
+      return ['Aadhaar Card', 'PAN Card', 'Truck RC'];
+    }
+  }
+
+  List<String> get _optionalDocuments {
+    if (widget.roleType == 'supplier') {
+      return ['GST Certificate'];
+    } else {
+      return ['Additional Truck RC'];
+    }
+  }
 
   @override
   void dispose() {
@@ -85,10 +102,11 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
           SnackBar(content: Text('Submitted: ${request.status}')),
         );
 
+        // Navigate directly to success screen (FREE MODEL - NO PAYMENT)
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => VerificationPaymentScreen(
+            builder: (context) => VerificationSuccessScreen(
               roleType: widget.roleType,
               verificationRequestId: request.id,
             ),
@@ -144,34 +162,27 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                       dropdownColor: AppColors.darkSurface,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyLarge
-                          ?.copyWith(color: AppColors.textPrimary),
-                      decoration: const InputDecoration(
+                          .bodyMedium
+                          ?.copyWith(color: Colors.white),
+                      decoration: InputDecoration(
                         labelText: 'Document Type',
+                        labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.glassBorder),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.glassBorder),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.primary, width: 2),
+                        ),
                       ),
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'aadhaar',
-                          child: Text(
-                            'Aadhaar',
-                            style: TextStyle(color: AppColors.textPrimary),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 'pan',
-                          child: Text(
-                            'PAN',
-                            style: TextStyle(color: AppColors.textPrimary),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 'manual',
-                          child: Text(
-                            'Manual',
-                            style: TextStyle(color: AppColors.textPrimary),
-                          ),
-                        ),
-                      ],
+                      items: _requiredDocuments.map((doc) {
+                        return DropdownMenuItem(
+                          value: doc.toLowerCase().replaceAll(' ', '_'),
+                          child: Text(doc, style: TextStyle(color: Colors.white)),
+                        );
+                      }).toList(),
                       onChanged: (v) {
                         if (v == null) return;
                         setState(() => _documentType = v);
@@ -180,32 +191,54 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                     const SizedBox(height: AppDimensions.md),
                     TextField(
                       controller: _documentNumberController,
-                      decoration: const InputDecoration(
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: AppColors.textPrimary,
+                      ),
+                      decoration: InputDecoration(
                         labelText: 'Document Number (optional)',
+                        labelStyle: TextStyle(color: AppColors.textSecondary),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.glassBorder),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.glassBorder),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.primary, width: 2),
+                        ),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.lg),
-                    OutlinedButton.icon(
-                      onPressed: _isSubmitting ? null : () => _pick(true),
-                      icon: const Icon(Icons.camera_alt_outlined),
-                      label: Text(_front == null ? 'Upload Front' : 'Front selected'),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: OutlinedButton.icon(
+                        onPressed: _isSubmitting ? null : () => _pick(true),
+                        icon: const Icon(Icons.camera_alt_outlined),
+                        label: Text(_front == null ? 'Upload Front' : 'Front selected'),
+                      ),
                     ),
                     const SizedBox(height: AppDimensions.sm),
-                    OutlinedButton.icon(
-                      onPressed: _isSubmitting ? null : () => _pick(false),
-                      icon: const Icon(Icons.camera_alt_outlined),
-                      label: Text(_back == null ? 'Upload Back' : 'Back selected'),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: OutlinedButton.icon(
+                        onPressed: _isSubmitting ? null : () => _pick(false),
+                        icon: const Icon(Icons.camera_alt_outlined),
+                        label: Text(_back == null ? 'Upload Back' : 'Back selected'),
+                      ),
                     ),
                     const SizedBox(height: AppDimensions.lg),
-                    ElevatedButton(
-                      onPressed: _isSubmitting ? null : _submit,
-                      child: _isSubmitting
-                          ? const SizedBox(
-                              height: 18,
-                              width: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Text('Submit Verification'),
+                    MouseRegion(
+                      cursor: _isSubmitting ? SystemMouseCursors.basic : SystemMouseCursors.click,
+                      child: ElevatedButton(
+                        onPressed: _isSubmitting ? null : _submit,
+                        child: _isSubmitting
+                            ? const SizedBox(
+                                height: 18,
+                                width: 18,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Text('Submit Documents'),
+                      ),
                     ),
                   ],
                 ),

@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
+import '../../../../shared/widgets/app_bottom_navigation.dart';
 import '../providers/saved_searches_provider.dart';
 
 class SavedSearchesScreen extends ConsumerWidget {
@@ -158,6 +159,7 @@ class SavedSearchesScreen extends ConsumerWidget {
         label: const Text('New Search'),
         backgroundColor: AppColors.primary,
       ),
+      bottomNavigationBar: const AppBottomNavigation(),
     );
   }
 

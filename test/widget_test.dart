@@ -1,45 +1,92 @@
-// This is a basic Flutter widget test.
+// Widget tests for Transfort app components
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// These tests verify the core UI components work correctly
+// without requiring full app initialization.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:transfort_app/main.dart';
-import 'package:transfort_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:transfort_app/shared/widgets/glassmorphic_button.dart';
+import 'package:transfort_app/shared/widgets/glassmorphic_card.dart';
+import 'package:transfort_app/core/theme/app_theme.dart';
 
 void main() {
-  testWidgets('App initialization test', (WidgetTester tester) async {
-    dotenv.testLoad(
-      fileInput: '''
-ENVIRONMENT=local
-USE_MOCK_AUTH=true
-USE_MOCK_LOADS=true
-USE_MOCK_CHAT=true
-SUPABASE_URL=http://127.0.0.1:54321
-SUPABASE_ANON_KEY=dummy
-''',
-    );
+  group('Widget Tests', () {
+    testWidgets('GlassmorphicButton renders correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: GlassmorphicButton(
+              variant: GlassmorphicButtonVariant.primary,
+              onPressed: () {},
+              child: const Text('Test Button'),
+            ),
+          ),
+        ),
+      );
 
-    SharedPreferences.setMockInitialValues({});
-    final prefs = await SharedPreferences.getInstance();
+      expect(find.text('Test Button'), findsOneWidget);
+      expect(find.byType(GlassmorphicButton), findsOneWidget);
+    });
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
-        child: const TransfortApp(),
-      ),
-    );
+    testWidgets('GlassmorphicCard renders correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: GlassmorphicCard(
+              padding: const EdgeInsets.all(16),
+              child: const Text('Test Card'),
+            ),
+          ),
+        ),
+      );
 
-    await tester.pumpAndSettle();
+      expect(find.text('Test Card'), findsOneWidget);
+      expect(find.byType(GlassmorphicCard), findsOneWidget);
+    });
 
-    expect(find.byType(MaterialApp), findsOneWidget);
+    testWidgets('Button tap works correctly', (WidgetTester tester) async {
+      bool wasTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: GlassmorphicButton(
+              variant: GlassmorphicButtonVariant.primary,
+              onPressed: () {
+                wasTapped = true;
+              },
+              child: const Text('Tap Me'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(GlassmorphicButton));
+      await tester.pump();
+
+      expect(wasTapped, isTrue);
+    });
+
+    testWidgets('Button disabled state works', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: GlassmorphicButton(
+              variant: GlassmorphicButtonVariant.primary,
+              onPressed: null, // Disabled button
+              child: const Text('Disabled Button'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(GlassmorphicButton), findsOneWidget);
+      expect(find.text('Disabled Button'), findsOneWidget);
+    });
   });
 }

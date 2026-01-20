@@ -8,11 +8,14 @@ import '../../../../core/services/ad_impression_tracker.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/native_ad_widget.dart';
+import '../../../../shared/widgets/app_bottom_navigation.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/loads_provider.dart';
+import '../widgets/filter_chip_group.dart';
 import '../widgets/load_card.dart';
 import '../widgets/empty_loads_state.dart';
-import '../widgets/filter_chip_group.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../../shared/widgets/offline_banner.dart';
+import '../../../../shared/widgets/glow_orb.dart';
 
 class TruckerFeedScreen extends ConsumerStatefulWidget {
   const TruckerFeedScreen({super.key});
@@ -87,6 +90,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
       ),
       body: Stack(
         children: [
+          const OfflineBanner(), // Show offline banner at top when offline
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
@@ -101,22 +105,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
               ),
             ),
           ),
-          const Positioned(
-            top: -140,
-            right: -120,
-            child: _GlowOrb(
-              size: 280,
-              color: AppColors.cyanGlowStrong,
-            ),
-          ),
-          const Positioned(
-            bottom: -160,
-            left: -140,
-            child: _GlowOrb(
-              size: 320,
-              color: AppColors.primary,
-            ),
-          ),
+          ...GlowOrbPresets.getGlowOrbsForScreen('load'),
           Column(
             children: [
               Padding(
@@ -201,35 +190,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _GlowOrb extends StatelessWidget {
-  final double size;
-  final Color color;
-
-  const _GlowOrb({
-    required this.size,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: RadialGradient(
-            colors: [
-              color.withAlpha((0.35 * 255).round()),
-              color.withAlpha(0),
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: const AppBottomNavigation(),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ import '../../../../core/utils/validators.dart';
 import '../../../../shared/widgets/cyan_glow_container.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
+import '../../../../shared/widgets/error_display.dart';
 import '../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -25,27 +27,54 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   String _countryCode = AppConfig.defaultCountryCode;
   bool _acceptedTerms = false;
   String? _mobileError;
+  String? _generalError;
+  Timer? _otpCooldownTimer;
+  int _otpCooldownSeconds = 0;
+  bool _canSendOtp = true;
 
   @override
   void dispose() {
     _mobileController.dispose();
+    _otpCooldownTimer?.cancel();
     super.dispose();
   }
 
+  void _startOtpCooldown() {
+    setState(() {
+      _canSendOtp = false;
+      _otpCooldownSeconds = 30; // 30 second cooldown
+    });
+
+    _otpCooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _otpCooldownSeconds--;
+        if (_otpCooldownSeconds <= 0) {
+          _canSendOtp = true;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
   Future<void> _sendOtp() async {
+    if (!_canSendOtp) {
+      setState(() {
+        _generalError = 'Please wait ${_otpCooldownSeconds}s before requesting another OTP';
+      });
+      return;
+    }
+
     setState(() {
       _mobileError = Validators.validateMobileNumber(_mobileController.text);
+      _generalError = null;
     });
 
     if (_mobileError != null) return;
 
     if (!_acceptedTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please accept Terms & Conditions'),
-          backgroundColor: AppColors.danger,
-        ),
-      );
+      setState(() {
+        _generalError = 'Please accept Terms & Conditions';
+      });
       return;
     }
 
@@ -55,18 +84,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
 
     if (success && mounted) {
+      _startOtpCooldown(); // Start cooldown after successful send
       context.push('/otp', extra: {
         'mobileNumber': _mobileController.text,
         'countryCode': _countryCode,
       });
     } else if (mounted) {
       final error = ref.read(authNotifierProvider).error;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error ?? 'Failed to send OTP'),
-          backgroundColor: AppColors.danger,
-        ),
-      );
+      setState(() {
+        _generalError = error ?? 'Failed to send OTP';
+      });
     }
   }
 
@@ -75,6 +102,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final authState = ref.watch(authNotifierProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -149,21 +181,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   GlassmorphicCard(
                     showGlow: true,
                     padding: const EdgeInsets.all(AppDimensions.lg),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Login with Mobile Number',
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textPrimary,
-                                  ),
-                        ),
-                        const SizedBox(height: AppDimensions.lg),
-                        Form(
-                          key: _formKey,
-                          child: Column(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Login with Mobile Number',
+                            style:
+                                Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textPrimary,
+                                    ),
+                          ),
+                          const SizedBox(height: AppDimensions.lg),
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -230,9 +262,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         FilteringTextInputFormatter.digitsOnly,
                                       ],
                                       maxLength: 10,
-                                      onChanged: (_) {
+                                      onChanged: (value) {
                                         if (_mobileError != null) {
-                                          setState(() => _mobileError = null);
+                                          setState(() {
+                                            _mobileError = Validators.validateMobileNumber(value);
+                                            _generalError = null;
+                                          });
                                         }
                                       },
                                       style: Theme.of(context)
@@ -252,124 +287,137 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: AppDimensions.md),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _acceptedTerms,
-                              activeColor: AppColors.primary,
-                              checkColor: Colors.white,
-                              side: const BorderSide(color: AppColors.glassBorder),
-                              onChanged: (value) {
-                                setState(() => _acceptedTerms = value ?? false);
-                              },
-                            ),
-                            Expanded(
-                              child: Text.rich(
-                                TextSpan(
-                                  text: 'I accept the ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: AppColors.textSecondary,
-                                      ),
-                                  children: const [
-                                    TextSpan(
-                                      text: 'Terms & Conditions',
-                                      style: TextStyle(
-                                        color: AppColors.primary,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.md),
+                  if (_generalError != null) ...[
+                    ErrorDisplay(
+                      message: _generalError!,
+                      onRetry: _canSendOtp ? _sendOtp : null,
+                      retryText: 'Retry',
+                    ),
+                    const SizedBox(height: AppDimensions.md),
+                  ],
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _acceptedTerms,
+                        activeColor: AppColors.primary,
+                        checkColor: Colors.white,
+                        side: const BorderSide(color: AppColors.glassBorder),
+                        onChanged: (value) {
+                          setState(() {
+                            _acceptedTerms = value ?? false;
+                            _generalError = null;
+                          });
+                        },
+                      ),
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            text: 'I accept the ',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                            children: const [
+                              TextSpan(
+                                text: 'Terms & Conditions',
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.lg),
+                  GlassmorphicButton(
+                    variant: GlassmorphicButtonVariant.primary,
+                    onPressed: authState.isLoading || !_canSendOtp ? null : _sendOtp,
+                    child: authState.isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: AppDimensions.lg),
-                        GlassmorphicButton(
-                          variant: GlassmorphicButtonVariant.primary,
-                          onPressed: authState.isLoading ? null : _sendOtp,
-                          child: authState.isLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor:
-                                        AlwaysStoppedAnimation<Color>(Colors.white),
+                          )
+                        : Text(_canSendOtp
+                            ? 'Send OTP'
+                            : 'Send OTP (${_otpCooldownSeconds}s)'),
+                  ),
+                  if (EnvConfig.useMockAuth) ...[
+                    const SizedBox(height: AppDimensions.sm),
+                    GlassmorphicButton(
+                      showGlow: false,
+                      onPressed: authState.isLoading
+                          ? null
+                          : () async {
+                              setState(() {
+                                _mobileError = Validators
+                                    .validateMobileNumber(_mobileController.text);
+                              });
+
+                              if (_mobileError != null) return;
+
+                              if (!_acceptedTerms) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Please accept Terms & Conditions'),
+                                    backgroundColor: AppColors.danger,
                                   ),
-                                )
-                              : const Text('Send OTP'),
-                        ),
-                        if (EnvConfig.useMockAuth) ...[
-                          const SizedBox(height: AppDimensions.sm),
-                          GlassmorphicButton(
-                            showGlow: false,
-                            onPressed: authState.isLoading
-                                ? null
-                                : () async {
-                                    setState(() {
-                                      _mobileError = Validators
-                                          .validateMobileNumber(_mobileController.text);
-                                    });
+                                );
+                                return;
+                              }
 
-                                    if (_mobileError != null) return;
+                              final messenger = ScaffoldMessenger.of(context);
+                              final success = await ref
+                                  .read(authNotifierProvider.notifier)
+                                  .verifyOtp(_mobileController.text, '123456');
 
-                                    if (!_acceptedTerms) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content:
-                                              Text('Please accept Terms & Conditions'),
-                                          backgroundColor: AppColors.danger,
-                                        ),
-                                      );
-                                      return;
-                                    }
+                              if (!mounted) return;
 
-                                    final messenger = ScaffoldMessenger.of(context);
-                                    final success = await ref
-                                        .read(authNotifierProvider.notifier)
-                                        .verifyOtp(_mobileController.text, '123456');
-
-                                    if (!mounted) return;
-
-                                    if (!success) {
-                                      final error =
-                                          ref.read(authNotifierProvider).error;
-                                      messenger.showSnackBar(
-                                        SnackBar(
-                                          content:
-                                              Text(error ?? 'Mock login failed'),
-                                          backgroundColor: AppColors.danger,
-                                        ),
-                                      );
-                                    }
-                                  },
-                            child: const Text('Continue without OTP (Mock)'),
-                          ),
-                        ],
-                        const SizedBox(height: AppDimensions.sm),
-                        TextButton(
-                          onPressed: authState.isLoading
-                              ? null
-                              : () => context.push('/dev-email-login'),
-                          child: const Text(
-                            'Dev: Login with Email OTP (Mailpit)',
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: authState.isLoading
-                              ? null
-                              : () => context.push('/admin-login'),
-                          child: const Text(
-                            'Admin: Login with Email & Password',
-                          ),
-                        ),
-                      ],
+                              if (!success) {
+                                final error =
+                                    ref.read(authNotifierProvider).error;
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text(error ?? 'Mock login failed'),
+                                    backgroundColor: AppColors.danger,
+                                  ),
+                                );
+                              }
+                            },
+                      child: const Text('Continue without OTP (Mock)'),
+                    ),
+                  ],
+                  const SizedBox(height: AppDimensions.sm),
+                  TextButton(
+                    onPressed: authState.isLoading
+                        ? null
+                        : () => context.push('/dev-email-login'),
+                    child: const Text(
+                      'Dev: Login with Email OTP (Mailpit)',
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: authState.isLoading
+                        ? null
+                        : () => context.push('/admin-login'),
+                    child: const Text(
+                      'Admin: Login with Email & Password',
                     ),
                   ),
                 ],

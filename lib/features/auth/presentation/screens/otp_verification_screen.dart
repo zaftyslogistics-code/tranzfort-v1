@@ -111,10 +111,13 @@ class _OtpVerificationScreenState
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Verify OTP'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Stack(
         children: [

@@ -18,7 +18,7 @@ CREATE POLICY "Admins can view own profile"
 
 -- Create audit_logs table
 CREATE TABLE public.audit_logs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   admin_id UUID REFERENCES public.admin_profiles(id),
   action VARCHAR(100) NOT NULL,
   entity_type VARCHAR(50),

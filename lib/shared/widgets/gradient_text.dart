@@ -34,7 +34,7 @@ class GradientText extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: defaultStyle.copyWith(color: Colors.white),
+        style: defaultStyle.copyWith(color: Colors.transparent),
         textAlign: textAlign,
       ),
     );

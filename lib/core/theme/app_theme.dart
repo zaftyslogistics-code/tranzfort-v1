@@ -106,19 +106,41 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderSide: const BorderSide(
+            color: AppColors.primary,
+            width: 2,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+          borderSide: const BorderSide(color: AppColors.danger, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
-          borderSide: const BorderSide(color: AppColors.danger, width: 2),
+          borderSide: const BorderSide(color: AppColors.danger, width: 1),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+          borderSide: const BorderSide(color: AppColors.glassBorder, width: 1),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.sm,
           vertical: AppDimensions.sm,
         ),
         hintStyle: AppTextStyles.body.copyWith(
+          color: AppColors.textTertiary,
+        ),
+        labelStyle: AppTextStyles.label.copyWith(
           color: AppColors.textSecondary,
         ),
+        errorStyle: AppTextStyles.caption.copyWith(
+          color: AppColors.danger,
+        ),
+        helperStyle: AppTextStyles.caption.copyWith(
+          color: AppColors.textTertiary,
+        ),
+        suffixIconColor: AppColors.textSecondary,
+        prefixIconColor: AppColors.textSecondary,
       ),
 
       chipTheme: ChipThemeData(
