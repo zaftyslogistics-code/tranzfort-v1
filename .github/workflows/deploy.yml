@@ -21,7 +21,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0' # Updated to support Dart 3.9.0
+          flutter-version: '3.27.0' # Latest stable with Dart 3.9.0+
           channel: 'stable'
 
       # Here we build the .env file.
