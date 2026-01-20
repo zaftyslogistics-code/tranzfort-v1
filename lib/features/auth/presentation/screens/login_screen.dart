@@ -187,12 +187,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            'Login with Mobile Number',
+                            'Welcome to Transfort',
                             style:
                                 Theme.of(context).textTheme.titleLarge?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.textPrimary,
                                     ),
+                          ),
+                          const SizedBox(height: AppDimensions.xs),
+                          Row(
+                            children: [
+                              Icon(Icons.lock_outline, 
+                                size: 14, 
+                                color: AppColors.textSecondary
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Secure Login',
+                                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                  color: AppColors.textSecondary,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: AppDimensions.lg),
                           Column(

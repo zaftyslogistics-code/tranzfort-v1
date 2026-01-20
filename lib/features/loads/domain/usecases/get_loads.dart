@@ -11,10 +11,12 @@ class GetLoads {
   Future<Either<Failure, List<Load>>> call({
     String? status,
     String? supplierId,
+    String? searchQuery,
   }) async {
     return await repository.getLoads(
       status: status,
       supplierId: supplierId,
+      searchQuery: searchQuery,
     );
   }
 }

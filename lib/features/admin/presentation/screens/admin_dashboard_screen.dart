@@ -11,6 +11,10 @@ class AdminDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final admin = ref.watch(authNotifierProvider).admin;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 1024;
+    final isTablet = screenWidth > 768 && screenWidth <= 1024;
+    final isMobile = screenWidth <= 768;
 
     return Scaffold(
       appBar: AppBar(
@@ -22,61 +26,126 @@ class AdminDashboardScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Row(
-        children: [
-          // Sidebar
-          Container(
-            width: 250,
-            color: AppColors.secondaryBackground,
-            child: Column(
+      drawer: isMobile ? _buildDrawer(context) : null,
+      body: isDesktop || isTablet
+          ? Row(
               children: [
-                const SizedBox(height: AppDimensions.xl),
-                _SidebarItem(
-                  icon: Icons.dashboard,
-                  label: 'Overview',
-                  isSelected: true,
-                  onTap: () {},
+                // Desktop/Tablet Sidebar
+                Container(
+                  width: isDesktop ? 250 : 200,
+                  color: AppColors.secondaryBackground,
+                  child: _buildSidebarContent(context),
                 ),
-                _SidebarItem(
-                  icon: Icons.verified_user,
-                  label: 'KYC Verifications',
-                  onTap: () => GoRouter.of(context).push('/admin/verifications'),
-                ),
-                _SidebarItem(
-                  icon: Icons.people,
-                  label: 'User Management',
-                  onTap: () => GoRouter.of(context).push('/admin/users'),
-                ),
-                _SidebarItem(
-                  icon: Icons.local_shipping,
-                  label: 'Load Monitoring',
-                  onTap: () => GoRouter.of(context).push('/admin/loads'),
-                ),
-                _SidebarItem(
-                  icon: Icons.settings,
-                  label: 'System Config',
-                  onTap: () => GoRouter.of(context).push('/admin/config'),
-                ),
+                // Main Content
+                Expanded(child: _buildMainContent(context, admin)),
               ],
-            ),
-          ),
-          // Main Content
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(AppDimensions.xl),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome, ${admin?.fullName ?? 'Admin'}',
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
+            )
+          : _buildMainContent(context, admin), // Mobile: full width
+    );
+  }
+
+  // Build mobile drawer
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      backgroundColor: AppColors.secondaryBackground,
+      child: _buildSidebarContent(context),
+    );
+  }
+
+  // Build sidebar content for both drawer and desktop sidebar
+  Widget _buildSidebarContent(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: AppDimensions.xl),
+        _SidebarItem(
+          icon: Icons.dashboard,
+          label: 'Overview',
+          isSelected: true,
+          onTap: () => Navigator.of(context).pop(),
+        ),
+        _SidebarItem(
+          icon: Icons.verified_user,
+          label: 'KYC Verifications',
+          onTap: () {
+            Navigator.of(context).pop();
+            context.push('/admin/verifications');
+          },
+        ),
+        _SidebarItem(
+          icon: Icons.people,
+          label: 'User Management',
+          onTap: () {
+            Navigator.of(context).pop();
+            context.push('/admin/users');
+          },
+        ),
+        _SidebarItem(
+          icon: Icons.local_shipping,
+          label: 'Load Monitoring',
+          onTap: () {
+            Navigator.of(context).pop();
+            context.push('/admin/loads');
+          },
+        ),
+        _SidebarItem(
+          icon: Icons.settings,
+          label: 'System Config',
+          onTap: () {
+            Navigator.of(context).pop();
+            context.push('/admin/config');
+          },
+        ),
+      ],
+    );
+  }
+
+  // Build main content area
+  Widget _buildMainContent(BuildContext context, dynamic admin) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth <= 768;
+    
+    return Container(
+      padding: EdgeInsets.all(isMobile ? AppDimensions.md : AppDimensions.xl),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome, ${admin?.fullName ?? 'Admin'}',
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: isMobile ? 24 : null,
                   ),
-                  const SizedBox(height: AppDimensions.xl),
-                  // Summary Cards
-                  Row(
+            ),
+            const SizedBox(height: AppDimensions.xl),
+            // Summary Cards - responsive layout
+            isMobile
+                ? Column(
+                    children: [
+                      _StatCard(
+                        title: 'Pending KYC',
+                        value: '12',
+                        icon: Icons.hourglass_empty,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(height: AppDimensions.md),
+                      _StatCard(
+                        title: 'Active Loads',
+                        value: '450',
+                        icon: Icons.local_shipping,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(height: AppDimensions.md),
+                      _StatCard(
+                        title: 'Total Users',
+                        value: '1,250',
+                        icon: Icons.people,
+                        color: Colors.green,
+                      ),
+                    ],
+                  )
+                : Row(
                     children: [
                       _StatCard(
                         title: 'Pending KYC',
@@ -93,18 +162,51 @@ class AdminDashboardScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: AppDimensions.lg),
                       _StatCard(
-                        title: 'Total Revenue',
-                        value: '₹24,500',
-                        icon: Icons.account_balance_wallet,
+                        title: 'Total Users',
+                        value: '1,250',
+                        icon: Icons.people,
                         color: Colors.green,
                       ),
                     ],
                   ),
-                ],
-              ),
+            const SizedBox(height: AppDimensions.xl),
+            // Quick Actions
+            Text(
+              'Quick Actions',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-          ),
-        ],
+            const SizedBox(height: AppDimensions.lg),
+            Wrap(
+              spacing: AppDimensions.md,
+              runSpacing: AppDimensions.md,
+              children: [
+                _QuickActionCard(
+                  title: 'Review KYC',
+                  icon: Icons.verified_user,
+                  onTap: () => context.push('/admin/verifications'),
+                ),
+                _QuickActionCard(
+                  title: 'Manage Users',
+                  icon: Icons.people,
+                  onTap: () => context.push('/admin/users'),
+                ),
+                _QuickActionCard(
+                  title: 'Monitor Loads',
+                  icon: Icons.local_shipping,
+                  onTap: () => context.push('/admin/loads'),
+                ),
+                _QuickActionCard(
+                  title: 'System Config',
+                  icon: Icons.settings,
+                  onTap: () => context.push('/admin/config'),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -158,30 +260,105 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth <= 768;
+    
+    return isMobile 
+        ? Card(
+            color: AppColors.glassSurfaceStrong,
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimensions.lg),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(icon, color: color, size: 32),
+                  const SizedBox(height: AppDimensions.md),
+                  Text(
+                    value,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        : Expanded(
+            child: Card(
+              color: AppColors.glassSurfaceStrong,
+              child: Padding(
+                padding: const EdgeInsets.all(AppDimensions.lg),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(icon, color: color, size: 32),
+                    const SizedBox(height: AppDimensions.md),
+                    Text(
+                      value,
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+  }
+}
+
+// Quick action card widget
+class _QuickActionCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _QuickActionCard({
+    required this.title,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 150,
       child: Card(
         color: AppColors.glassSurfaceStrong,
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimensions.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: color, size: 32),
-              const SizedBox(height: AppDimensions.md),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-              ),
-            ],
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+          child: Padding(
+            padding: const EdgeInsets.all(AppDimensions.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, color: AppColors.primary, size: 32),
+                const SizedBox(height: AppDimensions.sm),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),

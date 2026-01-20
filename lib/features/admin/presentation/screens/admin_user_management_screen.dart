@@ -83,25 +83,7 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
                   ? const Center(child: CircularProgressIndicator())
                   : state.users.isEmpty
                       ? const Center(child: Text('No users found'))
-                      : SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              headingRowColor:
-                                  MaterialStateProperty.all(AppColors.secondaryBackground),
-                              columns: const [
-                                DataColumn(label: Text('ID')),
-                                DataColumn(label: Text('Mobile')),
-                                DataColumn(label: Text('Name')),
-                                DataColumn(label: Text('Supplier')),
-                                DataColumn(label: Text('Trucker')),
-                                DataColumn(label: Text('Supplier KYC')),
-                                DataColumn(label: Text('Trucker KYC')),
-                              ],
-                              rows: state.users.map((u) => _row(context, u)).toList(),
-                            ),
-                          ),
-                        ),
+                      : _buildResponsiveUserList(context, state.users),
             ),
           ],
         ),
@@ -109,7 +91,129 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
     );
   }
 
-  DataRow _row(BuildContext context, UserModel user) {
+  Widget _buildResponsiveUserList(BuildContext context, List<UserModel> users) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth <= 768;
+
+    if (isMobile) {
+      return ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          final user = users[index];
+          return _buildUserCard(context, user);
+        },
+      );
+    } else {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
+          child: DataTable(
+            headingRowColor: MaterialStateProperty.all(AppColors.secondaryBackground),
+            columns: const [
+              DataColumn(label: Text('ID')),
+              DataColumn(label: Text('Mobile')),
+              DataColumn(label: Text('Name')),
+              DataColumn(label: Text('Supplier')),
+              DataColumn(label: Text('Trucker')),
+              DataColumn(label: Text('Supplier KYC')),
+              DataColumn(label: Text('Trucker KYC')),
+            ],
+            rows: users.map((u) => _buildDataRow(context, u)).toList(),
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _buildUserCard(BuildContext context, UserModel user) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: AppDimensions.md),
+      color: AppColors.glassSurfaceStrong,
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimensions.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'ID: ${user.id.substring(0, 8)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '${user.countryCode}${user.mobileNumber}',
+                  style: const TextStyle(color: AppColors.textSecondary),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppDimensions.sm),
+            Text('Name: ${user.name ?? '-'}'),
+            const SizedBox(height: AppDimensions.md),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Supplier', style: TextStyle(fontWeight: FontWeight.w500)),
+                      Switch(
+                        value: user.isSupplierEnabled,
+                        onChanged: (val) => _updateUser(user.id, {'is_supplier_enabled': val}),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Trucker', style: TextStyle(fontWeight: FontWeight.w500)),
+                      Switch(
+                        value: user.isTruckerEnabled,
+                        onChanged: (val) => _updateUser(user.id, {'is_trucker_enabled': val}),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppDimensions.md),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Supplier KYC', style: TextStyle(fontWeight: FontWeight.w500)),
+                      _StatusDropdown(
+                        value: user.supplierVerificationStatus,
+                        onChanged: (val) => _updateUser(user.id, {'supplier_verification_status': val}),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Trucker KYC', style: TextStyle(fontWeight: FontWeight.w500)),
+                      _StatusDropdown(
+                        value: user.truckerVerificationStatus,
+                        onChanged: (val) => _updateUser(user.id, {'trucker_verification_status': val}),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  DataRow _buildDataRow(BuildContext context, UserModel user) {
     return DataRow(
       cells: [
         DataCell(Text(user.id.substring(0, 8))),

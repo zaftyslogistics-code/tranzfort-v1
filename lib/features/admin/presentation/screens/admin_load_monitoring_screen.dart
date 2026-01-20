@@ -32,42 +32,99 @@ class _AdminLoadMonitoringScreenState extends ConsumerState<AdminLoadMonitoringS
           ? const Center(child: CircularProgressIndicator())
           : state.allLoads.isEmpty
               ? const Center(child: Text('No loads found'))
-              : Padding(
-                  padding: const EdgeInsets.all(AppDimensions.md),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SingleChildScrollView(
-                      child: DataTable(
-                        headingRowColor: MaterialStateProperty.all(AppColors.secondaryBackground),
-                        columns: const [
-                          DataColumn(label: Text('ID')),
-                          DataColumn(label: Text('From')),
-                          DataColumn(label: Text('To')),
-                          DataColumn(label: Text('Type')),
-                          DataColumn(label: Text('Status')),
-                          DataColumn(label: Text('Posted')),
-                          DataColumn(label: Text('Actions')),
-                        ],
-                        rows: state.allLoads.map((load) {
-                          return DataRow(cells: [
-                            DataCell(Text(load.id.substring(0, 8))),
-                            DataCell(Text(load.fromCity)),
-                            DataCell(Text(load.toCity)),
-                            DataCell(Text(load.loadType)),
-                            DataCell(_StatusBadge(status: load.status)),
-                            DataCell(Text(Formatters.formatDate(load.createdAt))),
-                            DataCell(
-                              IconButton(
-                                icon: const Icon(Icons.delete_outline, color: Colors.red),
-                                onPressed: () => _confirmDelete(context, load.id),
-                              ),
-                            ),
-                          ]);
-                        }).toList(),
-                      ),
+              : _buildResponsiveLoadList(context, state.allLoads),
+    );
+  }
+
+  Widget _buildResponsiveLoadList(BuildContext context, List<dynamic> loads) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth <= 768;
+
+    if (isMobile) {
+      return ListView.builder(
+        padding: const EdgeInsets.all(AppDimensions.md),
+        itemCount: loads.length,
+        itemBuilder: (context, index) {
+          final load = loads[index];
+          return _buildLoadCard(context, load);
+        },
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(AppDimensions.md),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SingleChildScrollView(
+            child: DataTable(
+              headingRowColor: MaterialStateProperty.all(AppColors.secondaryBackground),
+              columns: const [
+                DataColumn(label: Text('ID')),
+                DataColumn(label: Text('From')),
+                DataColumn(label: Text('To')),
+                DataColumn(label: Text('Type')),
+                DataColumn(label: Text('Status')),
+                DataColumn(label: Text('Posted')),
+                DataColumn(label: Text('Actions')),
+              ],
+              rows: loads.map((load) {
+                return DataRow(cells: [
+                  DataCell(Text(load.id.substring(0, 8))),
+                  DataCell(Text(load.fromCity)),
+                  DataCell(Text(load.toCity)),
+                  DataCell(Text(load.loadType)),
+                  DataCell(_StatusBadge(status: load.status)),
+                  DataCell(Text(Formatters.formatDate(load.createdAt))),
+                  DataCell(
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                      onPressed: () => _confirmDelete(context, load.id),
                     ),
                   ),
+                ]);
+              }).toList(),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _buildLoadCard(BuildContext context, dynamic load) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: AppDimensions.md),
+      color: AppColors.glassSurfaceStrong,
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimensions.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'ID: ${load.id.substring(0, 8)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
+                _StatusBadge(status: load.status),
+              ],
+            ),
+            const SizedBox(height: AppDimensions.sm),
+            Text('Route: ${load.fromCity} → ${load.toCity}'),
+            Text('Type: ${load.loadType}'),
+            Text('Posted: ${Formatters.formatDate(load.createdAt)}'),
+            const SizedBox(height: AppDimensions.md),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  onPressed: () => _confirmDelete(context, load.id),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 

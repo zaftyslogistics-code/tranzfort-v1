@@ -9,6 +9,7 @@ class User extends Equatable {
   final bool isTruckerEnabled;
   final String supplierVerificationStatus;
   final String truckerVerificationStatus;
+  final Map<String, dynamic> preferences;
   final DateTime createdAt;
   final DateTime lastLoginAt;
 
@@ -21,6 +22,7 @@ class User extends Equatable {
     required this.isTruckerEnabled,
     required this.supplierVerificationStatus,
     required this.truckerVerificationStatus,
+    this.preferences = const {},
     required this.createdAt,
     required this.lastLoginAt,
   });
@@ -39,5 +41,8 @@ class User extends Equatable {
         isTruckerEnabled,
         supplierVerificationStatus,
         truckerVerificationStatus,
+        preferences,
+        createdAt,
+        lastLoginAt,
       ];
 }

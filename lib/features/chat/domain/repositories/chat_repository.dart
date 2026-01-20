@@ -5,6 +5,7 @@ import '../../../../core/errors/failures.dart';
 
 abstract class ChatRepository {
   Future<Either<Failure, List<Chat>>> getChats({String? userId});
+  Stream<List<Chat>> watchChats({String? userId});
   Future<Either<Failure, Chat?>> getChatById(String chatId);
   Future<Either<Failure, List<ChatMessage>>> getMessages(String chatId);
   Stream<List<ChatMessage>> watchMessages(String chatId);

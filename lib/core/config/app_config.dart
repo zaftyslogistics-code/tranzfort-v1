@@ -14,9 +14,6 @@ class AppConfig {
 
   static const String defaultCountryCode = '+91';
 
-  static const int verificationFeeTrucker = 499;
-  static const int verificationFeeSupplier = 499;
-
   static const int nativeAdFrequency = 6;
   static const int maxAdsPerSession = 20;
 }

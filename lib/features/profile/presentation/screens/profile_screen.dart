@@ -9,9 +9,7 @@ import '../../../../shared/widgets/app_bottom_navigation.dart';
 import '../../../../shared/widgets/free_badge.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
-import '../../../verification/presentation/screens/document_upload_screen.dart';
 import '../../../../core/utils/formatters.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -21,31 +19,27 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  bool _loadAlertsEnabled = true;
-  bool _chatNotificationsEnabled = true;
-  late SharedPreferences _prefs;
+  Future<void> _updatePreference(String key, bool value) async {
+    final user = ref.read(authNotifierProvider).user;
+    if (user == null) return;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadPreferences();
-  }
+    final currentPreferences = Map<String, dynamic>.from(user.preferences);
+    currentPreferences[key] = value;
 
-  Future<void> _loadPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _loadAlertsEnabled = _prefs.getBool('load_alerts_enabled') ?? true;
-      _chatNotificationsEnabled = _prefs.getBool('chat_notifications_enabled') ?? true;
+    await ref.read(authNotifierProvider.notifier).updateUserProfile({
+      'preferences': currentPreferences,
     });
-  }
-
-  Future<void> _savePreference(String key, bool value) async {
-    await _prefs.setBool(key, value);
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(authNotifierProvider).user;
+    final authState = ref.watch(authNotifierProvider);
+    final user = authState.user;
+    
+    final preferences = user?.preferences ?? {};
+    final loadAlertsEnabled = preferences['load_alerts_enabled'] as bool? ?? true;
+    final chatNotificationsEnabled = preferences['chat_notifications_enabled'] as bool? ?? true;
+
     final isVerified =
         (user?.isSupplierVerified ?? false) || (user?.isTruckerVerified ?? false);
     final mobileText = user == null
@@ -226,12 +220,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             .bodySmall
                             ?.copyWith(color: AppColors.textSecondary),
                       ),
-                      value: _loadAlertsEnabled,
+                      value: loadAlertsEnabled,
                       activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() => _loadAlertsEnabled = value);
-                        _savePreference('load_alerts_enabled', value);
-                      },
+                      onChanged: (value) => _updatePreference('load_alerts_enabled', value),
                     ),
                     SwitchListTile(
                       title: Text(
@@ -248,12 +239,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             .bodySmall
                             ?.copyWith(color: AppColors.textSecondary),
                       ),
-                      value: _chatNotificationsEnabled,
+                      value: chatNotificationsEnabled,
                       activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() => _chatNotificationsEnabled = value);
-                        _savePreference('chat_notifications_enabled', value);
-                      },
+                      onChanged: (value) => _updatePreference('chat_notifications_enabled', value),
                     ),
                   ],
                 ),

@@ -34,10 +34,6 @@ class EnvConfig {
   static String get admobBannerAdUnitId =>
       dotenv.env['ADMOB_BANNER_AD_UNIT_ID'] ?? '';
 
-  // REMOVED: Razorpay Configuration (Free Model Implementation)
-  // static String get razorpayKeyId => dotenv.env['RAZORPAY_KEY_ID'] ?? '';
-  // static String get razorpayKeySecret => dotenv.env['RAZORPAY_KEY_SECRET'] ?? '';
-
   // AdMob Configuration
 
   static bool get useMockAuth => dotenv.env['USE_MOCK_AUTH'] == 'true';

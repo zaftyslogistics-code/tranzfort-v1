@@ -8,7 +8,7 @@ import '../models/material_type_model.dart';
 
 abstract class LoadsDataSource {
   Future<LoadModel> createLoad(Map<String, dynamic> loadData);
-  Future<List<LoadModel>> getLoads({String? status, String? supplierId});
+  Future<List<LoadModel>> getLoads({String? status, String? supplierId, String? searchQuery, int page = 0, int pageSize = 20});
   Future<LoadModel?> getLoadById(String id);
   Future<LoadModel> updateLoad(String id, Map<String, dynamic> updates);
   Future<void> deleteLoad(String id);
@@ -64,8 +64,14 @@ class MockLoadsDataSource implements LoadsDataSource {
   }
 
   @override
-  Future<List<LoadModel>> getLoads({String? status, String? supplierId}) async {
-    Logger.info('📋 MOCK: Getting loads (status: $status, supplierId: $supplierId)');
+  Future<List<LoadModel>> getLoads({
+    String? status,
+    String? supplierId,
+    String? searchQuery,
+    int page = 0,
+    int pageSize = 20,
+  }) async {
+    Logger.info('📋 MOCK: Getting loads (status: $status, supplierId: $supplierId, search: $searchQuery)');
 
     var allLoads = await _getAllLoads();
     if (allLoads.isEmpty) {
@@ -83,8 +89,32 @@ class MockLoadsDataSource implements LoadsDataSource {
       filteredLoads = filteredLoads.where((load) => load.supplierId == supplierId).toList();
     }
 
+    if (searchQuery != null && searchQuery.isNotEmpty) {
+      final query = searchQuery.toLowerCase();
+      filteredLoads = filteredLoads.where((load) {
+        return load.fromLocation.toLowerCase().contains(query) ||
+            load.toLocation.toLowerCase().contains(query) ||
+            load.fromCity.toLowerCase().contains(query) ||
+            load.toCity.toLowerCase().contains(query) ||
+            load.truckTypeRequired.toLowerCase().contains(query) ||
+            load.loadType.toLowerCase().contains(query);
+      }).toList();
+    }
+
     // Sort by created date (newest first)
     filteredLoads.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    // Pagination
+    final startIndex = page * pageSize;
+    if (startIndex >= filteredLoads.length) {
+      return [];
+    }
+    
+    final endIndex = (startIndex + pageSize) < filteredLoads.length 
+        ? startIndex + pageSize 
+        : filteredLoads.length;
+
+    filteredLoads = filteredLoads.sublist(startIndex, endIndex);
 
     Logger.info('✅ MOCK: Found ${filteredLoads.length} loads');
     return filteredLoads;

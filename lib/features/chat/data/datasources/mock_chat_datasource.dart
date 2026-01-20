@@ -8,6 +8,7 @@ import '../models/chat_message_model.dart';
 
 abstract class ChatDataSource {
   Future<List<ChatModel>> getChats({String? userId});
+  Stream<List<ChatModel>> watchChats({String? userId});
   Future<ChatModel?> getChatById(String chatId);
   Future<List<ChatMessageModel>> getMessages(String chatId);
   Stream<List<ChatMessageModel>> watchMessages(String chatId);
@@ -50,6 +51,13 @@ class MockChatDataSource implements ChatDataSource {
 
     Logger.info('✅ MOCK: Found ${chats.length} chats');
     return chats;
+  }
+
+  @override
+  Stream<List<ChatModel>> watchChats({String? userId}) {
+    // Basic mock implementation that just emits the current list once
+    // In a real mock, we'd use a StreamController to emit updates
+    return Stream.fromFuture(getChats(userId: userId));
   }
 
   @override

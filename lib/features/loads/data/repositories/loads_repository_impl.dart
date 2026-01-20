@@ -41,12 +41,14 @@ class LoadsRepositoryImpl implements LoadsRepository {
   Future<Either<Failure, List<Load>>> getLoads({
     String? status,
     String? supplierId,
+    String? searchQuery,
   }) async {
     try {
       final loadModels = await _withFallback(
         (ds) => ds.getLoads(
           status: status,
           supplierId: supplierId,
+          searchQuery: searchQuery,
         ),
       );
       return Right(loadModels.map(_modelToEntity).toList());

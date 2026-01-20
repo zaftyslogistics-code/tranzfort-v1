@@ -1,8 +1,10 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:io';
 import 'dart:typed_data';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/utils/logger.dart';
+import '../../../../core/utils/image/image_compressor.dart';
 import '../models/verification_request_model.dart';
 
 class SupabaseVerificationDataSource {
@@ -49,9 +51,25 @@ class SupabaseVerificationDataSource {
       final frontPath = '${user.id}/$roleType/${request.id}/front_${front.name}';
       final backPath = '${user.id}/$roleType/${request.id}/back_${back.name}';
 
-      await _upload(frontPath, Uint8List.fromList(await front.readAsBytes()),
+      // Compress images
+      final File frontFile = File(front.path);
+      final File backFile = File(back.path);
+
+      final File? compressedFront = await ImageCompressor.compressImage(frontFile);
+      final File? compressedBack = await ImageCompressor.compressImage(backFile);
+
+      // Use compressed file if available, otherwise fallback to original
+      final frontBytes = compressedFront != null 
+          ? await compressedFront.readAsBytes() 
+          : await front.readAsBytes();
+      
+      final backBytes = compressedBack != null 
+          ? await compressedBack.readAsBytes() 
+          : await back.readAsBytes();
+
+      await _upload(frontPath, Uint8List.fromList(frontBytes),
           contentType: front.mimeType);
-      await _upload(backPath, Uint8List.fromList(await back.readAsBytes()),
+      await _upload(backPath, Uint8List.fromList(backBytes),
           contentType: back.mimeType);
 
       final updated = await _supabase

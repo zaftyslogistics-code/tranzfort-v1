@@ -57,4 +57,55 @@ class OfflineCacheService {
     if (!isInitialized) return;
     await _box!.clear();
   }
+
+  Future<void> addItemToList(String key, Map<String, dynamic> item) async {
+    if (!isInitialized) {
+      await init();
+    }
+
+    final current = List<Map<String, dynamic>>.from(getCachedList(key) ?? const []);
+    current.insert(0, item);
+    await cacheList(key, current);
+  }
+
+  Future<void> updateItemInList(
+    String key,
+    String idField,
+    String idValue,
+    Map<String, dynamic> updates,
+  ) async {
+    if (!isInitialized) {
+      await init();
+    }
+
+    final current = getCachedList(key);
+    if (current == null) return;
+
+    final mutable = List<Map<String, dynamic>>.from(current);
+    final index = mutable.indexWhere((item) => item[idField] == idValue);
+    if (index == -1) return;
+
+    mutable[index] = {
+      ...mutable[index],
+      ...updates,
+    };
+    await cacheList(key, mutable);
+  }
+
+  Future<void> removeItemFromList(
+    String key,
+    String idField,
+    String idValue,
+  ) async {
+    if (!isInitialized) {
+      await init();
+    }
+
+    final current = getCachedList(key);
+    if (current == null) return;
+
+    final mutable = List<Map<String, dynamic>>.from(current);
+    mutable.removeWhere((item) => item[idField] == idValue);
+    await cacheList(key, mutable);
+  }
 }

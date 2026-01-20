@@ -18,6 +18,8 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../../core/config/env_config.dart';
 import '../../../../core/services/offline_cache_service.dart';
 
+import '../../../../core/utils/logger.dart';
+
 final loadsDataSourceProvider = Provider<LoadsDataSource>((ref) {
   if (EnvConfig.useMockLoads) {
     final prefs = ref.watch(sharedPreferencesProvider);
@@ -122,9 +124,13 @@ class LoadsNotifier extends StateNotifier<LoadsState> {
     required this.deleteLoadUseCase,
   }) : super(LoadsState());
 
-  Future<void> fetchLoads({String? status, String? supplierId}) async {
+  Future<void> fetchLoads({String? status, String? supplierId, String? searchQuery}) async {
     state = state.copyWith(isLoading: true, error: null);
-    final result = await getLoadsUseCase(status: status, supplierId: supplierId);
+    final result = await getLoadsUseCase(
+      status: status,
+      supplierId: supplierId,
+      searchQuery: searchQuery,
+    );
     result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -236,8 +242,8 @@ final truckTypesProvider = FutureProvider<List<TruckType>>((ref) async {
       const TruckType(id: 7, name: 'Tanker Truck', category: 'Tanker', displayOrder: 7),
       const TruckType(id: 8, name: 'Specialized Truck', category: 'Specialized', displayOrder: 8),
     ];
-  } catch (e) {
-    // Return empty list on any error
+  } catch (e, stack) {
+    Logger.error('Failed to load truck types', error: e, stackTrace: stack);
     return <TruckType>[];
   }
 });
@@ -264,8 +270,8 @@ final materialTypesProvider = FutureProvider<List<MaterialType>>((ref) async {
       const MaterialType(id: 16, name: 'Scrap/Waste', category: 'Scrap', displayOrder: 16),
       const MaterialType(id: 17, name: 'Other', category: 'Other', displayOrder: 17),
     ];
-  } catch (e) {
-    // Return empty list on any error
+  } catch (e, stack) {
+    Logger.error('Failed to load material types', error: e, stackTrace: stack);
     return <MaterialType>[];
   }
 });

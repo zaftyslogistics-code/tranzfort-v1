@@ -305,12 +305,12 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                           },
                           loading: () =>
                               const Center(child: CircularProgressIndicator()),
-                          error: (_, __) => Text(
-                            'Select a truck type',
+                          error: (error, stack) => Text(
+                            'Error: $error',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                ?.copyWith(color: AppColors.textSecondary),
+                                ?.copyWith(color: AppColors.danger),
                           ),
                         ),
                         const SizedBox(height: AppDimensions.lg),

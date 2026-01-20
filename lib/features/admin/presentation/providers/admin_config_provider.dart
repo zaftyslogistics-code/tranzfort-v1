@@ -68,8 +68,8 @@ class AdminConfigNotifier extends StateNotifier<AdminConfigState> {
           AdminConfigState(
             config: SystemConfig(
               enableAds: EnvConfig.enableAds,
-              verificationFeeTrucker: AppConfig.verificationFeeTrucker,
-              verificationFeeSupplier: AppConfig.verificationFeeSupplier,
+              verificationFeeTrucker: 0,
+              verificationFeeSupplier: 0,
               loadExpiryDays: AppConfig.loadExpiryDays,
             ),
           ),
@@ -92,10 +92,8 @@ class AdminConfigNotifier extends StateNotifier<AdminConfigState> {
 
       final config = SystemConfig(
         enableAds: (row['enable_ads'] as bool?) ?? state.config.enableAds,
-        verificationFeeTrucker:
-            (row['verification_fee_trucker'] as int?) ?? state.config.verificationFeeTrucker,
-        verificationFeeSupplier:
-            (row['verification_fee_supplier'] as int?) ?? state.config.verificationFeeSupplier,
+        verificationFeeTrucker: 0,
+        verificationFeeSupplier: 0,
         loadExpiryDays: (row['load_expiry_days'] as int?) ?? state.config.loadExpiryDays,
       );
 
@@ -107,18 +105,6 @@ class AdminConfigNotifier extends StateNotifier<AdminConfigState> {
 
   void updateEnableAds(bool value) {
     state = state.copyWith(config: state.config.copyWith(enableAds: value));
-  }
-
-  void updateVerificationFeeTrucker(int value) {
-    state = state.copyWith(
-      config: state.config.copyWith(verificationFeeTrucker: value),
-    );
-  }
-
-  void updateVerificationFeeSupplier(int value) {
-    state = state.copyWith(
-      config: state.config.copyWith(verificationFeeSupplier: value),
-    );
   }
 
   void updateLoadExpiryDays(int value) {
@@ -135,8 +121,6 @@ class AdminConfigNotifier extends StateNotifier<AdminConfigState> {
           .from('system_config')
           .update({
             'enable_ads': state.config.enableAds,
-            'verification_fee_trucker': state.config.verificationFeeTrucker,
-            'verification_fee_supplier': state.config.verificationFeeSupplier,
             'load_expiry_days': state.config.loadExpiryDays,
             'updated_at': DateTime.now().toIso8601String(),
           })

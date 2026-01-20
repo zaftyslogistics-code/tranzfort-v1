@@ -7,11 +7,14 @@ class Logger {
     }
   }
 
-  static void error(String message, {String tag = 'ERROR', Object? error}) {
+  static void error(String message, {String tag = 'ERROR', Object? error, StackTrace? stackTrace}) {
     if (kDebugMode) {
       print('[$tag] $message');
       if (error != null) {
         print('Error details: $error');
+      }
+      if (stackTrace != null) {
+        print('Stack trace: $stackTrace');
       }
     }
   }

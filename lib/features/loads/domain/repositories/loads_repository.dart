@@ -10,6 +10,7 @@ abstract class LoadsRepository {
   Future<Either<Failure, List<Load>>> getLoads({
     String? status,
     String? supplierId,
+    String? searchQuery,
   });
   
   Future<Either<Failure, Load?>> getLoadById(String id);

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,15 +8,16 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/services/ad_impression_tracker.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
-import '../../../../shared/widgets/native_ad_widget.dart';
+import '../../../../shared/widgets/conditional_ad_widget.dart';
 import '../../../../shared/widgets/app_bottom_navigation.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/filter_chip_group.dart';
 import '../widgets/load_card.dart';
-import '../widgets/empty_loads_state.dart';
+import '../../../../shared/widgets/empty_state_widget.dart';
 import '../../../../shared/widgets/offline_banner.dart';
 import '../../../../shared/widgets/glow_orb.dart';
+import '../../../../shared/widgets/role_badge.dart';
 
 class TruckerFeedScreen extends ConsumerStatefulWidget {
   const TruckerFeedScreen({super.key});
@@ -42,35 +44,44 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
   @override
   void dispose() {
     _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
   Future<void> _fetchLoads() async {
     final status = _filter == 'Active' ? 'active' : null;
-    await ref.read(loadsNotifierProvider.notifier).fetchLoads(status: status);
+    final query = _searchController.text.trim();
+    
+    await ref.read(loadsNotifierProvider.notifier).fetchLoads(
+      status: status,
+      searchQuery: query.isNotEmpty ? query : null,
+    );
   }
 
+  // NOTE: We now do server-side filtering, so this local filter is mainly for 
+  // ensuring the UI state is consistent or for offline fallback if we implemented that logic.
+  // But for now, we rely on the provider's loads which are already filtered by the server.
   List<dynamic> _applyFilters(List<dynamic> loads) {
-    var filtered = loads;
-
-    if (_filter == 'Active') {
-      filtered = filtered.where((load) => load.isActive).toList();
-    }
-
-    final query = _searchController.text.trim().toLowerCase();
-    if (query.isNotEmpty) {
-      filtered = filtered.where((load) {
-        return load.fromLocation.toLowerCase().contains(query) ||
-            load.toLocation.toLowerCase().contains(query) ||
-            load.fromCity.toLowerCase().contains(query) ||
-            load.toCity.toLowerCase().contains(query) ||
-            load.truckTypeRequired.toLowerCase().contains(query) ||
-            load.loadType.toLowerCase().contains(query);
-      }).toList();
-    }
-
-    return filtered;
+    // We can just return the loads as they are server-filtered now.
+    // However, if we want to keep some local instant feedback while typing (debounce needed),
+    // we could keep it. But simplest is to just return loads.
+    return loads;
   }
+
+  void _onSearchChanged(String value) {
+    // Debounce or just search on submit?
+    // For now, let's search on submit or with a slight delay.
+    // But given the UI has a search icon but no explicit submit button in the field decoration,
+    // let's assume we want to search as they type or when they hit enter.
+    // The previous implementation did local filtering on change.
+    // Let's implement a simple debounce here if we want auto-search.
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      _fetchLoads();
+    });
+  }
+  
+  Timer? _debounceTimer;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +91,13 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Find Loads'),
+        title: Row(
+          children: [
+            const Text('Find Loads'),
+            const SizedBox(width: AppDimensions.sm),
+            const RoleBadge(isSupplier: false),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -134,7 +151,8 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
                           hintText: 'Search by city, truck, material...',
                           prefixIcon: Icon(Icons.search),
                         ),
-                        onChanged: (_) => setState(() {}),
+                        onChanged: _onSearchChanged,
+                        onSubmitted: (_) => _fetchLoads(),
                       ),
                       const SizedBox(height: AppDimensions.sm),
                       FilterChipGroup(
@@ -153,8 +171,18 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
                 child: loadsState.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : filteredLoads.isEmpty
-                        ? const EmptyLoadsState(
-                            message: 'No loads available right now',
+                        ? EmptyStateWidget(
+                            message: 'No Loads Found',
+                            subMessage: 'Try adjusting your filters or search query.',
+                            icon: Icons.search_off,
+                            actionLabel: 'Clear Filters',
+                            onAction: () {
+                              setState(() {
+                                _searchController.clear();
+                                _filter = 'All';
+                              });
+                              _fetchLoads();
+                            },
                           )
                         : RefreshIndicator(
                             onRefresh: _fetchLoads,
@@ -166,7 +194,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
                               itemBuilder: (context, index) {
                                 // Show native ad every 5 loads (after 4th, 9th, 14th, etc.)
                                 if (index % 5 == 4 && index != filteredLoads.length - 1) {
-                                  return NativeAdWidget(
+                                  return ConditionalAdWidget(
                                     screenName: 'load_feed',
                                     userId: user?.id,
                                     isVerifiedUser: user?.isTruckerVerified ?? false,

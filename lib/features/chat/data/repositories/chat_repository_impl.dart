@@ -22,6 +22,13 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
+  Stream<List<Chat>> watchChats({String? userId}) {
+    return dataSource.watchChats(userId: userId).map(
+          (models) => models.map(_modelToEntity).toList(),
+        );
+  }
+
+  @override
   Future<Either<Failure, Chat?>> getChatById(String chatId) async {
     try {
       final model = await dataSource.getChatById(chatId);

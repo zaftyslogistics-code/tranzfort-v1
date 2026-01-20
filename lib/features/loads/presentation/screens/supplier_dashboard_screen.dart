@@ -9,7 +9,8 @@ import '../../../../shared/widgets/app_bottom_navigation.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/load_card.dart';
-import '../widgets/empty_loads_state.dart';
+import '../../../../shared/widgets/empty_state_widget.dart';
+import '../../../../shared/widgets/role_badge.dart';
 
 class SupplierDashboardScreen extends ConsumerStatefulWidget {
   const SupplierDashboardScreen({super.key});
@@ -57,7 +58,13 @@ class _SupplierDashboardScreenState
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('My Loads'),
+          title: Row(
+            children: [
+              const Text('My Loads'),
+              const SizedBox(width: AppDimensions.sm),
+              const RoleBadge(isSupplier: true),
+            ],
+          ),
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Active'),
@@ -107,10 +114,14 @@ class _SupplierDashboardScreenState
                 }
 
                 if (filteredLoads.isEmpty) {
-                  return EmptyLoadsState(
+                  return EmptyStateWidget(
                     message: 'No $tab loads yet',
-                    actionLabel: 'Post a Load',
-                    onAction: () => context.push('/post-load-step1'),
+                    subMessage: tab == 'Active' 
+                        ? 'Post a load to start receiving bids from truckers.' 
+                        : 'Your load history will appear here.',
+                    icon: Icons.inventory_2_outlined,
+                    actionLabel: tab == 'Active' ? 'Post a Load' : null,
+                    onAction: tab == 'Active' ? () => context.push('/post-load-step1') : null,
                   );
                 }
 

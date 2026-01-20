@@ -66,23 +66,6 @@ class _AdminConfigScreenState extends ConsumerState<AdminConfigScreen> {
             ),
             const SizedBox(height: AppDimensions.xl),
             _ConfigSection(
-              title: 'Verification Fees (INR)',
-              children: [
-                _ConfigInput(
-                  label: 'Trucker Verification Fee',
-                  value: config.verificationFeeTrucker.toString(),
-                  onChanged: (val) => notifier.updateVerificationFeeTrucker(int.tryParse(val) ?? 0),
-                ),
-                const SizedBox(height: AppDimensions.md),
-                _ConfigInput(
-                  label: 'Supplier Verification Fee',
-                  value: config.verificationFeeSupplier.toString(),
-                  onChanged: (val) => notifier.updateVerificationFeeSupplier(int.tryParse(val) ?? 0),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppDimensions.xl),
-            _ConfigSection(
               title: 'Marketplace Rules',
               children: [
                 _ConfigInput(

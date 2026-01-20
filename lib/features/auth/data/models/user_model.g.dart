@@ -18,6 +18,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
           json['supplier_verification_status'] as String? ?? 'unverified',
       truckerVerificationStatus:
           json['trucker_verification_status'] as String? ?? 'unverified',
+      preferences: json['preferences'] as Map<String, dynamic>? ?? const {},
       createdAt: DateTime.parse(json['created_at'] as String),
       lastLoginAt: DateTime.parse(json['last_login_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
@@ -33,6 +34,7 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'is_trucker_enabled': instance.isTruckerEnabled,
       'supplier_verification_status': instance.supplierVerificationStatus,
       'trucker_verification_status': instance.truckerVerificationStatus,
+      'preferences': instance.preferences,
       'created_at': instance.createdAt.toIso8601String(),
       'last_login_at': instance.lastLoginAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),

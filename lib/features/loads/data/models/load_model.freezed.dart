@@ -12,7 +12,8 @@ part of 'load_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 LoadModel _$LoadModelFromJson(Map<String, dynamic> json) {
   return _LoadModel.fromJson(json);
@@ -77,30 +78,31 @@ abstract class $LoadModelCopyWith<$Res> {
   factory $LoadModelCopyWith(LoadModel value, $Res Function(LoadModel) then) =
       _$LoadModelCopyWithImpl<$Res, LoadModel>;
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'supplier_id') String supplierId,
-      @JsonKey(name: 'from_location') String fromLocation,
-      @JsonKey(name: 'from_city') String fromCity,
-      @JsonKey(name: 'from_state') String? fromState,
-      @JsonKey(name: 'to_location') String toLocation,
-      @JsonKey(name: 'to_city') String toCity,
-      @JsonKey(name: 'to_state') String? toState,
-      @JsonKey(name: 'load_type') String loadType,
-      @JsonKey(name: 'truck_type_required') String truckTypeRequired,
-      double? weight,
-      double? price,
-      @JsonKey(name: 'price_type') String priceType,
-      @JsonKey(name: 'payment_terms') String? paymentTerms,
-      @JsonKey(name: 'loading_date') DateTime? loadingDate,
-      String? notes,
-      @JsonKey(name: 'contact_preferences_call') bool contactPreferencesCall,
-      @JsonKey(name: 'contact_preferences_chat') bool contactPreferencesChat,
-      String status,
-      @JsonKey(name: 'expires_at') DateTime expiresAt,
-      @JsonKey(name: 'view_count') int viewCount,
-      @JsonKey(name: 'created_at') DateTime createdAt,
-      @JsonKey(name: 'updated_at') DateTime updatedAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'supplier_id') String supplierId,
+    @JsonKey(name: 'from_location') String fromLocation,
+    @JsonKey(name: 'from_city') String fromCity,
+    @JsonKey(name: 'from_state') String? fromState,
+    @JsonKey(name: 'to_location') String toLocation,
+    @JsonKey(name: 'to_city') String toCity,
+    @JsonKey(name: 'to_state') String? toState,
+    @JsonKey(name: 'load_type') String loadType,
+    @JsonKey(name: 'truck_type_required') String truckTypeRequired,
+    double? weight,
+    double? price,
+    @JsonKey(name: 'price_type') String priceType,
+    @JsonKey(name: 'payment_terms') String? paymentTerms,
+    @JsonKey(name: 'loading_date') DateTime? loadingDate,
+    String? notes,
+    @JsonKey(name: 'contact_preferences_call') bool contactPreferencesCall,
+    @JsonKey(name: 'contact_preferences_chat') bool contactPreferencesChat,
+    String status,
+    @JsonKey(name: 'expires_at') DateTime expiresAt,
+    @JsonKey(name: 'view_count') int viewCount,
+    @JsonKey(name: 'created_at') DateTime createdAt,
+    @JsonKey(name: 'updated_at') DateTime updatedAt,
+  });
 }
 
 /// @nodoc
@@ -142,100 +144,103 @@ class _$LoadModelCopyWithImpl<$Res, $Val extends LoadModel>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      supplierId: null == supplierId
-          ? _value.supplierId
-          : supplierId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromLocation: null == fromLocation
-          ? _value.fromLocation
-          : fromLocation // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromCity: null == fromCity
-          ? _value.fromCity
-          : fromCity // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromState: freezed == fromState
-          ? _value.fromState
-          : fromState // ignore: cast_nullable_to_non_nullable
-              as String?,
-      toLocation: null == toLocation
-          ? _value.toLocation
-          : toLocation // ignore: cast_nullable_to_non_nullable
-              as String,
-      toCity: null == toCity
-          ? _value.toCity
-          : toCity // ignore: cast_nullable_to_non_nullable
-              as String,
-      toState: freezed == toState
-          ? _value.toState
-          : toState // ignore: cast_nullable_to_non_nullable
-              as String?,
-      loadType: null == loadType
-          ? _value.loadType
-          : loadType // ignore: cast_nullable_to_non_nullable
-              as String,
-      truckTypeRequired: null == truckTypeRequired
-          ? _value.truckTypeRequired
-          : truckTypeRequired // ignore: cast_nullable_to_non_nullable
-              as String,
-      weight: freezed == weight
-          ? _value.weight
-          : weight // ignore: cast_nullable_to_non_nullable
-              as double?,
-      price: freezed == price
-          ? _value.price
-          : price // ignore: cast_nullable_to_non_nullable
-              as double?,
-      priceType: null == priceType
-          ? _value.priceType
-          : priceType // ignore: cast_nullable_to_non_nullable
-              as String,
-      paymentTerms: freezed == paymentTerms
-          ? _value.paymentTerms
-          : paymentTerms // ignore: cast_nullable_to_non_nullable
-              as String?,
-      loadingDate: freezed == loadingDate
-          ? _value.loadingDate
-          : loadingDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      notes: freezed == notes
-          ? _value.notes
-          : notes // ignore: cast_nullable_to_non_nullable
-              as String?,
-      contactPreferencesCall: null == contactPreferencesCall
-          ? _value.contactPreferencesCall
-          : contactPreferencesCall // ignore: cast_nullable_to_non_nullable
-              as bool,
-      contactPreferencesChat: null == contactPreferencesChat
-          ? _value.contactPreferencesChat
-          : contactPreferencesChat // ignore: cast_nullable_to_non_nullable
-              as bool,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      expiresAt: null == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      viewCount: null == viewCount
-          ? _value.viewCount
-          : viewCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            supplierId: null == supplierId
+                ? _value.supplierId
+                : supplierId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fromLocation: null == fromLocation
+                ? _value.fromLocation
+                : fromLocation // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fromCity: null == fromCity
+                ? _value.fromCity
+                : fromCity // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fromState: freezed == fromState
+                ? _value.fromState
+                : fromState // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            toLocation: null == toLocation
+                ? _value.toLocation
+                : toLocation // ignore: cast_nullable_to_non_nullable
+                      as String,
+            toCity: null == toCity
+                ? _value.toCity
+                : toCity // ignore: cast_nullable_to_non_nullable
+                      as String,
+            toState: freezed == toState
+                ? _value.toState
+                : toState // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            loadType: null == loadType
+                ? _value.loadType
+                : loadType // ignore: cast_nullable_to_non_nullable
+                      as String,
+            truckTypeRequired: null == truckTypeRequired
+                ? _value.truckTypeRequired
+                : truckTypeRequired // ignore: cast_nullable_to_non_nullable
+                      as String,
+            weight: freezed == weight
+                ? _value.weight
+                : weight // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            price: freezed == price
+                ? _value.price
+                : price // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            priceType: null == priceType
+                ? _value.priceType
+                : priceType // ignore: cast_nullable_to_non_nullable
+                      as String,
+            paymentTerms: freezed == paymentTerms
+                ? _value.paymentTerms
+                : paymentTerms // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            loadingDate: freezed == loadingDate
+                ? _value.loadingDate
+                : loadingDate // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            notes: freezed == notes
+                ? _value.notes
+                : notes // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            contactPreferencesCall: null == contactPreferencesCall
+                ? _value.contactPreferencesCall
+                : contactPreferencesCall // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            contactPreferencesChat: null == contactPreferencesChat
+                ? _value.contactPreferencesChat
+                : contactPreferencesChat // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as String,
+            expiresAt: null == expiresAt
+                ? _value.expiresAt
+                : expiresAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            viewCount: null == viewCount
+                ? _value.viewCount
+                : viewCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            updatedAt: null == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -243,34 +248,36 @@ class _$LoadModelCopyWithImpl<$Res, $Val extends LoadModel>
 abstract class _$$LoadModelImplCopyWith<$Res>
     implements $LoadModelCopyWith<$Res> {
   factory _$$LoadModelImplCopyWith(
-          _$LoadModelImpl value, $Res Function(_$LoadModelImpl) then) =
-      __$$LoadModelImplCopyWithImpl<$Res>;
+    _$LoadModelImpl value,
+    $Res Function(_$LoadModelImpl) then,
+  ) = __$$LoadModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'supplier_id') String supplierId,
-      @JsonKey(name: 'from_location') String fromLocation,
-      @JsonKey(name: 'from_city') String fromCity,
-      @JsonKey(name: 'from_state') String? fromState,
-      @JsonKey(name: 'to_location') String toLocation,
-      @JsonKey(name: 'to_city') String toCity,
-      @JsonKey(name: 'to_state') String? toState,
-      @JsonKey(name: 'load_type') String loadType,
-      @JsonKey(name: 'truck_type_required') String truckTypeRequired,
-      double? weight,
-      double? price,
-      @JsonKey(name: 'price_type') String priceType,
-      @JsonKey(name: 'payment_terms') String? paymentTerms,
-      @JsonKey(name: 'loading_date') DateTime? loadingDate,
-      String? notes,
-      @JsonKey(name: 'contact_preferences_call') bool contactPreferencesCall,
-      @JsonKey(name: 'contact_preferences_chat') bool contactPreferencesChat,
-      String status,
-      @JsonKey(name: 'expires_at') DateTime expiresAt,
-      @JsonKey(name: 'view_count') int viewCount,
-      @JsonKey(name: 'created_at') DateTime createdAt,
-      @JsonKey(name: 'updated_at') DateTime updatedAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'supplier_id') String supplierId,
+    @JsonKey(name: 'from_location') String fromLocation,
+    @JsonKey(name: 'from_city') String fromCity,
+    @JsonKey(name: 'from_state') String? fromState,
+    @JsonKey(name: 'to_location') String toLocation,
+    @JsonKey(name: 'to_city') String toCity,
+    @JsonKey(name: 'to_state') String? toState,
+    @JsonKey(name: 'load_type') String loadType,
+    @JsonKey(name: 'truck_type_required') String truckTypeRequired,
+    double? weight,
+    double? price,
+    @JsonKey(name: 'price_type') String priceType,
+    @JsonKey(name: 'payment_terms') String? paymentTerms,
+    @JsonKey(name: 'loading_date') DateTime? loadingDate,
+    String? notes,
+    @JsonKey(name: 'contact_preferences_call') bool contactPreferencesCall,
+    @JsonKey(name: 'contact_preferences_chat') bool contactPreferencesChat,
+    String status,
+    @JsonKey(name: 'expires_at') DateTime expiresAt,
+    @JsonKey(name: 'view_count') int viewCount,
+    @JsonKey(name: 'created_at') DateTime createdAt,
+    @JsonKey(name: 'updated_at') DateTime updatedAt,
+  });
 }
 
 /// @nodoc
@@ -278,8 +285,9 @@ class __$$LoadModelImplCopyWithImpl<$Res>
     extends _$LoadModelCopyWithImpl<$Res, _$LoadModelImpl>
     implements _$$LoadModelImplCopyWith<$Res> {
   __$$LoadModelImplCopyWithImpl(
-      _$LoadModelImpl _value, $Res Function(_$LoadModelImpl) _then)
-      : super(_value, _then);
+    _$LoadModelImpl _value,
+    $Res Function(_$LoadModelImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LoadModel
   /// with the given fields replaced by the non-null parameter values.
@@ -310,132 +318,135 @@ class __$$LoadModelImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$LoadModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      supplierId: null == supplierId
-          ? _value.supplierId
-          : supplierId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromLocation: null == fromLocation
-          ? _value.fromLocation
-          : fromLocation // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromCity: null == fromCity
-          ? _value.fromCity
-          : fromCity // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromState: freezed == fromState
-          ? _value.fromState
-          : fromState // ignore: cast_nullable_to_non_nullable
-              as String?,
-      toLocation: null == toLocation
-          ? _value.toLocation
-          : toLocation // ignore: cast_nullable_to_non_nullable
-              as String,
-      toCity: null == toCity
-          ? _value.toCity
-          : toCity // ignore: cast_nullable_to_non_nullable
-              as String,
-      toState: freezed == toState
-          ? _value.toState
-          : toState // ignore: cast_nullable_to_non_nullable
-              as String?,
-      loadType: null == loadType
-          ? _value.loadType
-          : loadType // ignore: cast_nullable_to_non_nullable
-              as String,
-      truckTypeRequired: null == truckTypeRequired
-          ? _value.truckTypeRequired
-          : truckTypeRequired // ignore: cast_nullable_to_non_nullable
-              as String,
-      weight: freezed == weight
-          ? _value.weight
-          : weight // ignore: cast_nullable_to_non_nullable
-              as double?,
-      price: freezed == price
-          ? _value.price
-          : price // ignore: cast_nullable_to_non_nullable
-              as double?,
-      priceType: null == priceType
-          ? _value.priceType
-          : priceType // ignore: cast_nullable_to_non_nullable
-              as String,
-      paymentTerms: freezed == paymentTerms
-          ? _value.paymentTerms
-          : paymentTerms // ignore: cast_nullable_to_non_nullable
-              as String?,
-      loadingDate: freezed == loadingDate
-          ? _value.loadingDate
-          : loadingDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      notes: freezed == notes
-          ? _value.notes
-          : notes // ignore: cast_nullable_to_non_nullable
-              as String?,
-      contactPreferencesCall: null == contactPreferencesCall
-          ? _value.contactPreferencesCall
-          : contactPreferencesCall // ignore: cast_nullable_to_non_nullable
-              as bool,
-      contactPreferencesChat: null == contactPreferencesChat
-          ? _value.contactPreferencesChat
-          : contactPreferencesChat // ignore: cast_nullable_to_non_nullable
-              as bool,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      expiresAt: null == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      viewCount: null == viewCount
-          ? _value.viewCount
-          : viewCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
+    return _then(
+      _$LoadModelImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        supplierId: null == supplierId
+            ? _value.supplierId
+            : supplierId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fromLocation: null == fromLocation
+            ? _value.fromLocation
+            : fromLocation // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fromCity: null == fromCity
+            ? _value.fromCity
+            : fromCity // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fromState: freezed == fromState
+            ? _value.fromState
+            : fromState // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        toLocation: null == toLocation
+            ? _value.toLocation
+            : toLocation // ignore: cast_nullable_to_non_nullable
+                  as String,
+        toCity: null == toCity
+            ? _value.toCity
+            : toCity // ignore: cast_nullable_to_non_nullable
+                  as String,
+        toState: freezed == toState
+            ? _value.toState
+            : toState // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        loadType: null == loadType
+            ? _value.loadType
+            : loadType // ignore: cast_nullable_to_non_nullable
+                  as String,
+        truckTypeRequired: null == truckTypeRequired
+            ? _value.truckTypeRequired
+            : truckTypeRequired // ignore: cast_nullable_to_non_nullable
+                  as String,
+        weight: freezed == weight
+            ? _value.weight
+            : weight // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        price: freezed == price
+            ? _value.price
+            : price // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        priceType: null == priceType
+            ? _value.priceType
+            : priceType // ignore: cast_nullable_to_non_nullable
+                  as String,
+        paymentTerms: freezed == paymentTerms
+            ? _value.paymentTerms
+            : paymentTerms // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        loadingDate: freezed == loadingDate
+            ? _value.loadingDate
+            : loadingDate // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        notes: freezed == notes
+            ? _value.notes
+            : notes // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        contactPreferencesCall: null == contactPreferencesCall
+            ? _value.contactPreferencesCall
+            : contactPreferencesCall // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        contactPreferencesChat: null == contactPreferencesChat
+            ? _value.contactPreferencesChat
+            : contactPreferencesChat // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as String,
+        expiresAt: null == expiresAt
+            ? _value.expiresAt
+            : expiresAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        viewCount: null == viewCount
+            ? _value.viewCount
+            : viewCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$LoadModelImpl implements _LoadModel {
-  const _$LoadModelImpl(
-      {required this.id,
-      @JsonKey(name: 'supplier_id') required this.supplierId,
-      @JsonKey(name: 'from_location') required this.fromLocation,
-      @JsonKey(name: 'from_city') required this.fromCity,
-      @JsonKey(name: 'from_state') this.fromState,
-      @JsonKey(name: 'to_location') required this.toLocation,
-      @JsonKey(name: 'to_city') required this.toCity,
-      @JsonKey(name: 'to_state') this.toState,
-      @JsonKey(name: 'load_type') required this.loadType,
-      @JsonKey(name: 'truck_type_required') required this.truckTypeRequired,
-      this.weight,
-      this.price,
-      @JsonKey(name: 'price_type') this.priceType = 'negotiable',
-      @JsonKey(name: 'payment_terms') this.paymentTerms,
-      @JsonKey(name: 'loading_date') this.loadingDate,
-      this.notes,
-      @JsonKey(name: 'contact_preferences_call')
-      this.contactPreferencesCall = true,
-      @JsonKey(name: 'contact_preferences_chat')
-      this.contactPreferencesChat = true,
-      this.status = 'active',
-      @JsonKey(name: 'expires_at') required this.expiresAt,
-      @JsonKey(name: 'view_count') this.viewCount = 0,
-      @JsonKey(name: 'created_at') required this.createdAt,
-      @JsonKey(name: 'updated_at') required this.updatedAt});
+  const _$LoadModelImpl({
+    required this.id,
+    @JsonKey(name: 'supplier_id') required this.supplierId,
+    @JsonKey(name: 'from_location') required this.fromLocation,
+    @JsonKey(name: 'from_city') required this.fromCity,
+    @JsonKey(name: 'from_state') this.fromState,
+    @JsonKey(name: 'to_location') required this.toLocation,
+    @JsonKey(name: 'to_city') required this.toCity,
+    @JsonKey(name: 'to_state') this.toState,
+    @JsonKey(name: 'load_type') required this.loadType,
+    @JsonKey(name: 'truck_type_required') required this.truckTypeRequired,
+    this.weight,
+    this.price,
+    @JsonKey(name: 'price_type') this.priceType = 'negotiable',
+    @JsonKey(name: 'payment_terms') this.paymentTerms,
+    @JsonKey(name: 'loading_date') this.loadingDate,
+    this.notes,
+    @JsonKey(name: 'contact_preferences_call')
+    this.contactPreferencesCall = true,
+    @JsonKey(name: 'contact_preferences_chat')
+    this.contactPreferencesChat = true,
+    this.status = 'active',
+    @JsonKey(name: 'expires_at') required this.expiresAt,
+    @JsonKey(name: 'view_count') this.viewCount = 0,
+    @JsonKey(name: 'created_at') required this.createdAt,
+    @JsonKey(name: 'updated_at') required this.updatedAt,
+  });
 
   factory _$LoadModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoadModelImplFromJson(json);
@@ -560,31 +571,31 @@ class _$LoadModelImpl implements _LoadModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
-        runtimeType,
-        id,
-        supplierId,
-        fromLocation,
-        fromCity,
-        fromState,
-        toLocation,
-        toCity,
-        toState,
-        loadType,
-        truckTypeRequired,
-        weight,
-        price,
-        priceType,
-        paymentTerms,
-        loadingDate,
-        notes,
-        contactPreferencesCall,
-        contactPreferencesChat,
-        status,
-        expiresAt,
-        viewCount,
-        createdAt,
-        updatedAt
-      ]);
+    runtimeType,
+    id,
+    supplierId,
+    fromLocation,
+    fromCity,
+    fromState,
+    toLocation,
+    toCity,
+    toState,
+    loadType,
+    truckTypeRequired,
+    weight,
+    price,
+    priceType,
+    paymentTerms,
+    loadingDate,
+    notes,
+    contactPreferencesCall,
+    contactPreferencesChat,
+    status,
+    expiresAt,
+    viewCount,
+    createdAt,
+    updatedAt,
+  ]);
 
   /// Create a copy of LoadModel
   /// with the given fields replaced by the non-null parameter values.
@@ -596,41 +607,39 @@ class _$LoadModelImpl implements _LoadModel {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoadModelImplToJson(
-      this,
-    );
+    return _$$LoadModelImplToJson(this);
   }
 }
 
 abstract class _LoadModel implements LoadModel {
-  const factory _LoadModel(
-          {required final String id,
-          @JsonKey(name: 'supplier_id') required final String supplierId,
-          @JsonKey(name: 'from_location') required final String fromLocation,
-          @JsonKey(name: 'from_city') required final String fromCity,
-          @JsonKey(name: 'from_state') final String? fromState,
-          @JsonKey(name: 'to_location') required final String toLocation,
-          @JsonKey(name: 'to_city') required final String toCity,
-          @JsonKey(name: 'to_state') final String? toState,
-          @JsonKey(name: 'load_type') required final String loadType,
-          @JsonKey(name: 'truck_type_required')
-          required final String truckTypeRequired,
-          final double? weight,
-          final double? price,
-          @JsonKey(name: 'price_type') final String priceType,
-          @JsonKey(name: 'payment_terms') final String? paymentTerms,
-          @JsonKey(name: 'loading_date') final DateTime? loadingDate,
-          final String? notes,
-          @JsonKey(name: 'contact_preferences_call')
-          final bool contactPreferencesCall,
-          @JsonKey(name: 'contact_preferences_chat')
-          final bool contactPreferencesChat,
-          final String status,
-          @JsonKey(name: 'expires_at') required final DateTime expiresAt,
-          @JsonKey(name: 'view_count') final int viewCount,
-          @JsonKey(name: 'created_at') required final DateTime createdAt,
-          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
-      _$LoadModelImpl;
+  const factory _LoadModel({
+    required final String id,
+    @JsonKey(name: 'supplier_id') required final String supplierId,
+    @JsonKey(name: 'from_location') required final String fromLocation,
+    @JsonKey(name: 'from_city') required final String fromCity,
+    @JsonKey(name: 'from_state') final String? fromState,
+    @JsonKey(name: 'to_location') required final String toLocation,
+    @JsonKey(name: 'to_city') required final String toCity,
+    @JsonKey(name: 'to_state') final String? toState,
+    @JsonKey(name: 'load_type') required final String loadType,
+    @JsonKey(name: 'truck_type_required')
+    required final String truckTypeRequired,
+    final double? weight,
+    final double? price,
+    @JsonKey(name: 'price_type') final String priceType,
+    @JsonKey(name: 'payment_terms') final String? paymentTerms,
+    @JsonKey(name: 'loading_date') final DateTime? loadingDate,
+    final String? notes,
+    @JsonKey(name: 'contact_preferences_call')
+    final bool contactPreferencesCall,
+    @JsonKey(name: 'contact_preferences_chat')
+    final bool contactPreferencesChat,
+    final String status,
+    @JsonKey(name: 'expires_at') required final DateTime expiresAt,
+    @JsonKey(name: 'view_count') final int viewCount,
+    @JsonKey(name: 'created_at') required final DateTime createdAt,
+    @JsonKey(name: 'updated_at') required final DateTime updatedAt,
+  }) = _$LoadModelImpl;
 
   factory _LoadModel.fromJson(Map<String, dynamic> json) =
       _$LoadModelImpl.fromJson;

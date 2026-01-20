@@ -102,6 +102,7 @@ class AuthRepositoryImpl implements AuthRepository {
       isTruckerEnabled: userModel.isTruckerEnabled,
       supplierVerificationStatus: userModel.supplierVerificationStatus,
       truckerVerificationStatus: userModel.truckerVerificationStatus,
+      preferences: userModel.preferences,
       createdAt: userModel.createdAt,
       lastLoginAt: userModel.lastLoginAt,
     );

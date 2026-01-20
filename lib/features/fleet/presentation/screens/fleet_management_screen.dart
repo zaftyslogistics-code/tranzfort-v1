@@ -7,10 +7,12 @@ import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/free_badge.dart';
-import '../widgets/truck_card.dart';
+import '../../domain/entities/truck.dart';
+import '../providers/fleet_provider.dart';
 import '../widgets/add_truck_floating_button.dart';
 import '../widgets/fleet_stats_card.dart';
-import '../../domain/entities/truck.dart';
+import '../widgets/truck_card.dart';
+import '../../../../shared/widgets/empty_state_widget.dart';
 
 class FleetManagementScreen extends ConsumerStatefulWidget {
   const FleetManagementScreen({super.key});
@@ -28,6 +30,10 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ref.read(fleetNotifierProvider.notifier).fetchTrucks();
+    });
   }
 
   @override
@@ -38,6 +44,8 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
 
   @override
   Widget build(BuildContext context) {
+    final fleetState = ref.watch(fleetNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const GradientText(
@@ -86,48 +94,65 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
           ),
           
           // Content
-          TabBarView(
-            controller: _tabController,
-            children: [
-              _buildTruckList('active'),
-              _buildTruckList('expiring'),
-              _buildTruckList('all'),
-            ],
-          ),
+          if (fleetState.isLoading && fleetState.trucks.isEmpty)
+            const Center(child: CircularProgressIndicator())
+          else if (fleetState.error != null && fleetState.trucks.isEmpty)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(AppDimensions.lg),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Error: ${fleetState.error}',
+                      style: const TextStyle(color: AppColors.danger),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppDimensions.md),
+                    ElevatedButton(
+                      onPressed: () => ref
+                          .read(fleetNotifierProvider.notifier)
+                          .fetchTrucks(),
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            TabBarView(
+              controller: _tabController,
+              children: [
+                _buildTruckList('active', fleetState.trucks),
+                _buildTruckList('expiring', fleetState.trucks),
+                _buildTruckList('all', fleetState.trucks),
+              ],
+            ),
         ],
       ),
       floatingActionButton: const AddTruckFloatingButton(),
     );
   }
 
-  Widget _buildTruckList(String filter) {
-    // Mock data for now - will be replaced with real data
-    final mockTrucks = [
-      Truck(
-        id: '1',
-        truckNumber: 'MH-12-AB-1234',
-        truckType: 'Container Truck',
-        capacity: 20.0,
-        rcDocumentUrl: 'mock_rc_1.pdf',
-        insuranceDocumentUrl: 'mock_insurance_1.pdf',
-        rcExpiryDate: DateTime.now().add(const Duration(days: 180)),
-        insuranceExpiryDate: DateTime.now().add(const Duration(days: 45)),
-        createdAt: DateTime.now().subtract(const Duration(days: 30)),
-        updatedAt: DateTime.now(),
-      ),
-      Truck(
-        id: '2',
-        truckNumber: 'MH-12-XY-5678',
-        truckType: 'Flatbed',
-        capacity: 15.0,
-        rcDocumentUrl: 'mock_rc_2.pdf',
-        insuranceDocumentUrl: null,
-        rcExpiryDate: DateTime.now().add(const Duration(days: 365)),
-        insuranceExpiryDate: DateTime.now().subtract(const Duration(days: 10)),
-        createdAt: DateTime.now().subtract(const Duration(days: 60)),
-        updatedAt: DateTime.now(),
-      ),
-    ];
+  Widget _buildTruckList(String filter, List<Truck> allTrucks) {
+    List<Truck> filteredTrucks;
+    switch (filter) {
+      case 'active':
+        filteredTrucks = allTrucks.where((t) => t.isActive).toList();
+        break;
+      case 'expiring':
+        filteredTrucks = allTrucks
+            .where(
+              (t) => t.isRcExpiringSoon ||
+                  t.isInsuranceExpiringSoon ||
+                  t.isRcExpired ||
+                  t.isInsuranceExpired,
+            )
+            .toList();
+        break;
+      default:
+        filteredTrucks = allTrucks;
+    }
 
     return Column(
       children: [
@@ -139,13 +164,13 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
         
         // Truck List
         Expanded(
-          child: mockTrucks.isEmpty
+          child: filteredTrucks.isEmpty
               ? _buildEmptyState(filter)
               : ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
-                  itemCount: mockTrucks.length,
+                  itemCount: filteredTrucks.length,
                   itemBuilder: (context, index) {
-                    final truck = mockTrucks[index];
+                    final truck = filteredTrucks[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: AppDimensions.md),
                       child: TruckCard(
@@ -164,64 +189,39 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
 
   Widget _buildEmptyState(String filter) {
     String message;
+    String? subMessage;
     IconData icon;
-    String actionText;
+    String? actionText;
+    VoidCallback? onAction;
 
     switch (filter) {
       case 'active':
-        message = 'No active trucks in your fleet';
+        message = 'No Active Trucks';
+        subMessage = 'Add a truck to your fleet to get started.';
         icon = Icons.local_shipping_outlined;
         actionText = 'Add Your First Truck';
+        onAction = _addTruck;
         break;
       case 'expiring':
-        message = 'No trucks with expiring documents';
+        message = 'All Documents Valid';
+        subMessage = 'Great job! None of your trucks have expiring documents.';
         icon = Icons.check_circle_outline;
-        actionText = 'All Documents Valid';
         break;
       default:
-        message = 'No trucks in your fleet yet';
+        message = 'No Trucks Added';
+        subMessage = 'Build your fleet by adding trucks.';
         icon = Icons.add_circle_outline;
         actionText = 'Add Your First Truck';
+        onAction = _addTruck;
         break;
     }
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.xl),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 80,
-              color: AppColors.textSecondary,
-            ),
-            const SizedBox(height: AppDimensions.lg),
-            Text(
-              message,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.lg),
-            if (filter != 'expiring')
-              GlassmorphicButton(
-                variant: GlassmorphicButtonVariant.primary,
-                onPressed: _addTruck,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.add),
-                    const SizedBox(width: AppDimensions.sm),
-                    Text(actionText),
-                  ],
-                ),
-              ),
-          ],
-        ),
-      ),
+    return EmptyStateWidget(
+      message: message,
+      subMessage: subMessage,
+      icon: icon,
+      actionLabel: actionText,
+      onAction: onAction,
     );
   }
 
@@ -402,15 +402,30 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
             child: Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              // Implement delete logic
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${truck.truckNumber} deleted successfully'),
-                  backgroundColor: AppColors.success,
-                ),
-              );
+              final success = await ref
+                  .read(fleetNotifierProvider.notifier)
+                  .deleteTruck(truck.id);
+              
+              if (mounted) {
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${truck.truckNumber} deleted successfully'),
+                      backgroundColor: AppColors.success,
+                    ),
+                  );
+                } else {
+                  final error = ref.read(fleetNotifierProvider).error;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(error ?? 'Failed to delete truck'),
+                      backgroundColor: AppColors.danger,
+                    ),
+                  );
+                }
+              }
             },
             child: Text('Delete', style: TextStyle(color: AppColors.danger)),
           ),

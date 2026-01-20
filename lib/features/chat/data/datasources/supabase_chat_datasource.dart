@@ -33,6 +33,24 @@ class SupabaseChatDataSource implements ChatDataSource {
   }
 
   @override
+  Stream<List<ChatModel>> watchChats({String? userId}) {
+    var query = _supabase.from('chats').stream(primaryKey: ['id']).order('last_message_at', ascending: false);
+    
+    if (userId != null) {
+      // Client-side filtering for complex OR condition in streams
+      // Supabase stream filtering is limited compared to select
+      return query.map((rows) {
+        final chats = rows.map((json) => ChatModel.fromJson(json)).toList();
+        return chats.where((c) => c.truckerId == userId || c.supplierId == userId).toList();
+      });
+    }
+    
+    return query.map(
+      (rows) => rows.map((json) => ChatModel.fromJson(json)).toList(),
+    );
+  }
+
+  @override
   Future<ChatModel?> getChatById(String chatId) async {
     try {
       final data = await _supabase

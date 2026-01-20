@@ -8,10 +8,10 @@ import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/free_badge.dart';
-import '../widgets/fleet_stats_card.dart';
 import '../../domain/entities/truck.dart';
 import '../../domain/entities/truck_specification.dart';
 import '../../../../shared/widgets/simple_truck_type_selector.dart';
+import '../providers/fleet_provider.dart';
 
 class AddTruckScreen extends ConsumerStatefulWidget {
   final Truck? truck; // For editing
@@ -450,20 +450,61 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
 
+    if (_selectedTruckType == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a truck type')),
+      );
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     try {
-      // TODO: Implement actual truck creation/update logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
+      final notifier = ref.read(fleetNotifierProvider.notifier);
+      final truckData = {
+        'truck_number': _truckNumberController.text,
+        'truck_type': _selectedTruckType,
+        'capacity': double.tryParse(_capacityController.text) ?? 0.0,
+        'rc_expiry_date': _rcExpiryDate?.toIso8601String(),
+        'insurance_expiry_date': _insuranceExpiryDate?.toIso8601String(),
+      };
+
+      bool success;
+      if (widget.truck != null) {
+        success = await notifier.updateTruck(
+          widget.truck!.id,
+          truckData,
+          rcDocument: _rcDocument,
+          insuranceDocument: _insuranceDocument,
+        );
+      } else {
+        success = await notifier.addTruck(
+          truckData,
+          rcDocument: _rcDocument,
+          insuranceDocument: _insuranceDocument,
+        );
+      }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(widget.truck != null ? 'Truck updated successfully' : 'Truck added successfully'),
-            backgroundColor: AppColors.success,
-          ),
-        );
-        Navigator.pop(context);
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(widget.truck != null
+                  ? 'Truck updated successfully'
+                  : 'Truck added successfully'),
+              backgroundColor: AppColors.success,
+            ),
+          );
+          Navigator.pop(context);
+        } else {
+          final error = ref.read(fleetNotifierProvider).error;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error ?? 'Failed to save truck'),
+              backgroundColor: AppColors.danger,
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -500,16 +541,34 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
             child: Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // TODO: Implement actual deletion
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Truck deleted successfully'),
-                  backgroundColor: AppColors.success,
-                ),
-              );
-              Navigator.pop(context);
+            onPressed: () async {
+              Navigator.pop(context); // Close dialog
+              
+              setState(() => _isLoading = true);
+              final success = await ref
+                  .read(fleetNotifierProvider.notifier)
+                  .deleteTruck(widget.truck!.id);
+              
+              if (mounted) {
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Truck deleted successfully'),
+                      backgroundColor: AppColors.success,
+                    ),
+                  );
+                  Navigator.pop(context); // Close screen
+                } else {
+                  final error = ref.read(fleetNotifierProvider).error;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(error ?? 'Failed to delete truck'),
+                      backgroundColor: AppColors.danger,
+                    ),
+                  );
+                  setState(() => _isLoading = false);
+                }
+              }
             },
             child: Text('Delete', style: TextStyle(color: AppColors.danger)),
           ),

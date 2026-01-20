@@ -22,7 +22,23 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   }
 
   Map<String, dynamic> _toUpdatePayload(Map<String, dynamic> updates) {
-    return updates; // Temporary simplification, should be audited
+    // Security: Whitelist allowed fields to prevent malicious updates
+    // (e.g. preventing updates to supplier_id, view_count, created_at)
+    const allowedFields = {
+      'from_location', 'from_city', 'from_state',
+      'to_location', 'to_city', 'to_state',
+      'load_type', 'truck_type_required',
+      'weight', 'price', 'price_type',
+      'payment_terms', 'loading_date',
+      'notes',
+      'contact_preferences_call', 'contact_preferences_chat',
+      'status'
+    };
+
+    final sanitized = Map<String, dynamic>.from(updates)
+      ..removeWhere((key, value) => !allowedFields.contains(key));
+    
+    return sanitized;
   }
 
   @override
@@ -31,7 +47,16 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       final payload = _toInsertPayload(loadData);
       final Map<String, dynamic> data =
           await _client.from('loads').insert(payload).select().single();
-      return _toLoadModel(data);
+      
+      final load = _toLoadModel(data);
+      
+      // Update cache
+      await OfflineCacheService().addItemToList(
+        OfflineCacheService.loadsKey,
+        load.toJson(),
+      );
+      
+      return load;
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -41,6 +66,7 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   Future<List<LoadModel>> getLoads({
     String? status,
     String? supplierId,
+    String? searchQuery,
     int page = 0,
     int pageSize = 20,
   }) async {
@@ -54,6 +80,19 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
 
         if (supplierId != null) {
           query = query.eq('supplier_id', supplierId);
+        }
+
+        if (searchQuery != null && searchQuery.isNotEmpty) {
+          // Search across multiple fields using OR logic
+          // Note: This requires a filter builder string for the OR clause
+          final searchFilter = 'from_city.ilike.%$searchQuery%,'
+              'to_city.ilike.%$searchQuery%,'
+              'from_state.ilike.%$searchQuery%,'
+              'to_state.ilike.%$searchQuery%,'
+              'truck_type.ilike.%$searchQuery%,'
+              'material_type.ilike.%$searchQuery%';
+          
+          query = query.or(searchFilter);
         }
 
         final from = page * pageSize;
@@ -117,7 +156,17 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
           .select()
           .single();
 
-      return _toLoadModel(data);
+      final load = _toLoadModel(data);
+
+      // Update cache
+      await OfflineCacheService().updateItemInList(
+        OfflineCacheService.loadsKey,
+        'id',
+        id,
+        load.toJson(),
+      );
+
+      return load;
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -127,6 +176,13 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   Future<void> deleteLoad(String id) async {
     try {
       await _client.from('loads').update({'status': 'deleted'}).eq('id', id);
+      
+      // Update cache
+      await OfflineCacheService().removeItemFromList(
+        OfflineCacheService.loadsKey,
+        'id',
+        id,
+      );
     } catch (e) {
       throw ServerException(e.toString());
     }

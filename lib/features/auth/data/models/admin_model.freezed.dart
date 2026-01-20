@@ -12,7 +12,8 @@ part of 'admin_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 AdminModel _$AdminModelFromJson(Map<String, dynamic> json) {
   return _AdminModel.fromJson(json);
@@ -42,15 +43,17 @@ mixin _$AdminModel {
 /// @nodoc
 abstract class $AdminModelCopyWith<$Res> {
   factory $AdminModelCopyWith(
-          AdminModel value, $Res Function(AdminModel) then) =
-      _$AdminModelCopyWithImpl<$Res, AdminModel>;
+    AdminModel value,
+    $Res Function(AdminModel) then,
+  ) = _$AdminModelCopyWithImpl<$Res, AdminModel>;
   @useResult
-  $Res call(
-      {String id,
-      String role,
-      @JsonKey(name: 'full_name') String? fullName,
-      @JsonKey(name: 'created_at') DateTime createdAt,
-      @JsonKey(name: 'updated_at') DateTime updatedAt});
+  $Res call({
+    String id,
+    String role,
+    @JsonKey(name: 'full_name') String? fullName,
+    @JsonKey(name: 'created_at') DateTime createdAt,
+    @JsonKey(name: 'updated_at') DateTime updatedAt,
+  });
 }
 
 /// @nodoc
@@ -74,28 +77,31 @@ class _$AdminModelCopyWithImpl<$Res, $Val extends AdminModel>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      role: null == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      fullName: freezed == fullName
-          ? _value.fullName
-          : fullName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            role: null == role
+                ? _value.role
+                : role // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fullName: freezed == fullName
+                ? _value.fullName
+                : fullName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            updatedAt: null == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -103,16 +109,18 @@ class _$AdminModelCopyWithImpl<$Res, $Val extends AdminModel>
 abstract class _$$AdminModelImplCopyWith<$Res>
     implements $AdminModelCopyWith<$Res> {
   factory _$$AdminModelImplCopyWith(
-          _$AdminModelImpl value, $Res Function(_$AdminModelImpl) then) =
-      __$$AdminModelImplCopyWithImpl<$Res>;
+    _$AdminModelImpl value,
+    $Res Function(_$AdminModelImpl) then,
+  ) = __$$AdminModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String role,
-      @JsonKey(name: 'full_name') String? fullName,
-      @JsonKey(name: 'created_at') DateTime createdAt,
-      @JsonKey(name: 'updated_at') DateTime updatedAt});
+  $Res call({
+    String id,
+    String role,
+    @JsonKey(name: 'full_name') String? fullName,
+    @JsonKey(name: 'created_at') DateTime createdAt,
+    @JsonKey(name: 'updated_at') DateTime updatedAt,
+  });
 }
 
 /// @nodoc
@@ -120,8 +128,9 @@ class __$$AdminModelImplCopyWithImpl<$Res>
     extends _$AdminModelCopyWithImpl<$Res, _$AdminModelImpl>
     implements _$$AdminModelImplCopyWith<$Res> {
   __$$AdminModelImplCopyWithImpl(
-      _$AdminModelImpl _value, $Res Function(_$AdminModelImpl) _then)
-      : super(_value, _then);
+    _$AdminModelImpl _value,
+    $Res Function(_$AdminModelImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AdminModel
   /// with the given fields replaced by the non-null parameter values.
@@ -134,40 +143,43 @@ class __$$AdminModelImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$AdminModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      role: null == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      fullName: freezed == fullName
-          ? _value.fullName
-          : fullName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
+    return _then(
+      _$AdminModelImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        role: null == role
+            ? _value.role
+            : role // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fullName: freezed == fullName
+            ? _value.fullName
+            : fullName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$AdminModelImpl implements _AdminModel {
-  const _$AdminModelImpl(
-      {required this.id,
-      required this.role,
-      @JsonKey(name: 'full_name') this.fullName,
-      @JsonKey(name: 'created_at') required this.createdAt,
-      @JsonKey(name: 'updated_at') required this.updatedAt});
+  const _$AdminModelImpl({
+    required this.id,
+    required this.role,
+    @JsonKey(name: 'full_name') this.fullName,
+    @JsonKey(name: 'created_at') required this.createdAt,
+    @JsonKey(name: 'updated_at') required this.updatedAt,
+  });
 
   factory _$AdminModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AdminModelImplFromJson(json);
@@ -221,20 +233,18 @@ class _$AdminModelImpl implements _AdminModel {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AdminModelImplToJson(
-      this,
-    );
+    return _$$AdminModelImplToJson(this);
   }
 }
 
 abstract class _AdminModel implements AdminModel {
-  const factory _AdminModel(
-          {required final String id,
-          required final String role,
-          @JsonKey(name: 'full_name') final String? fullName,
-          @JsonKey(name: 'created_at') required final DateTime createdAt,
-          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
-      _$AdminModelImpl;
+  const factory _AdminModel({
+    required final String id,
+    required final String role,
+    @JsonKey(name: 'full_name') final String? fullName,
+    @JsonKey(name: 'created_at') required final DateTime createdAt,
+    @JsonKey(name: 'updated_at') required final DateTime updatedAt,
+  }) = _$AdminModelImpl;
 
   factory _AdminModel.fromJson(Map<String, dynamic> json) =
       _$AdminModelImpl.fromJson;

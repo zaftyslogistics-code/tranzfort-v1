@@ -14,6 +14,7 @@ class UserModel with _$UserModel {
     @JsonKey(name: 'is_trucker_enabled') @Default(false) bool isTruckerEnabled,
     @JsonKey(name: 'supplier_verification_status') @Default('unverified') String supplierVerificationStatus,
     @JsonKey(name: 'trucker_verification_status') @Default('unverified') String truckerVerificationStatus,
+    @Default({}) Map<String, dynamic> preferences,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'last_login_at') required DateTime lastLoginAt,
     @JsonKey(name: 'updated_at') required DateTime updatedAt,

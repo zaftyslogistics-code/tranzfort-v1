@@ -19,19 +19,10 @@ class ChatListScreen extends ConsumerStatefulWidget {
 
 class _ChatListScreenState extends ConsumerState<ChatListScreen> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final user = ref.read(authNotifierProvider).user;
-      ref.read(chatNotifierProvider.notifier).fetchChats(userId: user?.id);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final chatState = ref.watch(chatNotifierProvider);
     final user = ref.watch(authNotifierProvider).user;
+    final chatStream = ref.watch(chatListStreamProvider(user?.id));
+    
     final isSupplier = user?.isSupplierEnabled ?? false;
     final isTrucker = user?.isTruckerEnabled ?? false;
     final isVerified = isSupplier
@@ -76,9 +67,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
               color: AppColors.primary,
             ),
           ),
-          if (chatState.isLoading)
-            const Center(child: CircularProgressIndicator())
-          else if (!isVerified)
+          if (!isVerified)
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(AppDimensions.xl),
@@ -118,52 +107,61 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
                 ),
               ),
             )
-          else if (chatState.chats.isEmpty)
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(AppDimensions.xl),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const BannerAdWidget(),
-                    const SizedBox(height: AppDimensions.lg),
-                    const Icon(
-                      Icons.chat_bubble_outline,
-                      size: 72,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(height: AppDimensions.lg),
-                    GradientText(
-                      'No chats yet',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: AppDimensions.sm),
-                    Text(
-                      'Start a conversation from any load detail page.',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            )
           else
-            ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: AppDimensions.sm),
-              itemCount: chatState.chats.length,
-              itemBuilder: (context, index) {
-                final chat = chatState.chats[index];
-                return ChatPreviewCard(
-                  chat: chat,
-                  onTap: () => context.push('/chat', extra: chat.id),
+            chatStream.when(
+              data: (chats) {
+                if (chats.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppDimensions.xl),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const BannerAdWidget(),
+                          const SizedBox(height: AppDimensions.lg),
+                          const Icon(
+                            Icons.chat_bubble_outline,
+                            size: 72,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(height: AppDimensions.lg),
+                          GradientText(
+                            'No chats yet',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: AppDimensions.sm),
+                          Text(
+                            'Start a conversation from any load detail page.',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: AppDimensions.sm),
+                  itemCount: chats.length,
+                  itemBuilder: (context, index) {
+                    final chat = chats[index];
+                    return ChatPreviewCard(
+                      chat: chat,
+                      onTap: () => context.push('/chat', extra: chat.id),
+                    );
+                  },
                 );
               },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(
+                child: Text('Error: $error', style: const TextStyle(color: AppColors.danger)),
+              ),
             ),
         ],
       ),
