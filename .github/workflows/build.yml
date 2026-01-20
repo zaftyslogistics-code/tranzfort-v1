@@ -19,8 +19,12 @@ jobs:
       with:
         flutter-version: '3.27.0' # Latest stable with Dart 3.9.0+
         channel: 'stable'
-        cache: true
-        cache-key: flutter-${{ runner.os }}-${{ hashFiles('**/pubspec.lock') }}
+        cache: false # Disable cache to force fresh install
+
+    - name: Verify Flutter and Dart versions
+      run: |
+        flutter --version
+        dart --version
     
     - name: Install dependencies
       run: flutter pub get

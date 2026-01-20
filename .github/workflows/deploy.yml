@@ -23,6 +23,12 @@ jobs:
         with:
           flutter-version: '3.27.0' # Latest stable with Dart 3.9.0+
           channel: 'stable'
+          cache: false # Disable cache to force fresh install
+
+      - name: Verify Flutter and Dart versions
+        run: |
+          flutter --version
+          dart --version
 
       # Here we build the .env file.
       # Since you deferred ads, we inject TEST IDs so the app doesn't crash.
