@@ -160,23 +160,55 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
     try {
       Logger.info('Updating profile for user: $userId');
 
+      final mappedUpdates = <String, dynamic>{};
+      for (final entry in updates.entries) {
+        switch (entry.key) {
+          case 'isSupplierEnabled':
+            mappedUpdates['is_supplier_enabled'] = entry.value;
+            break;
+          case 'isTruckerEnabled':
+            mappedUpdates['is_trucker_enabled'] = entry.value;
+            break;
+          default:
+            mappedUpdates[entry.key] = entry.value;
+        }
+      }
+
       final updateData = <String, dynamic>{
-        ...updates,
+        ...mappedUpdates,
         'updated_at': DateTime.now().toIso8601String(),
       };
 
-      await supabaseClient
-          .from('users')
-          .update(updateData)
-          .eq('id', userId);
+      await supabaseClient.from('users').update(updateData).eq('id', userId);
 
-      Logger.info('Profile updated successfully');
+      // Fetch updated profile; if the row doesn't exist yet, create it and retry.
+      var updatedProfile = await _getUserProfile(userId);
+      if (updatedProfile == null) {
+        final authUser = supabaseClient.auth.currentUser;
+        try {
+          await supabaseClient.from('users').upsert(
+            {
+              'id': userId,
+              'mobile_number': authUser?.phone ?? _mobilePlaceholder(userId),
+              'country_code': authUser?.userMetadata?['country_code'] ?? '+91',
+              'name': authUser?.userMetadata?['name'] ?? authUser?.email,
+              'email': authUser?.email,
+              ...updateData,
+            },
+            onConflict: 'id',
+          );
+        } catch (e) {
+          Logger.error('Failed to upsert user profile during updateProfile', error: e);
+        }
 
-      // Fetch and return updated profile
-      final updatedProfile = await _getUserProfile(userId);
+        updatedProfile = await _getUserProfile(userId);
+      }
+
       if (updatedProfile == null) {
         throw Exception('Failed to fetch updated profile');
       }
+
+      Logger.info('Profile updated successfully');
       return updatedProfile;
     } catch (e) {
       Logger.error('Failed to update profile', error: e);
