@@ -9,7 +9,7 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/cirruslabs/flutter:3.24.0
+      image: ghcr.io/cirruslabs/flutter:stable
 
     steps:
       - uses: actions/checkout@v4
