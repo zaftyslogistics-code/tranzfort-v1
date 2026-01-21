@@ -102,7 +102,3 @@ flutter:
     - assets/env/
     - logo full.png
     - transport-logo-v1.png
-    - .env
-    - .env.local
-    - .env.staging
-    - .env.production
