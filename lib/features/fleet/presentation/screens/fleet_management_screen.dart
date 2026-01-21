@@ -409,24 +409,24 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
               final success = await ref
                   .read(fleetNotifierProvider.notifier)
                   .deleteTruck(truck.id);
-              
-              if (mounted) {
-                if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${truck.truckNumber} deleted successfully'),
-                      backgroundColor: AppColors.success,
-                    ),
-                  );
-                } else {
-                  final error = ref.read(fleetNotifierProvider).error;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(error ?? 'Failed to delete truck'),
-                      backgroundColor: AppColors.danger,
-                    ),
-                  );
-                }
+
+              if (!context.mounted) return;
+
+              if (success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${truck.truckNumber} deleted successfully'),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+              } else {
+                final error = ref.read(fleetNotifierProvider).error;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(error ?? 'Failed to delete truck'),
+                    backgroundColor: AppColors.danger,
+                  ),
+                );
               }
             },
             child: Text('Delete', style: TextStyle(color: AppColors.danger)),

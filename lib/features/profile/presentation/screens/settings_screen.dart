@@ -6,15 +6,12 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/app_bottom_navigation.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authNotifierProvider).user;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),

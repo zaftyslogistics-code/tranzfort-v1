@@ -159,9 +159,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/edit-truck/:truckId',
         name: 'edit-truck',
         builder: (context, state) {
-          final truckId = state.pathParameters['truckId']!;
           // TODO: Fetch truck data and pass to AddTruckScreen
-          return AddTruckScreen();
+          return const AddTruckScreen();
         },
       ),
       GoRoute(

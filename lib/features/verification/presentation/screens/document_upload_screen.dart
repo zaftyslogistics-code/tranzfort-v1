@@ -38,14 +38,6 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
     }
   }
 
-  List<String> get _optionalDocuments {
-    if (widget.roleType == 'supplier') {
-      return ['GST Certificate'];
-    } else {
-      return ['Additional Truck RC'];
-    }
-  }
-
   @override
   void dispose() {
     _documentNumberController.dispose();

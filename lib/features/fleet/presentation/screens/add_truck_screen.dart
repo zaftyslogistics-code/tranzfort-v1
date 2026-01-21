@@ -548,26 +548,26 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
               final success = await ref
                   .read(fleetNotifierProvider.notifier)
                   .deleteTruck(widget.truck!.id);
-              
-              if (mounted) {
-                if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Truck deleted successfully'),
-                      backgroundColor: AppColors.success,
-                    ),
-                  );
-                  context.pop(); // Close screen
-                } else {
-                  final error = ref.read(fleetNotifierProvider).error;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(error ?? 'Failed to delete truck'),
-                      backgroundColor: AppColors.danger,
-                    ),
-                  );
-                  setState(() => _isLoading = false);
-                }
+
+              if (!context.mounted) return;
+
+              if (success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Truck deleted successfully'),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+                context.pop(); // Close screen
+              } else {
+                final error = ref.read(fleetNotifierProvider).error;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(error ?? 'Failed to delete truck'),
+                    backgroundColor: AppColors.danger,
+                  ),
+                );
+                setState(() => _isLoading = false);
               }
             },
             child: Text('Delete', style: TextStyle(color: AppColors.danger)),

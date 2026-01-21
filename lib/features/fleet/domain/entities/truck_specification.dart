@@ -89,7 +89,7 @@ class TruckSpecification extends Equatable {
   }
 
   String get tyreCountDisplay {
-    return '${tyreCount} Tyres';
+    return '$tyreCount Tyres';
   }
 
   String get dimensions {

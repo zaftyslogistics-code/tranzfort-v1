@@ -115,7 +115,7 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
   }
 
   Widget _buildCategorySelector() {
-    return Container(
+    return SizedBox(
       height: 120,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -329,7 +329,7 @@ class QuickTruckTypeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final specs = TruckSpecification.getSmartIndianTruckSpecifications();
     
-    return Container(
+    return SizedBox(
       height: 80,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

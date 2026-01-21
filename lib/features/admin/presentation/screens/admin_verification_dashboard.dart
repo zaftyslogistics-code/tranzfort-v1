@@ -79,6 +79,8 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
           .update(updates)
           .eq('id', requestId);
 
+      if (!context.mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Request $status'),
@@ -89,6 +91,9 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
       _fetchRequests(); // Refresh list
     } catch (e) {
       Logger.error('Failed to update request status', error: e);
+
+      if (!context.mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.danger),
       );

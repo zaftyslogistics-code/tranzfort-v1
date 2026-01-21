@@ -2,30 +2,18 @@ import '../../domain/entities/truck.dart';
 
 class TruckModel extends Truck {
   const TruckModel({
-    required String id,
-    required String truckNumber,
-    required String truckType,
-    required double capacity,
-    String? rcDocumentUrl,
-    String? insuranceDocumentUrl,
-    DateTime? rcExpiryDate,
-    DateTime? insuranceExpiryDate,
-    bool isActive = true,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-  }) : super(
-          id: id,
-          truckNumber: truckNumber,
-          truckType: truckType,
-          capacity: capacity,
-          rcDocumentUrl: rcDocumentUrl,
-          insuranceDocumentUrl: insuranceDocumentUrl,
-          rcExpiryDate: rcExpiryDate,
-          insuranceExpiryDate: insuranceExpiryDate,
-          isActive: isActive,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-        );
+    required super.id,
+    required super.truckNumber,
+    required super.truckType,
+    required super.capacity,
+    super.rcDocumentUrl,
+    super.insuranceDocumentUrl,
+    super.rcExpiryDate,
+    super.insuranceExpiryDate,
+    super.isActive = true,
+    required super.createdAt,
+    required super.updatedAt,
+  });
 
   factory TruckModel.fromJson(Map<String, dynamic> json) {
     return TruckModel(
