@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../data/datasources/mock_chat_datasource.dart';
+import '../../data/datasources/chat_datasource.dart';
 import '../../data/datasources/supabase_chat_datasource.dart';
 import '../../data/repositories/chat_repository_impl.dart';
 import '../../domain/entities/chat.dart';
@@ -10,15 +10,8 @@ import '../../domain/usecases/get_chat_by_id.dart';
 import '../../domain/usecases/get_messages.dart';
 import '../../domain/usecases/send_message.dart';
 import '../../domain/usecases/mark_as_read.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
-import '../../../../core/config/env_config.dart';
 
 final chatDataSourceProvider = Provider<ChatDataSource>((ref) {
-  if (EnvConfig.useMockChat) {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    return MockChatDataSource(prefs);
-  }
-
   final supabase = Supabase.instance.client;
   return SupabaseChatDataSource(supabase);
 });

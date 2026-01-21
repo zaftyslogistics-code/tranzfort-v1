@@ -202,8 +202,12 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                               const material.MaterialType(id: 9, name: 'Furniture', category: 'Furniture', displayOrder: 9),
                               const material.MaterialType(id: 10, name: 'Other', category: 'Other', displayOrder: 10),
                             ];
+                            final selectedMaterial = materialList.any((t) => t.name == _selectedMaterial)
+                                ? _selectedMaterial
+                                : null;
                             return DropdownButtonFormField<String>(
-                              initialValue: _selectedMaterial,
+                              initialValue: selectedMaterial,
+                              isExpanded: true,
                               dropdownColor: AppColors.darkSurface,
                               style: Theme.of(context)
                                   .textTheme
@@ -213,24 +217,13 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                                   .map<DropdownMenuItem<String>>(
                                     (type) => DropdownMenuItem(
                                       value: type.name,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            type.name,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.copyWith(color: AppColors.textPrimary),
-                                          ),
-                                          Text(
-                                            type.category ?? 'General',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall
-                                                ?.copyWith(color: AppColors.textSecondary, fontSize: 11),
-                                          ),
-                                        ],
+                                      child: Text(
+                                        type.name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(color: AppColors.textPrimary),
                                       ),
                                     ),
                                   )
@@ -245,13 +238,51 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                           },
                           loading: () =>
                               const Center(child: CircularProgressIndicator()),
-                          error: (_, __) => Text(
-                            'Select a material type',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(color: AppColors.textSecondary),
-                          ),
+                          error: (_, __) {
+                            final materialList = [
+                              const material.MaterialType(id: 1, name: 'Agriculture - Grains', category: 'Agriculture', displayOrder: 1),
+                              const material.MaterialType(id: 2, name: 'Agriculture - Vegetables', category: 'Agriculture', displayOrder: 2),
+                              const material.MaterialType(id: 3, name: 'FMCG', category: 'FMCG', displayOrder: 3),
+                              const material.MaterialType(id: 4, name: 'Building Materials', category: 'Building Materials', displayOrder: 4),
+                              const material.MaterialType(id: 5, name: 'Textiles', category: 'Textiles', displayOrder: 5),
+                              const material.MaterialType(id: 6, name: 'Electronics', category: 'Electronics', displayOrder: 6),
+                              const material.MaterialType(id: 7, name: 'Machinery', category: 'Machinery', displayOrder: 7),
+                              const material.MaterialType(id: 8, name: 'Chemicals', category: 'Chemicals', displayOrder: 8),
+                              const material.MaterialType(id: 9, name: 'Furniture', category: 'Furniture', displayOrder: 9),
+                              const material.MaterialType(id: 10, name: 'Other', category: 'Other', displayOrder: 10),
+                            ];
+                            final selectedMaterial = materialList.any((t) => t.name == _selectedMaterial)
+                                ? _selectedMaterial
+                                : null;
+
+                            return DropdownButtonFormField<String>(
+                              initialValue: selectedMaterial,
+                              isExpanded: true,
+                              dropdownColor: AppColors.darkSurface,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: AppColors.textPrimary),
+                              items: materialList
+                                  .map<DropdownMenuItem<String>>(
+                                    (type) => DropdownMenuItem(
+                                      value: type.name,
+                                      child: Text(
+                                        type.name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(color: AppColors.textPrimary),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) => setState(() => _selectedMaterial = value),
+                              decoration: const InputDecoration(hintText: 'Select material'),
+                              validator: (value) => Validators.validateRequired(value, 'material'),
+                            );
+                          },
                         ),
                         const SizedBox(height: AppDimensions.lg),
                         Text(
@@ -274,8 +305,12 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                               domain.TruckType(id: 7, name: 'Tanker Truck', category: 'Tanker', displayOrder: 7),
                               domain.TruckType(id: 8, name: 'Specialized Truck', category: 'Specialized', displayOrder: 8),
                             ];
+                            final selectedTruckType = truckList.any((t) => t.name == _selectedTruckType)
+                                ? _selectedTruckType
+                                : null;
                             return DropdownButtonFormField<String>(
-                              initialValue: _selectedTruckType,
+                              initialValue: selectedTruckType,
+                              isExpanded: true,
                               dropdownColor: AppColors.darkSurface,
                               style: Theme.of(context)
                                   .textTheme

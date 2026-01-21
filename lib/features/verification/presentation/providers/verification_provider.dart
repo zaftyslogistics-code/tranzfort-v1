@@ -1,9 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../../core/config/env_config.dart';
 import '../../../../core/utils/logger.dart';
 import '../../data/datasources/supabase_verification_datasource.dart';
-import '../../data/datasources/mock_verification_datasource.dart';
 import '../../data/repositories/verification_repository_impl.dart';
 import '../../domain/repositories/verification_repository.dart';
 import '../../domain/usecases/get_pending_verification_requests.dart';
@@ -11,14 +9,9 @@ import '../../domain/usecases/update_verification_status.dart';
 import '../../domain/usecases/create_verification_request.dart';
 
 final verificationDataSourceProvider = Provider<dynamic>((ref) {
-  if (EnvConfig.useMockAuth) {
-    Logger.info('📋 Using Mock Verification DataSource');
-    return MockVerificationDataSource();
-  } else {
-    final supabase = Supabase.instance.client;
-    Logger.info('📋 Using Supabase Verification DataSource');
-    return SupabaseVerificationDataSource(supabase);
-  }
+  final supabase = Supabase.instance.client;
+  Logger.info('📋 Using Supabase Verification DataSource');
+  return SupabaseVerificationDataSource(supabase);
 });
 
 final verificationRepositoryProvider = Provider<VerificationRepository>((ref) {

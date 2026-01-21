@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import '../../data/datasources/mock_loads_datasource.dart';
+import '../../data/datasources/loads_datasource.dart';
 import '../../data/datasources/supabase_loads_datasource.dart';
 import '../../data/repositories/loads_repository_impl.dart';
 import '../../domain/entities/load.dart';
@@ -14,18 +14,11 @@ import '../../domain/usecases/update_load.dart';
 import '../../domain/usecases/delete_load.dart';
 import '../../domain/usecases/get_truck_types.dart';
 import '../../domain/usecases/get_material_types.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
-import '../../../../core/config/env_config.dart';
 import '../../../../core/services/offline_cache_service.dart';
 
 import '../../../../core/utils/logger.dart';
 
 final loadsDataSourceProvider = Provider<LoadsDataSource>((ref) {
-  if (EnvConfig.useMockLoads) {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    return MockLoadsDataSource(prefs);
-  }
-
   final supabase = Supabase.instance.client;
   return SupabaseLoadsDataSource(supabase);
 });
@@ -33,13 +26,7 @@ final loadsDataSourceProvider = Provider<LoadsDataSource>((ref) {
 final loadsRepositoryProvider = Provider((ref) {
   final primary = ref.watch(loadsDataSourceProvider);
 
-  final prefs = ref.watch(sharedPreferencesProvider);
-  final fallback = MockLoadsDataSource(prefs);
-
-  return LoadsRepositoryImpl(
-    primary,
-    fallback: fallback,
-  );
+  return LoadsRepositoryImpl(primary);
 });
 
 final createLoadUseCaseProvider = Provider((ref) {
@@ -231,17 +218,15 @@ final loadsNotifierProvider =
 // Master data providers
 final truckTypesProvider = FutureProvider<List<TruckType>>((ref) async {
   try {
-    // Direct mock data to avoid complex provider chain issues
-    return [
-      const TruckType(id: 1, name: 'Small Truck (4-6 Tyres)', category: 'Small', displayOrder: 1),
-      const TruckType(id: 2, name: 'Medium Truck (10-12 Tyres)', category: 'Medium', displayOrder: 2),
-      const TruckType(id: 3, name: 'Heavy Truck (14-16 Tyres)', category: 'Heavy', displayOrder: 3),
-      const TruckType(id: 4, name: 'Super Heavy (18+ Tyres)', category: 'Super Heavy', displayOrder: 4),
-      const TruckType(id: 5, name: 'Container Truck', category: 'Container', displayOrder: 5),
-      const TruckType(id: 6, name: 'Flatbed Truck', category: 'Flatbed', displayOrder: 6),
-      const TruckType(id: 7, name: 'Tanker Truck', category: 'Tanker', displayOrder: 7),
-      const TruckType(id: 8, name: 'Specialized Truck', category: 'Specialized', displayOrder: 8),
-    ];
+    final useCase = ref.read(getTruckTypesUseCaseProvider);
+    final result = await useCase();
+    return result.fold(
+      (failure) {
+        Logger.error('Failed to load truck types', error: failure.message);
+        return <TruckType>[];
+      },
+      (types) => types,
+    );
   } catch (e, stack) {
     Logger.error('Failed to load truck types', error: e, stackTrace: stack);
     return <TruckType>[];
@@ -250,26 +235,15 @@ final truckTypesProvider = FutureProvider<List<TruckType>>((ref) async {
 
 final materialTypesProvider = FutureProvider<List<MaterialType>>((ref) async {
   try {
-    // Direct mock data to avoid complex provider chain issues
-    return [
-      const MaterialType(id: 1, name: 'Agriculture - Grains', category: 'Agriculture', displayOrder: 1),
-      const MaterialType(id: 2, name: 'Agriculture - Vegetables', category: 'Agriculture', displayOrder: 2),
-      const MaterialType(id: 3, name: 'Agriculture - Fruits', category: 'Agriculture', displayOrder: 3),
-      const MaterialType(id: 4, name: 'FMCG', category: 'FMCG', displayOrder: 4),
-      const MaterialType(id: 5, name: 'Building Materials - Cement', category: 'Building Materials', displayOrder: 5),
-      const MaterialType(id: 6, name: 'Building Materials - Steel', category: 'Building Materials', displayOrder: 6),
-      const MaterialType(id: 7, name: 'Building Materials - Bricks', category: 'Building Materials', displayOrder: 7),
-      const MaterialType(id: 8, name: 'Chemicals', category: 'Chemicals', displayOrder: 8),
-      const MaterialType(id: 9, name: 'Electronics', category: 'Electronics', displayOrder: 9),
-      const MaterialType(id: 10, name: 'Textiles', category: 'Textiles', displayOrder: 10),
-      const MaterialType(id: 11, name: 'Furniture', category: 'Furniture', displayOrder: 11),
-      const MaterialType(id: 12, name: 'Machinery', category: 'Machinery', displayOrder: 12),
-      const MaterialType(id: 13, name: 'Petroleum Products', category: 'Petroleum', displayOrder: 13),
-      const MaterialType(id: 14, name: 'Pharmaceuticals', category: 'Pharmaceuticals', displayOrder: 14),
-      const MaterialType(id: 15, name: 'Raw Materials', category: 'Raw Materials', displayOrder: 15),
-      const MaterialType(id: 16, name: 'Scrap/Waste', category: 'Scrap', displayOrder: 16),
-      const MaterialType(id: 17, name: 'Other', category: 'Other', displayOrder: 17),
-    ];
+    final useCase = ref.read(getMaterialTypesUseCaseProvider);
+    final result = await useCase();
+    return result.fold(
+      (failure) {
+        Logger.error('Failed to load material types', error: failure.message);
+        return <MaterialType>[];
+      },
+      (types) => types,
+    );
   } catch (e, stack) {
     Logger.error('Failed to load material types', error: e, stackTrace: stack);
     return <MaterialType>[];

@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../domain/entities/chat.dart';
 import '../../domain/entities/chat_message.dart';
 import '../../domain/repositories/chat_repository.dart';
-import '../datasources/mock_chat_datasource.dart';
+import '../datasources/chat_datasource.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/errors/exceptions.dart';
 

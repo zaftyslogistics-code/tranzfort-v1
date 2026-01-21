@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,83 +12,13 @@ import 'core/router/app_router.dart';
 import 'core/services/ad_service.dart';
 import 'core/services/offline_cache_service.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
-import 'features/auth/data/datasources/mock_auth_datasource.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    if (kIsWeb) {
-      try {
-        await dotenv.load(fileName: 'assets/env/production.env');
-        Logger.info('Loaded assets/env/production.env file');
-      } catch (e) {
-        try {
-          await dotenv.load(fileName: 'assets/env/staging.env');
-          Logger.info('Loaded assets/env/staging.env file');
-        } catch (e2) {
-          try {
-            await dotenv.load(fileName: 'assets/env/local.env');
-            Logger.info('Loaded assets/env/local.env file');
-          } catch (e3) {
-            // Fallback if no env assets are present
-            Logger.warning('No env assets found, using fallback configuration');
-            dotenv.env.addAll({
-              'ENVIRONMENT': 'production',
-              'SUPABASE_URL': 'https://your-production-project.supabase.co',
-              'SUPABASE_ANON_KEY': 'your_production_anon_key',
-              'USE_MOCK_AUTH': 'false',
-              'USE_MOCK_LOADS': 'false',
-              'USE_MOCK_CHAT': 'false',
-              'ENABLE_ANALYTICS': 'true',
-              'API_TIMEOUT': '30000',
-            });
-          }
-        }
-      }
-    } else {
-      try {
-        await dotenv.load(fileName: '.env');
-        Logger.info('Loaded .env file');
-      } catch (e) {
-        try {
-          await dotenv.load(fileName: '.env.production');
-          Logger.info('Loaded .env.production file');
-        } catch (e2) {
-          try {
-            await dotenv.load(fileName: '.env.local');
-            Logger.info('Loaded .env.local file');
-          } catch (e3) {
-            try {
-              await dotenv.load(fileName: 'assets/env/production.env');
-              Logger.info('Loaded assets/env/production.env file');
-            } catch (e4) {
-              try {
-                await dotenv.load(fileName: 'assets/env/staging.env');
-                Logger.info('Loaded assets/env/staging.env file');
-              } catch (e5) {
-                try {
-                  await dotenv.load(fileName: 'assets/env/local.env');
-                  Logger.info('Loaded assets/env/local.env file');
-                } catch (e6) {
-                  Logger.warning('No env files found, using fallback configuration');
-                  dotenv.env.addAll({
-                    'ENVIRONMENT': 'production',
-                    'SUPABASE_URL': 'https://your-production-project.supabase.co',
-                    'SUPABASE_ANON_KEY': 'your_production_anon_key',
-                    'USE_MOCK_AUTH': 'false',
-                    'USE_MOCK_LOADS': 'false',
-                    'USE_MOCK_CHAT': 'false',
-                    'ENABLE_ANALYTICS': 'true',
-                    'API_TIMEOUT': '30000',
-                  });
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    await dotenv.load(fileName: 'assets/env/production.env');
+    Logger.info('Loaded assets/env/production.env file');
     Logger.info('Environment loaded: ${EnvConfig.environment}');
 
     await Supabase.initialize(
@@ -106,17 +35,6 @@ void main() async {
 
     final sharedPreferences = await SharedPreferences.getInstance();
     Logger.info('SharedPreferences initialized');
-
-    // Clear mock data in development mode for fresh testing
-    if (EnvConfig.isLocal) {
-      try {
-        final mockAuth = MockAuthDataSource(sharedPreferences);
-        await mockAuth.clearMockData();
-        Logger.info('🧹 Mock data cleared for fresh testing');
-      } catch (e) {
-        Logger.error('Failed to clear mock data', error: e);
-      }
-    }
 
     // Set up global error handling
     ErrorWidget.builder = (FlutterErrorDetails details) {

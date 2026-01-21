@@ -3,7 +3,7 @@ import '../../domain/entities/load.dart';
 import '../../domain/entities/truck_type.dart';
 import '../../domain/entities/material_type.dart';
 import '../../domain/repositories/loads_repository.dart';
-import '../datasources/mock_loads_datasource.dart';
+import '../datasources/loads_datasource.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/errors/exceptions.dart';
 

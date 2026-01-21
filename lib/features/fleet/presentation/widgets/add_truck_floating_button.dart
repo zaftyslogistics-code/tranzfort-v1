@@ -11,19 +11,19 @@ class AddTruckFloatingButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.truckPrimary, AppColors.truckSecondary],
+          colors: [AppColors.primary, AppColors.secondary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: AppColors.truckPrimary.withAlpha((0.4 * 255).round()),
+            color: AppColors.primary.withAlpha((0.4 * 255).round()),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
           BoxShadow(
-            color: AppColors.truckPrimary.withAlpha((0.2 * 255).round()),
+            color: AppColors.primary.withAlpha((0.2 * 255).round()),
             blurRadius: 40,
             offset: const Offset(0, 16),
           ),

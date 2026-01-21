@@ -3,7 +3,7 @@ import '../../../../core/utils/logger.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../models/chat_model.dart';
 import '../models/chat_message_model.dart';
-import 'mock_chat_datasource.dart';
+import 'chat_datasource.dart';
 
 class SupabaseChatDataSource implements ChatDataSource {
   final SupabaseClient _supabase;

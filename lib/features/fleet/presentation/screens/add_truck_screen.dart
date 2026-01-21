@@ -495,7 +495,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
               backgroundColor: AppColors.success,
             ),
           );
-          Navigator.pop(context);
+          context.pop();
         } else {
           final error = ref.read(fleetNotifierProvider).error;
           ScaffoldMessenger.of(context).showSnackBar(
@@ -557,7 +557,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                       backgroundColor: AppColors.success,
                     ),
                   );
-                  Navigator.pop(context); // Close screen
+                  context.pop(); // Close screen
                 } else {
                   final error = ref.read(fleetNotifierProvider).error;
                   ScaffoldMessenger.of(context).showSnackBar(

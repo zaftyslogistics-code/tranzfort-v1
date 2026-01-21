@@ -23,6 +23,8 @@ class _IntentSelectionScreenState
   String? _selectedIntent;
 
   Future<void> _selectIntent(String intent) async {
+    final router = GoRouter.of(context);
+    final messenger = ScaffoldMessenger.maybeOf(context);
     Logger.info('🎯 INTENT: User selected intent: $intent');
     setState(() => _selectedIntent = intent);
 
@@ -44,55 +46,47 @@ class _IntentSelectionScreenState
       if (!success) {
         Logger.error('❌ INTENT: Profile update failed, but proceeding with navigation');
         if (!mounted) return;
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+
+        messenger?.showSnackBar(
+          const SnackBar(
             content: Text('Profile update failed, but you can continue. Settings will be updated later.'),
           ),
         );
       }
 
       Logger.info('✅ INTENT: Profile updated successfully, navigating to dashboard');
-      
-      // Wait for the state to update
-      await Future.delayed(const Duration(milliseconds: 100));
-      if (!mounted) return;
 
-      // Check the updated user state
       final updatedAuthState = ref.read(authNotifierProvider);
-      Logger.info('🎯 INTENT: Updated user state - Supplier: ${updatedAuthState.user?.isSupplierEnabled}, Trucker: ${updatedAuthState.user?.isTruckerEnabled}');
+      Logger.info(
+        '🎯 INTENT: Updated user state - Supplier: ${updatedAuthState.user?.isSupplierEnabled}, Trucker: ${updatedAuthState.user?.isTruckerEnabled}',
+      );
 
-      // Use a more direct navigation approach
-      await Future.delayed(const Duration(milliseconds: 400));
-      if (!mounted) return;
-      
-      // Use goNamed for more reliable navigation
       if (intent == 'supplier') {
         Logger.info('🚚 INTENT: Navigating to supplier dashboard');
         try {
           // Clear the stack and navigate to dashboard
-          context.goNamed('supplier-dashboard');
+          router.goNamed('supplier-dashboard');
         } catch (e) {
           Logger.error('❌ INTENT: goNamed error to supplier dashboard: $e');
           // Fallback: try push
-          if (mounted) context.push('/supplier-dashboard');
+          if (mounted) router.push('/supplier-dashboard');
         }
       } else {
         Logger.info('🚚 INTENT: Navigating to trucker feed');
         try {
           // Clear the stack and navigate to trucker feed
-          context.goNamed('trucker-feed');
+          router.goNamed('trucker-feed');
         } catch (e) {
           Logger.error('❌ INTENT: goNamed error to trucker feed: $e');
           // Fallback: try push
-          if (mounted) context.push('/trucker-feed');
+          if (mounted) router.push('/trucker-feed');
         }
       }
     } catch (e) {
       Logger.error('❌ INTENT: Error during intent selection: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+        messenger?.showSnackBar(
+          const SnackBar(
             content: Text('An error occurred. Please try again.'),
           ),
         );

@@ -6,7 +6,7 @@ import '../../../../core/utils/retry.dart';
 import '../models/load_model.dart';
 import '../models/material_type_model.dart';
 import '../models/truck_type_model.dart';
-import 'mock_loads_datasource.dart';
+import 'loads_datasource.dart';
 
 class SupabaseLoadsDataSource implements LoadsDataSource {
   final SupabaseClient _client;
@@ -18,7 +18,33 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   }
 
   Map<String, dynamic> _toInsertPayload(Map<String, dynamic> loadData) {
-    return LoadModel.fromJson(loadData).toJson();
+    final now = DateTime.now();
+    final dynamic loadingDateRaw = loadData['loadingDate'] ?? loadData['loading_date'];
+
+    return {
+      'supplier_id': loadData['supplierId'] ?? loadData['supplier_id'],
+      'from_location': loadData['fromLocation'] ?? loadData['from_location'],
+      'from_city': loadData['fromCity'] ?? loadData['from_city'],
+      'from_state': loadData['fromState'] ?? loadData['from_state'],
+      'to_location': loadData['toLocation'] ?? loadData['to_location'],
+      'to_city': loadData['toCity'] ?? loadData['to_city'],
+      'to_state': loadData['toState'] ?? loadData['to_state'],
+      'load_type': loadData['loadType'] ?? loadData['load_type'],
+      'truck_type_required': loadData['truckTypeRequired'] ?? loadData['truck_type_required'],
+      'weight': loadData['weight'],
+      'price': loadData['price'],
+      'price_type': loadData['priceType'] ?? loadData['price_type'] ?? 'negotiable',
+      'payment_terms': loadData['paymentTerms'] ?? loadData['payment_terms'],
+      'loading_date': loadingDateRaw is DateTime
+          ? loadingDateRaw.toIso8601String()
+          : loadingDateRaw,
+      'notes': loadData['notes'],
+      'contact_preferences_call':
+          loadData['contactPreferencesCall'] ?? loadData['contact_preferences_call'] ?? true,
+      'contact_preferences_chat':
+          loadData['contactPreferencesChat'] ?? loadData['contact_preferences_chat'] ?? true,
+      'expires_at': loadData['expiresAt'] ?? loadData['expires_at'] ?? now.add(const Duration(days: 90)).toIso8601String(),
+    };
   }
 
   Map<String, dynamic> _toUpdatePayload(Map<String, dynamic> updates) {
@@ -35,7 +61,44 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       'status'
     };
 
-    final sanitized = Map<String, dynamic>.from(updates)
+    final dynamic loadingDateRaw = updates['loadingDate'] ?? updates['loading_date'];
+
+    final mapped = <String, dynamic>{
+      if (updates.containsKey('fromLocation') || updates.containsKey('from_location'))
+        'from_location': updates['fromLocation'] ?? updates['from_location'],
+      if (updates.containsKey('fromCity') || updates.containsKey('from_city'))
+        'from_city': updates['fromCity'] ?? updates['from_city'],
+      if (updates.containsKey('fromState') || updates.containsKey('from_state'))
+        'from_state': updates['fromState'] ?? updates['from_state'],
+      if (updates.containsKey('toLocation') || updates.containsKey('to_location'))
+        'to_location': updates['toLocation'] ?? updates['to_location'],
+      if (updates.containsKey('toCity') || updates.containsKey('to_city'))
+        'to_city': updates['toCity'] ?? updates['to_city'],
+      if (updates.containsKey('toState') || updates.containsKey('to_state'))
+        'to_state': updates['toState'] ?? updates['to_state'],
+      if (updates.containsKey('loadType') || updates.containsKey('load_type'))
+        'load_type': updates['loadType'] ?? updates['load_type'],
+      if (updates.containsKey('truckTypeRequired') || updates.containsKey('truck_type_required'))
+        'truck_type_required': updates['truckTypeRequired'] ?? updates['truck_type_required'],
+      if (updates.containsKey('weight')) 'weight': updates['weight'],
+      if (updates.containsKey('price')) 'price': updates['price'],
+      if (updates.containsKey('priceType') || updates.containsKey('price_type'))
+        'price_type': updates['priceType'] ?? updates['price_type'],
+      if (updates.containsKey('paymentTerms') || updates.containsKey('payment_terms'))
+        'payment_terms': updates['paymentTerms'] ?? updates['payment_terms'],
+      if (updates.containsKey('loadingDate') || updates.containsKey('loading_date'))
+        'loading_date': loadingDateRaw is DateTime
+            ? loadingDateRaw.toIso8601String()
+            : loadingDateRaw,
+      if (updates.containsKey('notes')) 'notes': updates['notes'],
+      if (updates.containsKey('contactPreferencesCall') || updates.containsKey('contact_preferences_call'))
+        'contact_preferences_call': updates['contactPreferencesCall'] ?? updates['contact_preferences_call'],
+      if (updates.containsKey('contactPreferencesChat') || updates.containsKey('contact_preferences_chat'))
+        'contact_preferences_chat': updates['contactPreferencesChat'] ?? updates['contact_preferences_chat'],
+      if (updates.containsKey('status')) 'status': updates['status'],
+    };
+
+    final sanitized = Map<String, dynamic>.from(mapped)
       ..removeWhere((key, value) => !allowedFields.contains(key));
     
     return sanitized;
@@ -89,8 +152,8 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
               'to_city.ilike.%$searchQuery%,'
               'from_state.ilike.%$searchQuery%,'
               'to_state.ilike.%$searchQuery%,'
-              'truck_type.ilike.%$searchQuery%,'
-              'material_type.ilike.%$searchQuery%';
+              'truck_type_required.ilike.%$searchQuery%,'
+              'load_type.ilike.%$searchQuery%';
           
           query = query.or(searchFilter);
         }

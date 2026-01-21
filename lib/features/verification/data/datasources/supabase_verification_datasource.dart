@@ -25,8 +25,7 @@ class SupabaseVerificationDataSource {
   }) async {
     final user = _supabase.auth.currentUser;
     if (user == null) {
-      throw ServerException(
-          'Supabase user session not found. Turn off USE_MOCK_AUTH and log in with Supabase to submit verification.');
+      throw ServerException('User session not found. Please log in to submit verification.');
     }
 
     try {

@@ -4,14 +4,14 @@ import '../entities/user.dart';
 import '../../../../core/errors/failures.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, void>> sendOtp(
-    String mobileNumber,
-    String countryCode,
+  Future<Either<Failure, User>> signUpWithEmailPassword(
+    String email,
+    String password,
   );
-  
-  Future<Either<Failure, User>> verifyOtp(
-    String mobileNumber,
-    String otp,
+
+  Future<Either<Failure, User>> signInWithEmailPassword(
+    String email,
+    String password,
   );
   
   Future<Either<Failure, User?>> getCurrentUser();

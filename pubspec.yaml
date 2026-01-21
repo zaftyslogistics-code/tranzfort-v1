@@ -33,6 +33,7 @@ dependencies:
   
   # Utilities
   intl: ^0.20.2
+  timeago: ^3.7.0
   uuid: ^4.2.2
   shared_preferences: ^2.2.2
   connectivity_plus: ^5.0.2

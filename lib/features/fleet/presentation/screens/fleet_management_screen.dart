@@ -13,6 +13,7 @@ import '../widgets/add_truck_floating_button.dart';
 import '../widgets/fleet_stats_card.dart';
 import '../widgets/truck_card.dart';
 import '../../../../shared/widgets/empty_state_widget.dart';
+import '../../../../shared/widgets/app_bottom_navigation.dart';
 
 class FleetManagementScreen extends ConsumerStatefulWidget {
   const FleetManagementScreen({super.key});
@@ -65,7 +66,7 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppColors.truckPrimary,
+          indicatorColor: AppColors.primary,
           labelColor: AppColors.textPrimary,
           unselectedLabelColor: AppColors.textSecondary,
           tabs: const [
@@ -131,6 +132,7 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
         ],
       ),
       floatingActionButton: const AddTruckFloatingButton(),
+      bottomNavigationBar: const AppBottomNavigation(),
     );
   }
 

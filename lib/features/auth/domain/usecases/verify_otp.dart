@@ -12,6 +12,6 @@ class VerifyOtp {
     String mobileNumber,
     String otp,
   ) async {
-    return await repository.verifyOtp(mobileNumber, otp);
+    throw UnsupportedError('OTP login has been removed');
   }
 }

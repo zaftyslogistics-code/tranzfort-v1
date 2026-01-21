@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../domain/entities/admin.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../datasources/mock_auth_datasource.dart';
+import '../datasources/auth_datasource.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/errors/exceptions.dart';
 
@@ -12,13 +12,13 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.dataSource);
 
   @override
-  Future<Either<Failure, void>> sendOtp(
-    String mobileNumber,
-    String countryCode,
+  Future<Either<Failure, User>> signUpWithEmailPassword(
+    String email,
+    String password,
   ) async {
     try {
-      await dataSource.sendOtp(mobileNumber, countryCode);
-      return const Right(null);
+      final userModel = await dataSource.signUpWithEmailPassword(email, password);
+      return Right(_modelToEntity(userModel));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
@@ -27,12 +27,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, User>> verifyOtp(
-    String mobileNumber,
-    String otp,
+  Future<Either<Failure, User>> signInWithEmailPassword(
+    String email,
+    String password,
   ) async {
     try {
-      final userModel = await dataSource.verifyOtp(mobileNumber, otp);
+      final userModel = await dataSource.signInWithEmailPassword(email, password);
       return Right(_modelToEntity(userModel));
     } on AuthException catch (e) {
       return Left(AuthFailure(e.message));

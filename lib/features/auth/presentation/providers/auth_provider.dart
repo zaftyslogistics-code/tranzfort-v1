@@ -3,18 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:local_auth/local_auth.dart';
-import '../../data/datasources/mock_auth_datasource.dart';
+import '../../data/datasources/auth_datasource.dart';
 import '../../data/datasources/supabase_auth_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/admin.dart' as domain;
 import '../../domain/entities/user.dart' as domain;
-import '../../domain/usecases/send_otp.dart';
-import '../../domain/usecases/verify_otp.dart';
+import '../../domain/usecases/sign_in_with_email_password.dart';
+import '../../domain/usecases/sign_up_with_email_password.dart';
 import '../../domain/usecases/get_admin_profile.dart';
 import '../../domain/usecases/get_current_user.dart';
 import '../../domain/usecases/sign_out.dart';
 import '../../domain/usecases/update_profile.dart';
-import '../../../../core/config/env_config.dart';
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/utils/logger.dart';
 
@@ -23,11 +22,6 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 });
 
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
-  if (EnvConfig.useMockAuth) {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    return MockAuthDataSource(prefs);
-  }
-
   return SupabaseAuthDataSourceImpl(
     supabaseClient: Supabase.instance.client,
   );
@@ -43,14 +37,14 @@ final authRepositoryProvider = Provider((ref) {
   return AuthRepositoryImpl(dataSource);
 });
 
-final sendOtpUseCaseProvider = Provider((ref) {
+final signUpWithEmailPasswordUseCaseProvider = Provider((ref) {
   final repository = ref.watch(authRepositoryProvider);
-  return SendOtp(repository);
+  return SignUpWithEmailPassword(repository);
 });
 
-final verifyOtpUseCaseProvider = Provider((ref) {
+final signInWithEmailPasswordUseCaseProvider = Provider((ref) {
   final repository = ref.watch(authRepositoryProvider);
-  return VerifyOtp(repository);
+  return SignInWithEmailPassword(repository);
 });
 
 final getCurrentUserUseCaseProvider = Provider((ref) {
@@ -115,8 +109,8 @@ class AuthState {
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  final SendOtp sendOtpUseCase;
-  final VerifyOtp verifyOtpUseCase;
+  final SignUpWithEmailPassword signUpWithEmailPasswordUseCase;
+  final SignInWithEmailPassword signInWithEmailPasswordUseCase;
   final GetCurrentUser getCurrentUserUseCase;
   final GetAdminProfile getAdminProfileUseCase;
   final SignOut signOutUseCase;
@@ -127,8 +121,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Timer? _sessionTimer;
 
   AuthNotifier({
-    required this.sendOtpUseCase,
-    required this.verifyOtpUseCase,
+    required this.signUpWithEmailPasswordUseCase,
+    required this.signInWithEmailPasswordUseCase,
     required this.getCurrentUserUseCase,
     required this.getAdminProfileUseCase,
     required this.signOutUseCase,
@@ -155,74 +149,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> checkAuthStatus() async {
     if (state.hasCheckedAuth) return;
     state = state.copyWith(isLoading: true, error: null);
-    
-    // First check if there's a real Supabase session (for admin users)
-    try {
-      final currentUser = supabaseClient.auth.currentUser;
-      
-      if (currentUser != null) {
-        // Real Supabase session found - check if it's an admin
-        final userEmail = currentUser.email;
-        final isAdmin = userEmail != null && (userEmail.contains('admin') || userEmail.contains('super'));
-        
-        if (isAdmin) {
-          // Admin user with real Supabase auth
-          final result = await getCurrentUserUseCase();
-          
-          await result.fold(
-            (failure) async {
-              _cancelSessionTimer();
-              state = state.copyWith(
-                isLoading: false,
-                isAuthenticated: false,
-                error: failure.message,
-                hasCheckedAuth: true,
-              );
-            },
-            (user) async {
-              if (user != null) {
-                // Check for admin profile
-                final adminResult = await getAdminProfileUseCase(user.id);
-                adminResult.fold(
-                  (_) {
-                    _startSessionTimer();
-                    state = state.copyWith(
-                      user: user,
-                      isLoading: false,
-                      isAuthenticated: true,
-                      hasCheckedAuth: true,
-                    );
-                  },
-                  (admin) {
-                    _startSessionTimer();
-                    state = state.copyWith(
-                      user: user,
-                      admin: admin,
-                      isLoading: false,
-                      isAuthenticated: true,
-                      hasCheckedAuth: true,
-                    );
-                  },
-                );
-              } else {
-                _cancelSessionTimer();
-                state = state.copyWith(
-                  isLoading: false,
-                  isAuthenticated: false,
-                  hasCheckedAuth: true,
-                );
-              }
-            },
-          );
-          return;
-        }
-      }
-    } catch (e) {
-      // Continue to mock auth check
-      Logger.error('Error checking Supabase session', error: e);
-    }
-    
-    // No real Supabase session or not admin - use mock auth flow
+
     final result = await getCurrentUserUseCase();
     
     await result.fold(
@@ -272,31 +199,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
   }
 
-  Future<bool> sendOtp(String mobileNumber, String countryCode) async {
+  Future<bool> signUpWithEmailPassword(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
-    final result = await sendOtpUseCase(mobileNumber, countryCode);
-    return result.fold(
-      (failure) {
-        state = state.copyWith(isLoading: false, error: failure.message);
-        return false;
-      },
-      (_) {
-        state = state.copyWith(isLoading: false);
-        return true;
-      },
-    );
-  }
-
-  Future<bool> verifyOtp(String mobileNumber, String otp) async {
-    state = state.copyWith(isLoading: true, error: null);
-    final result = await verifyOtpUseCase(mobileNumber, otp);
+    final result = await signUpWithEmailPasswordUseCase(email, password);
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
         return false;
       },
       (user) async {
-        // Check for admin profile after successful OTP verification
         final adminResult = await getAdminProfileUseCase(user.id);
         adminResult.fold(
           (_) {
@@ -310,6 +221,42 @@ class AuthNotifier extends StateNotifier<AuthState> {
           },
           (admin) {
             _startSessionTimer(); // Start session timer for admin
+            state = state.copyWith(
+              user: user,
+              admin: admin,
+              isLoading: false,
+              isAuthenticated: true,
+              hasCheckedAuth: true,
+            );
+          },
+        );
+        return true;
+      },
+    );
+  }
+
+  Future<bool> signInWithEmailPassword(String email, String password) async {
+    state = state.copyWith(isLoading: true, error: null);
+    final result = await signInWithEmailPasswordUseCase(email, password);
+    return result.fold(
+      (failure) {
+        state = state.copyWith(isLoading: false, error: failure.message);
+        return false;
+      },
+      (user) async {
+        final adminResult = await getAdminProfileUseCase(user.id);
+        adminResult.fold(
+          (_) {
+            _startSessionTimer();
+            state = state.copyWith(
+              user: user,
+              isLoading: false,
+              isAuthenticated: true,
+              hasCheckedAuth: true,
+            );
+          },
+          (admin) {
+            _startSessionTimer();
             state = state.copyWith(
               user: user,
               admin: admin,
@@ -384,8 +331,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
 final authNotifierProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
-    sendOtpUseCase: ref.read(sendOtpUseCaseProvider),
-    verifyOtpUseCase: ref.read(verifyOtpUseCaseProvider),
+    signUpWithEmailPasswordUseCase:
+        ref.read(signUpWithEmailPasswordUseCaseProvider),
+    signInWithEmailPasswordUseCase:
+        ref.read(signInWithEmailPasswordUseCaseProvider),
     getCurrentUserUseCase: ref.read(getCurrentUserUseCaseProvider),
     getAdminProfileUseCase: ref.read(getAdminProfileUseCaseProvider),
     signOutUseCase: ref.read(signOutUseCaseProvider),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:go_router/src/state.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
@@ -14,7 +13,7 @@ class AppBottomNavigation extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authNotifierProvider);
     final user = authState.user;
-    final location = '/home'; // Temporary hardcoded location
+    final location = GoRouterState.of(context).uri.toString();
     
     // Determine which navigation to show based on user role
     final isSupplier = user?.isSupplierEnabled ?? false;
@@ -24,25 +23,26 @@ class AppBottomNavigation extends ConsumerWidget {
       return const SizedBox.shrink(); // No navigation if no role selected
     }
 
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: AppColors.darkSurface,
-        border: Border(
-          top: BorderSide(
-            color: AppColors.glassBorder,
-            width: 1,
+    return SafeArea(
+      top: false,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.darkSurface,
+          border: Border(
+            top: BorderSide(
+              color: AppColors.glassBorder,
+              width: 1,
+            ),
           ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.md,
-          vertical: AppDimensions.sm,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.md,
+            vertical: AppDimensions.sm,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
             if (isSupplier) ...[
               _NavItem(
                 icon: Icons.dashboard_outlined,
@@ -94,7 +94,8 @@ class AppBottomNavigation extends ConsumerWidget {
               isSelected: location == '/settings',
               onTap: () => context.go('/settings'),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );

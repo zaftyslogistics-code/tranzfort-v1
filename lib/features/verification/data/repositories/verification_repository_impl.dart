@@ -4,7 +4,6 @@ import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/repositories/verification_repository.dart';
 import '../datasources/supabase_verification_datasource.dart';
-import '../datasources/mock_verification_datasource.dart';
 import '../models/verification_request_model.dart';
 
 class VerificationRepositoryImpl implements VerificationRepository {

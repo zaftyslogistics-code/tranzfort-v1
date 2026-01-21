@@ -1,17 +1,12 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/config/env_config.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
-import '../../../../core/utils/validators.dart';
 import '../../../../shared/widgets/cyan_glow_container.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
-import '../../../../shared/widgets/error_display.dart';
 import '../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -22,79 +17,56 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final _mobileController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  String _countryCode = AppConfig.defaultCountryCode;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _acceptedTerms = false;
-  String? _mobileError;
   String? _generalError;
-  Timer? _otpCooldownTimer;
-  int _otpCooldownSeconds = 0;
-  bool _canSendOtp = true;
 
   @override
   void dispose() {
-    _mobileController.dispose();
-    _otpCooldownTimer?.cancel();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  void _startOtpCooldown() {
-    setState(() {
-      _canSendOtp = false;
-      _otpCooldownSeconds = 30; // 30 second cooldown
-    });
-
-    _otpCooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _otpCooldownSeconds--;
-        if (_otpCooldownSeconds <= 0) {
-          _canSendOtp = true;
-          timer.cancel();
-        }
-      });
-    });
-  }
-
-  Future<void> _sendOtp() async {
-    if (!_canSendOtp) {
-      setState(() {
-        _generalError = 'Please wait ${_otpCooldownSeconds}s before requesting another OTP';
-      });
-      return;
-    }
+  Future<void> _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
 
     setState(() {
-      _mobileError = Validators.validateMobileNumber(_mobileController.text);
       _generalError = null;
     });
 
-    if (_mobileError != null) return;
+    if (email.isEmpty || !email.contains('@')) {
+      setState(() => _generalError = 'Enter a valid email address');
+      return;
+    }
+
+    if (password.isEmpty) {
+      setState(() => _generalError = 'Enter your password');
+      return;
+    }
 
     if (!_acceptedTerms) {
+      setState(() => _generalError = 'Please accept Terms & Conditions');
+      return;
+    }
+
+    final success = await ref
+        .read(authNotifierProvider.notifier)
+        .signInWithEmailPassword(email, password);
+
+    if (!mounted) return;
+
+    if (!success) {
+      final error = ref.read(authNotifierProvider).error;
       setState(() {
-        _generalError = 'Please accept Terms & Conditions';
+        _generalError = error ?? 'Login failed';
       });
       return;
     }
 
-    final success = await ref.read(authNotifierProvider.notifier).sendOtp(
-          _mobileController.text,
-          _countryCode,
-        );
-
-    if (success && mounted) {
-      _startOtpCooldown(); // Start cooldown after successful send
-      context.push('/otp', extra: {
-        'mobileNumber': _mobileController.text,
-        'countryCode': _countryCode,
-      });
-    } else if (mounted) {
-      final error = ref.read(authNotifierProvider).error;
-      setState(() {
-        _generalError = error ?? 'Failed to send OTP';
-      });
-    }
+    context.go('/splash');
   }
 
   @override
@@ -181,139 +153,47 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   GlassmorphicCard(
                     showGlow: true,
                     padding: const EdgeInsets.all(AppDimensions.lg),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'Welcome to Transfort',
-                            style:
-                                Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimary,
-                                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Welcome to Transfort',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimary,
+                              ),
+                        ),
+                        const SizedBox(height: AppDimensions.lg),
+                        TextField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            hintText: 'you@example.com',
                           ),
-                          const SizedBox(height: AppDimensions.xs),
-                          Row(
-                            children: [
-                              Icon(Icons.lock_outline, 
-                                size: 14, 
-                                color: AppColors.textSecondary
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Secure Login',
-                                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                  color: AppColors.textSecondary,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ],
+                          keyboardType: TextInputType.emailAddress,
+                          autofillHints: const [AutofillHints.email],
+                        ),
+                        const SizedBox(height: AppDimensions.md),
+                        TextField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
                           ),
-                          const SizedBox(height: AppDimensions.lg),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Mobile Number',
-                                style:
-                                    Theme.of(context).textTheme.labelLarge?.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.textSecondary,
-                                        ),
-                              ),
-                              const SizedBox(height: AppDimensions.xs),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 90,
-                                    height: AppDimensions.buttonHeight,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: AppDimensions.sm,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.glassSurfaceStrong,
-                                      border: Border.all(
-                                        color: AppColors.glassBorder,
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                        AppDimensions.radiusMd,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButton<String>(
-                                          value: _countryCode,
-                                          isExpanded: true,
-                                          iconEnabledColor: AppColors.textSecondary,
-                                          dropdownColor: AppColors.darkSurface,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge
-                                              ?.copyWith(
-                                                color: AppColors.textPrimary,
-                                              ),
-                                          items: const [
-                                            DropdownMenuItem(
-                                              value: '+91',
-                                              child: Text('+91'),
-                                            ),
-                                          ],
-                                          onChanged: (value) {
-                                            if (value != null) {
-                                              setState(() => _countryCode = value);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: AppDimensions.sm),
-                                  Expanded(
-                                    child: TextField(
-                                      controller: _mobileController,
-                                      keyboardType: TextInputType.phone,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly,
-                                      ],
-                                      maxLength: 10,
-                                      onChanged: (value) {
-                                        if (_mobileError != null) {
-                                          setState(() {
-                                            _mobileError = Validators.validateMobileNumber(value);
-                                            _generalError = null;
-                                          });
-                                        }
-                                      },
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                            color: AppColors.textPrimary,
-                                          ),
-                                      decoration: InputDecoration(
-                                        hintText: '9876543210',
-                                        errorText: _mobileError,
-                                        counterText: '',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                          obscureText: true,
+                          autofillHints: const [AutofillHints.password],
+                          onSubmitted: (_) => _login(),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: AppDimensions.md),
                   if (_generalError != null) ...[
-                    ErrorDisplay(
-                      message: _generalError!,
-                      onRetry: _canSendOtp ? _sendOtp : null,
-                      retryText: 'Retry',
+                    Text(
+                      _generalError!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppColors.danger),
                     ),
                     const SizedBox(height: AppDimensions.md),
                   ],
@@ -358,7 +238,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: AppDimensions.lg),
                   GlassmorphicButton(
                     variant: GlassmorphicButtonVariant.primary,
-                    onPressed: authState.isLoading || !_canSendOtp ? null : _sendOtp,
+                    onPressed: authState.isLoading ? null : _login,
                     child: authState.isLoading
                         ? const SizedBox(
                             height: 20,
@@ -369,73 +249,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
-                        : Text(_canSendOtp
-                            ? 'Send OTP'
-                            : 'Send OTP (${_otpCooldownSeconds}s)'),
+                        : const Text('Login'),
                   ),
-                  if (EnvConfig.useMockAuth) ...[
-                    const SizedBox(height: AppDimensions.sm),
-                    GlassmorphicButton(
-                      showGlow: false,
-                      onPressed: authState.isLoading
-                          ? null
-                          : () async {
-                              setState(() {
-                                _mobileError = Validators
-                                    .validateMobileNumber(_mobileController.text);
-                              });
-
-                              if (_mobileError != null) return;
-
-                              if (!_acceptedTerms) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Please accept Terms & Conditions'),
-                                    backgroundColor: AppColors.danger,
-                                  ),
-                                );
-                                return;
-                              }
-
-                              final messenger = ScaffoldMessenger.of(context);
-                              final success = await ref
-                                  .read(authNotifierProvider.notifier)
-                                  .verifyOtp(_mobileController.text, '123456');
-
-                              if (!mounted) return;
-
-                              if (!success) {
-                                final error =
-                                    ref.read(authNotifierProvider).error;
-                                messenger.showSnackBar(
-                                  SnackBar(
-                                    content:
-                                        Text(error ?? 'Mock login failed'),
-                                    backgroundColor: AppColors.danger,
-                                  ),
-                                );
-                              }
-                            },
-                      child: const Text('Continue without OTP (Mock)'),
-                    ),
-                  ],
                   const SizedBox(height: AppDimensions.sm),
                   TextButton(
-                    onPressed: authState.isLoading
-                        ? null
-                        : () => context.push('/dev-email-login'),
-                    child: const Text(
-                      'Dev: Login with Email OTP (Mailpit)',
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: authState.isLoading
-                        ? null
-                        : () => context.push('/admin-login'),
-                    child: const Text(
-                      'Admin: Login with Email & Password',
-                    ),
+                    onPressed:
+                        authState.isLoading ? null : () => context.push('/signup'),
+                    child: const Text('Create an account'),
                   ),
                 ],
               ),

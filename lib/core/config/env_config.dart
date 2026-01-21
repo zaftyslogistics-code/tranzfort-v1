@@ -36,10 +36,6 @@ class EnvConfig {
 
   // AdMob Configuration
 
-  static bool get useMockAuth => dotenv.env['USE_MOCK_AUTH'] == 'true';
-  static bool get useMockLoads => dotenv.env['USE_MOCK_LOADS'] == 'true';
-  static bool get useMockChat => dotenv.env['USE_MOCK_CHAT'] == 'true';
-
   // Free Model Configuration
   static bool get isFreeModel => true; // Always true - payment system removed
 }

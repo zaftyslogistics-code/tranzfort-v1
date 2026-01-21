@@ -13,10 +13,8 @@ import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/admin_email_password_login_screen.dart';
-import '../../features/auth/presentation/screens/otp_verification_screen.dart';
+import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/auth/presentation/screens/intent_selection_screen.dart';
-import '../../features/auth/presentation/screens/dev_email_login_screen.dart';
-import '../../features/auth/presentation/screens/dev_email_otp_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimensions.dart';
 import '../../features/loads/presentation/screens/supplier_dashboard_screen.dart';
@@ -61,20 +59,14 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       final isOnSplash = state.matchedLocation == '/splash';
       final isOnLogin = state.matchedLocation == '/login';
-      final isOnOtp = state.matchedLocation == '/otp';
+      final isOnSignup = state.matchedLocation == '/signup';
       final isOnIntent = state.matchedLocation == '/intent-selection';
-      final isOnDevEmailLogin = state.matchedLocation == '/dev-email-login';
-      final isOnDevEmailOtp = state.matchedLocation == '/dev-email-otp';
       final isOnAdminLogin = state.matchedLocation == '/admin-login';
 
       final isOnAdmin = state.matchedLocation.startsWith('/admin');
 
       if (!isAuthenticated) {
-        return (isOnLogin ||
-                isOnOtp ||
-                isOnDevEmailLogin ||
-                isOnDevEmailOtp ||
-                isOnAdminLogin)
+        return (isOnLogin || isOnSignup || isOnAdminLogin)
             ? null
             : '/login';
       }
@@ -108,7 +100,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           final isOnSupplierDashboard = state.matchedLocation == '/supplier-dashboard';
           final isOnTruckerFeed = state.matchedLocation == '/trucker-feed';
           
-          if ((isOnIntent || isOnLogin || isOnOtp || isOnSplash) && 
+          if ((isOnIntent || isOnLogin || isOnSignup || isOnSplash) && 
               !isOnSupplierDashboard && !isOnTruckerFeed) {
             if (user.isSupplierEnabled) {
               return '/supplier-dashboard';
@@ -132,31 +124,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
+        path: '/signup',
+        builder: (context, state) => const SignupScreen(),
+      ),
+      GoRoute(
         path: '/admin-login',
         builder: (context, state) => const AdminEmailPasswordLoginScreen(),
-      ),
-      GoRoute(
-        path: '/dev-email-login',
-        builder: (context, state) => const DevEmailLoginScreen(),
-      ),
-      GoRoute(
-        path: '/dev-email-otp',
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>?;
-          return DevEmailOtpScreen(
-            email: extra?['email'] ?? '',
-          );
-        },
-      ),
-      GoRoute(
-        path: '/otp',
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>?;
-          return OtpVerificationScreen(
-            mobileNumber: extra?['mobileNumber'] ?? '',
-            countryCode: extra?['countryCode'] ?? '+91',
-          );
-        },
       ),
       GoRoute(
         path: '/intent-selection',

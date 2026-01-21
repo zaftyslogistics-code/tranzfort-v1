@@ -13,13 +13,13 @@ class SupabaseAdminReportsDataSource implements AdminReportsDataSource {
 
   @override
   Future<List<UserReportModel>> getReports({String? status}) async {
-    var query = _client.from('user_reports').select().order('created_at', ascending: false);
+    var query = _client.from('user_reports').select();
 
     if (status != null) {
       query = query.eq('status', status);
     }
 
-    final response = await query;
+    final response = await query.order('created_at', ascending: false);
     return (response as List).map((e) => UserReportModel.fromJson(e)).toList();
   }
 

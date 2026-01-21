@@ -32,7 +32,7 @@ class FleetStatsCard extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppColors.truckPrimary, AppColors.truckSecondary],
+                    colors: [AppColors.primary, AppColors.secondary],
                   ),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
                 ),
@@ -59,7 +59,7 @@ class FleetStatsCard extends StatelessWidget {
                   'Total Trucks',
                   '12',
                   Icons.local_shipping,
-                  AppColors.truckPrimary,
+                  AppColors.primary,
                 ),
               ),
               const SizedBox(width: AppDimensions.md),

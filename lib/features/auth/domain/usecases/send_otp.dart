@@ -11,6 +11,6 @@ class SendOtp {
     String mobileNumber,
     String countryCode,
   ) async {
-    return await repository.sendOtp(mobileNumber, countryCode);
+    throw UnsupportedError('OTP login has been removed');
   }
 }
