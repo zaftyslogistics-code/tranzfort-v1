@@ -10,6 +10,11 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
 
   SupabaseAuthDataSourceImpl({required this.supabaseClient});
 
+  String _mobilePlaceholder(String userId) {
+    final compact = userId.replaceAll('-', '');
+    return compact.length <= 15 ? compact : compact.substring(0, 15);
+  }
+
   @override
   Future<UserModel> signUpWithEmailPassword(String email, String password) async {
     try {
@@ -23,20 +28,52 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
         throw Exception('Signup failed - no user returned');
       }
 
+      final userId = response.user!.id;
+
       // Fetch user profile (trigger may take a moment)
-      UserModel? userProfile = await _getUserProfile(response.user!.id);
+      UserModel? userProfile = await _getUserProfile(userId);
       int retries = 3;
       while (userProfile == null && retries > 0) {
         await Future.delayed(const Duration(milliseconds: 500));
-        userProfile = await _getUserProfile(response.user!.id);
+        userProfile = await _getUserProfile(userId);
         retries--;
       }
 
       if (userProfile == null) {
-        throw Exception('User profile could not be found. Please contact support.');
+        try {
+          await supabaseClient.from('users').upsert(
+            {
+              'id': userId,
+              'mobile_number':
+                  response.user!.phone ?? _mobilePlaceholder(response.user!.id),
+              'country_code':
+                  response.user!.userMetadata?['country_code'] ?? '+91',
+              'name': response.user!.userMetadata?['name'] ?? response.user!.email,
+              'email': response.user!.email,
+              'last_login_at': DateTime.now().toIso8601String(),
+              'updated_at': DateTime.now().toIso8601String(),
+            },
+            onConflict: 'id',
+          );
+        } catch (e) {
+          Logger.error('Failed to create user profile after signup', error: e);
+        }
+
+        userProfile = await _getUserProfile(userId);
       }
 
-      return userProfile;
+      if (userProfile != null) return userProfile;
+
+      final createdAt = DateTime.tryParse(response.user!.createdAt) ?? DateTime.now();
+      return UserModel(
+        id: userId,
+        mobileNumber: SUBSTRING_PLACEHOLDER,
+        countryCode: '+91',
+        name: response.user!.userMetadata?['name'] ?? response.user!.email ?? 'User',
+        createdAt: createdAt,
+        lastLoginAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
     } catch (e) {
       Logger.error('Failed to sign up with email/password', error: e);
       rethrow;
