@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           backgroundColor: AppColors.glassSurfaceStrong,
                           borderColor: AppColors.glassBorderStrong,
                           child: Image(
-                            image: AssetImage('logo full.png'),
+                            image: AssetImage('transport-logo-v1.png'),
                             width: 180,
                             height: 56,
                             fit: BoxFit.contain,

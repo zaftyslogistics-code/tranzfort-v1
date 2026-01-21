@@ -65,8 +65,9 @@ dependencies:
   
   # Code Generation
   freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
   equatable: ^2.0.5
+  fl_chart: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -83,8 +84,9 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "logo-black-bg.png"
+  image_path: "transport-logo-v1 icon.png"
   adaptive_icon_background: "#000000"
+  remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -96,7 +98,10 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/env/
     - logo full.png
+    - transport-logo-v1.png
+    - .env
     - .env.local
     - .env.staging
     - .env.production

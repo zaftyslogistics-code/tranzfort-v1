@@ -23,10 +23,14 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 });
 
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
-  // Always use mock auth for mobile OTP since Supabase local doesn't support it
-  // Admin login will use real Supabase auth directly
-  final prefs = ref.watch(sharedPreferencesProvider);
-  return MockAuthDataSource(prefs);
+  if (EnvConfig.useMockAuth) {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    return MockAuthDataSource(prefs);
+  }
+
+  return SupabaseAuthDataSourceImpl(
+    supabaseClient: Supabase.instance.client,
+  );
 });
 
 // Additional provider for checking Supabase session directly

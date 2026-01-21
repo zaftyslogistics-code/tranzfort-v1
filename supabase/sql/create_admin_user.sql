@@ -26,7 +26,7 @@ BEGIN
   -- Check if user email contains 'admin' to auto-create admin profile
   IF NEW.email LIKE '%admin%' THEN
     INSERT INTO public.admin_profiles (id, role, full_name)
-    VALUES (NEW.id, 'super_admin', COALESCE(NEW.raw_user_metadata->>'name', 'Admin User'))
+    VALUES (NEW.id, 'super_admin', COALESCE(NEW.raw_user_meta_data->>'name', 'Admin User'))
     ON CONFLICT (id) DO NOTHING;
   END IF;
   
@@ -35,6 +35,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Create trigger to automatically create admin profile
-CREATE TRIGGER on_auth_user_created
+DROP TRIGGER IF EXISTS on_auth_admin_user_created ON auth.users;
+CREATE TRIGGER on_auth_admin_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_admin_user();

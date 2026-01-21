@@ -7,6 +7,8 @@ import '../../features/admin/presentation/screens/admin_verification_screen.dart
 import '../../features/admin/presentation/screens/admin_load_monitoring_screen.dart';
 import '../../features/admin/presentation/screens/admin_config_screen.dart';
 import '../../features/admin/presentation/screens/admin_user_management_screen.dart';
+import '../../features/admin/presentation/screens/admin_reports_screen.dart';
+import '../../features/admin/presentation/screens/admin_analytics_screen.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
@@ -271,6 +273,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/admin/users',
         builder: (context, state) => const AdminUserManagementScreen(),
+      ),
+      GoRoute(
+        path: '/admin/reports',
+        builder: (context, state) => const AdminReportsScreen(),
+      ),
+      GoRoute(
+        path: '/admin/analytics',
+        builder: (context, state) => const AdminAnalyticsScreen(),
       ),
       GoRoute(
         path: '/verification',

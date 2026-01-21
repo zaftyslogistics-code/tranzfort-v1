@@ -80,6 +80,22 @@ class AdminDashboardScreen extends ConsumerWidget {
           },
         ),
         _SidebarItem(
+          icon: Icons.report_problem,
+          label: 'Reports & Moderation',
+          onTap: () {
+            Navigator.of(context).pop();
+            context.push('/admin/reports');
+          },
+        ),
+        _SidebarItem(
+          icon: Icons.analytics,
+          label: 'Analytics',
+          onTap: () {
+            Navigator.of(context).pop();
+            context.push('/admin/analytics');
+          },
+        ),
+        _SidebarItem(
           icon: Icons.local_shipping,
           label: 'Load Monitoring',
           onTap: () {
@@ -192,6 +208,16 @@ class AdminDashboardScreen extends ConsumerWidget {
                   title: 'Manage Users',
                   icon: Icons.people,
                   onTap: () => context.push('/admin/users'),
+                ),
+                _QuickActionCard(
+                  title: 'Moderation',
+                  icon: Icons.report_problem,
+                  onTap: () => context.push('/admin/reports'),
+                ),
+                _QuickActionCard(
+                  title: 'Analytics',
+                  icon: Icons.analytics,
+                  onTap: () => context.push('/admin/analytics'),
                 ),
                 _QuickActionCard(
                   title: 'Monitor Loads',

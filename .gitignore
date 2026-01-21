@@ -71,3 +71,6 @@ app.*.map.json
 # Android keystore files (production signing)
 android/key.properties
 android/app/upload-keystore.jks
+
+# Local Netlify folder
+.netlify
