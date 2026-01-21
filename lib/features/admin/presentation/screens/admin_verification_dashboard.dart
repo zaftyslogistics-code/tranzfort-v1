@@ -62,6 +62,8 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
   }
 
   Future<void> _updateStatus(String requestId, String status, {String? reason}) async {
+    final messenger = ScaffoldMessenger.of(context);
+
     try {
       final supabase = Supabase.instance.client;
       final updates = {
@@ -79,9 +81,9 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
           .update(updates)
           .eq('id', requestId);
 
-      if (!context.mounted) return;
+      if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text('Request $status'),
           backgroundColor: status == 'approved' ? AppColors.success : AppColors.danger,
@@ -92,9 +94,9 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
     } catch (e) {
       Logger.error('Failed to update request status', error: e);
 
-      if (!context.mounted) return;
+      if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.danger),
       );
     }
