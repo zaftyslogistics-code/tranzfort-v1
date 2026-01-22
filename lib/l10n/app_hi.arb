@@ -1,0 +1,45 @@
+{
+  "@@locale": "hi",
+  "appTitle": "ट्रांसफोर्ट",
+  
+  "login": "लॉगिन",
+  "signup": "साइन अप",
+  "logout": "लॉगआउट",
+  "email": "ईमेल",
+  "password": "पासवर्ड",
+  "confirmPassword": "पासवर्ड की पुष्टि करें",
+  
+  "dashboard": "डैशबोर्ड",
+  "profile": "प्रोफ़ाइल",
+  "settings": "सेटिंग्स",
+  "notifications": "सूचनाएं",
+  
+  "postLoad": "लोड पोस्ट करें",
+  "myLoads": "मेरे लोड",
+  "findLoads": "लोड खोजें",
+  "loadDetails": "लोड विवरण",
+  
+  "myFleet": "मेरा बेड़ा",
+  "addTruck": "ट्रक जोड़ें",
+  "truckDetails": "ट्रक विवरण",
+  
+  "chat": "चैट",
+  "messages": "संदेश",
+  "sendMessage": "संदेश भेजें",
+  
+  "save": "सहेजें",
+  "cancel": "रद्द करें",
+  "delete": "हटाएं",
+  "edit": "संपादित करें",
+  "confirm": "पुष्टि करें",
+  "close": "बंद करें",
+  
+  "loading": "लोड हो रहा है...",
+  "error": "त्रुटि",
+  "success": "सफलता",
+  "retry": "पुनः प्रयास करें",
+  
+  "noDataAvailable": "कोई डेटा उपलब्ध नहीं",
+  "somethingWentWrong": "कुछ गलत हो गया",
+  "tryAgainLater": "कृपया बाद में पुनः प्रयास करें"
+}

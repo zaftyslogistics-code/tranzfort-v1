@@ -1,0 +1,48 @@
+{
+  "@@locale": "en",
+  "appTitle": "Transfort",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  
+  "login": "Login",
+  "signup": "Sign Up",
+  "logout": "Logout",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  
+  "dashboard": "Dashboard",
+  "profile": "Profile",
+  "settings": "Settings",
+  "notifications": "Notifications",
+  
+  "postLoad": "Post Load",
+  "myLoads": "My Loads",
+  "findLoads": "Find Loads",
+  "loadDetails": "Load Details",
+  
+  "myFleet": "My Fleet",
+  "addTruck": "Add Truck",
+  "truckDetails": "Truck Details",
+  
+  "chat": "Chat",
+  "messages": "Messages",
+  "sendMessage": "Send Message",
+  
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "confirm": "Confirm",
+  "close": "Close",
+  
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "retry": "Retry",
+  
+  "noDataAvailable": "No data available",
+  "somethingWentWrong": "Something went wrong",
+  "tryAgainLater": "Please try again later"
+}
