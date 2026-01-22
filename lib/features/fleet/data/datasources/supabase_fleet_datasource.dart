@@ -76,8 +76,9 @@ class SupabaseFleetDataSource implements FleetDataSource {
       if (rcUrl != null || insuranceUrl != null) {
         final updates = <String, dynamic>{};
         if (rcUrl != null) updates['rc_document_url'] = rcUrl;
-        if (insuranceUrl != null)
+        if (insuranceUrl != null) {
           updates['insurance_document_url'] = insuranceUrl;
+        }
 
         final updated = await _client
             .from('trucks')
