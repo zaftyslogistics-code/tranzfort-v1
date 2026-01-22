@@ -74,11 +74,8 @@ CREATE POLICY "Admins can update verification requests"
   USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
-DROP POLICY IF EXISTS "Admins can view verification payments" ON public.verification_payments;
-CREATE POLICY "Admins can view verification payments"
-  ON public.verification_payments
-  FOR SELECT
-  USING (public.is_admin());
+-- Note: verification_payments table was dropped in migration 20260120000001_drop_payment_infrastructure.sql
+-- Removed zombie RLS policy reference to dropped table
 
 -- Storage: allow admins to view verification documents
 DROP POLICY IF EXISTS "Admins can view verification documents" ON storage.objects;
@@ -91,35 +88,13 @@ CREATE POLICY "Admins can view verification documents"
   );
 
 -- ============================================
--- Persisted system configuration
+-- System configuration policies
 -- ============================================
-CREATE TABLE IF NOT EXISTS public.system_config (
-  id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
-  enable_ads BOOLEAN NOT NULL DEFAULT TRUE,
-  verification_fee_trucker INT NOT NULL DEFAULT 499,
-  verification_fee_supplier INT NOT NULL DEFAULT 499,
-  load_expiry_days INT NOT NULL DEFAULT 90,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- Note: system_config table is created in migration 20260120000004_create_system_config.sql
+-- This migration only adds admin-specific policies
 
-ALTER TABLE public.system_config ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Super admins can view system config" ON public.system_config;
-CREATE POLICY "Super admins can view system config"
-  ON public.system_config
-  FOR SELECT
-  USING (public.is_super_admin());
-
-DROP POLICY IF EXISTS "Super admins can update system config" ON public.system_config;
-CREATE POLICY "Super admins can update system config"
-  ON public.system_config
-  FOR UPDATE
-  USING (public.is_super_admin())
-  WITH CHECK (public.is_super_admin());
-
-INSERT INTO public.system_config (id)
-VALUES (1)
-ON CONFLICT (id) DO NOTHING;
+-- Admin policies for system_config are defined in the table creation migration
+-- to avoid duplication and ensure proper migration order
 
 -- ============================================
 -- Auth trigger: support email-based logins too

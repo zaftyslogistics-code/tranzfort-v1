@@ -191,10 +191,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
-        path: '/trucker-feed',
-        builder: (context, state) => const TruckerFeedScreen(),
-      ),
-      GoRoute(
         path: '/load-detail-trucker',
         builder: (context, state) => LoadDetailTruckerScreen(
           loadId: state.extra as String,

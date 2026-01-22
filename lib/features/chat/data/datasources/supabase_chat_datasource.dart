@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/utils/logger.dart';
+import '../../../../core/utils/input_validator.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../models/chat_model.dart';
 import '../models/chat_message_model.dart';
@@ -73,7 +74,9 @@ class SupabaseChatDataSource implements ChatDataSource {
     DateTime? before,
   }) async {
     try {
-      // Build base query
+      Logger.info('💬 SUPABASE: Getting messages for chat $chatId (limit: $limit, before: $before)');
+      
+      // Build base query with proper pagination
       var queryBuilder = _supabase
           .from('chat_messages')
           .select('*')
@@ -92,6 +95,8 @@ class SupabaseChatDataSource implements ChatDataSource {
       final messages = (response as List)
           .map((json) => ChatMessageModel.fromJson(json))
           .toList();
+
+      Logger.info('✅ SUPABASE: Retrieved ${messages.length} messages');
 
       // Reverse to get chronological order (oldest first)
       return messages.reversed.toList();
@@ -121,19 +126,32 @@ class SupabaseChatDataSource implements ChatDataSource {
     String messageText,
   ) async {
     try {
+      // Sanitize message to prevent XSS and limit length
+      final sanitizedMessage = InputValidator.sanitizeChatMessage(messageText);
+      
+      // Check for malicious input
+      if (!InputValidator.isSafeInput(sanitizedMessage)) {
+        InputValidator.logSuspiciousInput(sanitizedMessage, 'chat_message');
+        throw ServerException('Invalid message content');
+      }
+
+      Logger.info('💬 SUPABASE: Sending message to chat $chatId');
+
       final inserted = await _supabase
           .from('chat_messages')
           .insert({
             'chat_id': chatId,
             'sender_id': senderId,
-            'message_text': messageText,
+            'message_text': sanitizedMessage,
             'is_read': false,
           })
           .select('*')
           .single();
 
+      Logger.info('✅ SUPABASE: Message sent successfully');
       return ChatMessageModel.fromJson(inserted);
     } catch (e) {
+      Logger.error('Failed to send message', error: e);
       throw ServerException(e.toString());
     }
   }

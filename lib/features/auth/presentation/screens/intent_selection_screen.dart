@@ -28,21 +28,27 @@ class _IntentSelectionScreenState
     Logger.info('🎯 INTENT: User selected intent: $intent');
     setState(() => _selectedIntent = intent);
 
+    // Use snake_case keys to match database columns directly
     final updates = intent == 'supplier'
-        ? {'isSupplierEnabled': true}
-        : {'isTruckerEnabled': true};
+        ? {'is_supplier_enabled': true}
+        : {'is_trucker_enabled': true};
 
     Logger.info('🎯 INTENT: Updating profile with updates: $updates');
 
     try {
       final success = await ref
           .read(authNotifierProvider.notifier)
-          .updateUserProfile(updates);
+          .updateUserProfile(updates)
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              Logger.error('❌ INTENT: Profile update timed out');
+              return false;
+            },
+          );
 
       Logger.info('🎯 INTENT: Profile update result: $success');
 
-      // Even if profile update fails, allow navigation
-      // The profile update can be retried later
       if (!success) {
         Logger.error('❌ INTENT: Profile update failed, but proceeding with navigation');
         if (!mounted) return;
@@ -50,6 +56,7 @@ class _IntentSelectionScreenState
         messenger?.showSnackBar(
           const SnackBar(
             content: Text('Profile update failed, but you can continue. Settings will be updated later.'),
+            duration: Duration(seconds: 3),
           ),
         );
       }
@@ -61,35 +68,56 @@ class _IntentSelectionScreenState
         '🎯 INTENT: Updated user state - Supplier: ${updatedAuthState.user?.isSupplierEnabled}, Trucker: ${updatedAuthState.user?.isTruckerEnabled}',
       );
 
-      if (intent == 'supplier') {
-        Logger.info('🚚 INTENT: Navigating to supplier dashboard');
+      if (!mounted) return;
+
+      final targetRoute = intent == 'supplier' ? 'supplier-dashboard' : 'trucker-feed';
+      final targetPath = intent == 'supplier' ? '/supplier-dashboard' : '/trucker-feed';
+      
+      Logger.info('🚚 INTENT: Navigating to $targetRoute');
+      
+      try {
+        router.goNamed(targetRoute);
+        Logger.info('✅ INTENT: Navigation successful via goNamed');
+      } catch (e) {
+        Logger.error('❌ INTENT: goNamed failed: $e');
+        
         try {
-          // Clear the stack and navigate to dashboard
-          router.goNamed('supplier-dashboard');
-        } catch (e) {
-          Logger.error('❌ INTENT: goNamed error to supplier dashboard: $e');
-          // Fallback: try push
-          if (mounted) router.push('/supplier-dashboard');
-        }
-      } else {
-        Logger.info('🚚 INTENT: Navigating to trucker feed');
-        try {
-          // Clear the stack and navigate to trucker feed
-          router.goNamed('trucker-feed');
-        } catch (e) {
-          Logger.error('❌ INTENT: goNamed error to trucker feed: $e');
-          // Fallback: try push
-          if (mounted) router.push('/trucker-feed');
+          if (mounted) {
+            router.go(targetPath);
+            Logger.info('✅ INTENT: Navigation successful via go()');
+          }
+        } catch (e2) {
+          Logger.error('❌ INTENT: go() also failed: $e2');
+          
+          if (mounted) {
+            messenger?.showSnackBar(
+              SnackBar(
+                content: const Text('Navigation failed. Please try again.'),
+                duration: const Duration(seconds: 5),
+                action: SnackBarAction(
+                  label: 'Retry',
+                  onPressed: () => _selectIntent(intent),
+                ),
+              ),
+            );
+            setState(() => _selectedIntent = null);
+          }
         }
       }
     } catch (e) {
       Logger.error('❌ INTENT: Error during intent selection: $e');
       if (mounted) {
         messenger?.showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred. Please try again.'),
+          SnackBar(
+            content: const Text('An error occurred. Please try again.'),
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Retry',
+              onPressed: () => _selectIntent(intent),
+            ),
           ),
         );
+        setState(() => _selectedIntent = null);
       }
     }
   }

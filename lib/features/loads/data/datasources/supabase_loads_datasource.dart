@@ -21,6 +21,11 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
     final now = DateTime.now();
     final dynamic loadingDateRaw = loadData['loadingDate'] ?? loadData['loading_date'];
 
+    // Map to database columns - note: DB has both old (material_type, truck_type) 
+    // and new (load_type, truck_type_required) columns, but old ones have NOT NULL constraints
+    final materialType = loadData['loadType'] ?? loadData['load_type'] ?? loadData['materialType'] ?? loadData['material_type'];
+    final truckType = loadData['truckTypeRequired'] ?? loadData['truck_type_required'] ?? loadData['truckType'] ?? loadData['truck_type'];
+
     return {
       'supplier_id': loadData['supplierId'] ?? loadData['supplier_id'],
       'from_location': loadData['fromLocation'] ?? loadData['from_location'],
@@ -29,9 +34,13 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       'to_location': loadData['toLocation'] ?? loadData['to_location'],
       'to_city': loadData['toCity'] ?? loadData['to_city'],
       'to_state': loadData['toState'] ?? loadData['to_state'],
-      'load_type': loadData['loadType'] ?? loadData['load_type'],
-      'truck_type_required': loadData['truckTypeRequired'] ?? loadData['truck_type_required'],
+      // Map to BOTH old and new columns to satisfy NOT NULL constraints
+      'material_type': materialType,
+      'truck_type': truckType,
+      'load_type': materialType,
+      'truck_type_required': truckType,
       'weight': loadData['weight'],
+      'weight_in_tons': loadData['weight'], // Also populate old column
       'price': loadData['price'],
       'price_type': loadData['priceType'] ?? loadData['price_type'] ?? 'negotiable',
       'payment_terms': loadData['paymentTerms'] ?? loadData['payment_terms'],

@@ -158,24 +158,11 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
     Map<String, dynamic> updates,
   ) async {
     try {
-      Logger.info('Updating profile for user: $userId');
-
-      final mappedUpdates = <String, dynamic>{};
-      for (final entry in updates.entries) {
-        switch (entry.key) {
-          case 'isSupplierEnabled':
-            mappedUpdates['is_supplier_enabled'] = entry.value;
-            break;
-          case 'isTruckerEnabled':
-            mappedUpdates['is_trucker_enabled'] = entry.value;
-            break;
-          default:
-            mappedUpdates[entry.key] = entry.value;
-        }
-      }
-
-      final updateData = <String, dynamic>{
-        ...mappedUpdates,
+      Logger.info('🔧 DATASOURCE: Updating profile for user: $userId with updates: $updates');
+      
+      // Add updated_at timestamp
+      final Map<String, dynamic> updateData = {
+        ...updates,
         'updated_at': DateTime.now().toIso8601String(),
       };
 

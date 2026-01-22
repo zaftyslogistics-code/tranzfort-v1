@@ -16,9 +16,50 @@ import 'features/auth/presentation/providers/auth_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Set up error boundary for production
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    // Log error for debugging
+    Logger.error('Widget error caught by error boundary', error: details.exception, stackTrace: details.stack);
+    
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: AppColors.darkBackground,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: AppColors.danger),
+                const SizedBox(height: 16),
+                const Text(
+                  'Something went wrong',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Please restart the app. If the problem persists, contact support.',
+                  style: TextStyle(color: AppColors.textSecondary),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  };
+
   try {
-    await dotenv.load(fileName: 'assets/env/production.env');
-    Logger.info('Loaded assets/env/production.env file');
+    // Load environment file based on compile-time constant
+    // Usage: flutter run --dart-define=ENV_FILE=assets/env/local.env
+    const String envFile = String.fromEnvironment(
+      'ENV_FILE',
+      defaultValue: 'assets/env/production.env',
+    );
+    await dotenv.load(fileName: envFile);
+    Logger.info('Loaded $envFile file');
     Logger.info('Environment loaded: ${EnvConfig.environment}');
 
     await Supabase.initialize(

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/utils/input_validator.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
@@ -32,7 +33,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 
   Future<void> _signup() async {
-    final email = _emailController.text.trim();
+    final email = InputValidator.sanitize(_emailController.text.trim());
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
@@ -40,13 +41,32 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       _error = null;
     });
 
-    if (email.isEmpty || !email.contains('@')) {
-      setState(() => _error = 'Enter a valid email address');
+    // Validate and sanitize email
+    final emailError = InputValidator.validateEmail(email);
+    if (emailError != null) {
+      setState(() => _error = emailError);
       return;
     }
 
-    if (password.isEmpty || password.length < 6) {
-      setState(() => _error = 'Password must be at least 6 characters');
+    // Check for malicious input
+    if (!InputValidator.isSafeInput(email)) {
+      InputValidator.logSuspiciousInput(email, 'signup_email');
+      setState(() => _error = 'Invalid input detected');
+      return;
+    }
+
+    if (password.isEmpty || password.length < 8) {
+      setState(() => _error = 'Password must be at least 8 characters');
+      return;
+    }
+
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      setState(() => _error = 'Password must contain at least one uppercase letter');
+      return;
+    }
+
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      setState(() => _error = 'Password must contain at least one number');
       return;
     }
 
@@ -63,11 +83,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     if (!mounted) return;
 
-    setState(() => _isLoading = false);
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
 
     if (!success) {
       final err = ref.read(authNotifierProvider).error;
-      setState(() => _error = err ?? 'Signup failed');
+      if (mounted) {
+        setState(() => _error = err ?? 'Signup failed');
+      }
       return;
     }
 
