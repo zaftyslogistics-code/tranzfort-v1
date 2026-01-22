@@ -24,9 +24,11 @@ class FleetRepositoryImpl implements FleetRepository {
   }
 
   @override
-  Future<Either<Failure, Truck>> addTruck(Map<String, dynamic> truckData, {XFile? rcDocument, XFile? insuranceDocument}) async {
+  Future<Either<Failure, Truck>> addTruck(Map<String, dynamic> truckData,
+      {XFile? rcDocument, XFile? insuranceDocument}) async {
     try {
-      final truck = await _dataSource.addTruck(truckData, rcDocument: rcDocument, insuranceDocument: insuranceDocument);
+      final truck = await _dataSource.addTruck(truckData,
+          rcDocument: rcDocument, insuranceDocument: insuranceDocument);
       return Right(truck);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -36,9 +38,12 @@ class FleetRepositoryImpl implements FleetRepository {
   }
 
   @override
-  Future<Either<Failure, Truck>> updateTruck(String id, Map<String, dynamic> updates, {XFile? rcDocument, XFile? insuranceDocument}) async {
+  Future<Either<Failure, Truck>> updateTruck(
+      String id, Map<String, dynamic> updates,
+      {XFile? rcDocument, XFile? insuranceDocument}) async {
     try {
-      final truck = await _dataSource.updateTruck(id, updates, rcDocument: rcDocument, insuranceDocument: insuranceDocument);
+      final truck = await _dataSource.updateTruck(id, updates,
+          rcDocument: rcDocument, insuranceDocument: insuranceDocument);
       return Right(truck);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));

@@ -106,56 +106,55 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            mobileNumber: null == mobileNumber
-                ? _value.mobileNumber
-                : mobileNumber // ignore: cast_nullable_to_non_nullable
-                      as String,
-            countryCode: null == countryCode
-                ? _value.countryCode
-                : countryCode // ignore: cast_nullable_to_non_nullable
-                      as String,
-            name: freezed == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            isSupplierEnabled: null == isSupplierEnabled
-                ? _value.isSupplierEnabled
-                : isSupplierEnabled // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            isTruckerEnabled: null == isTruckerEnabled
-                ? _value.isTruckerEnabled
-                : isTruckerEnabled // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            supplierVerificationStatus: null == supplierVerificationStatus
-                ? _value.supplierVerificationStatus
-                : supplierVerificationStatus // ignore: cast_nullable_to_non_nullable
-                      as String,
-            truckerVerificationStatus: null == truckerVerificationStatus
-                ? _value.truckerVerificationStatus
-                : truckerVerificationStatus // ignore: cast_nullable_to_non_nullable
-                      as String,
-            preferences: null == preferences
-                ? _value.preferences
-                : preferences // ignore: cast_nullable_to_non_nullable
-                      as Map<String, dynamic>,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            lastLoginAt: null == lastLoginAt
-                ? _value.lastLoginAt
-                : lastLoginAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            updatedAt: null == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        mobileNumber: null == mobileNumber
+            ? _value.mobileNumber
+            : mobileNumber // ignore: cast_nullable_to_non_nullable
+                as String,
+        countryCode: null == countryCode
+            ? _value.countryCode
+            : countryCode // ignore: cast_nullable_to_non_nullable
+                as String,
+        name: freezed == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                as String?,
+        isSupplierEnabled: null == isSupplierEnabled
+            ? _value.isSupplierEnabled
+            : isSupplierEnabled // ignore: cast_nullable_to_non_nullable
+                as bool,
+        isTruckerEnabled: null == isTruckerEnabled
+            ? _value.isTruckerEnabled
+            : isTruckerEnabled // ignore: cast_nullable_to_non_nullable
+                as bool,
+        supplierVerificationStatus: null == supplierVerificationStatus
+            ? _value.supplierVerificationStatus
+            : supplierVerificationStatus // ignore: cast_nullable_to_non_nullable
+                as String,
+        truckerVerificationStatus: null == truckerVerificationStatus
+            ? _value.truckerVerificationStatus
+            : truckerVerificationStatus // ignore: cast_nullable_to_non_nullable
+                as String,
+        preferences: null == preferences
+            ? _value.preferences
+            : preferences // ignore: cast_nullable_to_non_nullable
+                as Map<String, dynamic>,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        lastLoginAt: null == lastLoginAt
+            ? _value.lastLoginAt
+            : lastLoginAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+      ) as $Val,
     );
   }
 }
@@ -219,51 +218,51 @@ class __$$UserModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         mobileNumber: null == mobileNumber
             ? _value.mobileNumber
             : mobileNumber // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         countryCode: null == countryCode
             ? _value.countryCode
             : countryCode // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         name: freezed == name
             ? _value.name
             : name // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         isSupplierEnabled: null == isSupplierEnabled
             ? _value.isSupplierEnabled
             : isSupplierEnabled // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                as bool,
         isTruckerEnabled: null == isTruckerEnabled
             ? _value.isTruckerEnabled
             : isTruckerEnabled // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                as bool,
         supplierVerificationStatus: null == supplierVerificationStatus
             ? _value.supplierVerificationStatus
             : supplierVerificationStatus // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         truckerVerificationStatus: null == truckerVerificationStatus
             ? _value.truckerVerificationStatus
             : truckerVerificationStatus // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         preferences: null == preferences
             ? _value._preferences
             : preferences // ignore: cast_nullable_to_non_nullable
-                  as Map<String, dynamic>,
+                as Map<String, dynamic>,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         lastLoginAt: null == lastLoginAt
             ? _value.lastLoginAt
             : lastLoginAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         updatedAt: null == updatedAt
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
       ),
     );
   }
@@ -379,20 +378,20 @@ class _$UserModelImpl implements _UserModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    mobileNumber,
-    countryCode,
-    name,
-    isSupplierEnabled,
-    isTruckerEnabled,
-    supplierVerificationStatus,
-    truckerVerificationStatus,
-    const DeepCollectionEquality().hash(_preferences),
-    createdAt,
-    lastLoginAt,
-    updatedAt,
-  );
+        runtimeType,
+        id,
+        mobileNumber,
+        countryCode,
+        name,
+        isSupplierEnabled,
+        isTruckerEnabled,
+        supplierVerificationStatus,
+        truckerVerificationStatus,
+        const DeepCollectionEquality().hash(_preferences),
+        createdAt,
+        lastLoginAt,
+        updatedAt,
+      );
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.

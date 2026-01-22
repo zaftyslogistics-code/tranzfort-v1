@@ -34,7 +34,8 @@ final maxLoadsPerUserProvider = FutureProvider<int>((ref) async {
 });
 
 // Provider to check if current app version is supported
-final appVersionSupportedProvider = FutureProvider.family<bool, String>((ref, currentVersion) async {
+final appVersionSupportedProvider =
+    FutureProvider.family<bool, String>((ref, currentVersion) async {
   final service = ref.watch(remoteConfigServiceProvider);
   return service.isVersionSupported(currentVersion);
 });

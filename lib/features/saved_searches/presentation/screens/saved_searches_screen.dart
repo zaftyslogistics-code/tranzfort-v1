@@ -72,8 +72,7 @@ class SavedSearchesScreen extends ConsumerWidget {
                             padding:
                                 const EdgeInsets.only(bottom: AppDimensions.md),
                             child: GlassmorphicCard(
-                              padding:
-                                  const EdgeInsets.all(AppDimensions.md),
+                              padding: const EdgeInsets.all(AppDimensions.md),
                               child: Row(
                                 children: [
                                   const Icon(
@@ -95,7 +94,8 @@ class SavedSearchesScreen extends ConsumerWidget {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         ),
-                                        const SizedBox(height: AppDimensions.xs),
+                                        const SizedBox(
+                                            height: AppDimensions.xs),
                                         Text(
                                           '${s.fromLocation ?? 'Any'} → ${s.toLocation ?? 'Any'}',
                                           style: Theme.of(context)

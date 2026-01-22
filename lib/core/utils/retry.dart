@@ -18,7 +18,8 @@ Future<T> retry<T>(
       final canRetry = attempt <= retries && (shouldRetry?.call(e) ?? true);
       if (!canRetry) rethrow;
       await Future.delayed(delay);
-      delay = Duration(milliseconds: (delay.inMilliseconds * backoffFactor).round());
+      delay = Duration(
+          milliseconds: (delay.inMilliseconds * backoffFactor).round());
     }
   }
 }

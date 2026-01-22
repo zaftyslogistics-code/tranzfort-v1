@@ -13,10 +13,12 @@ class AdminEmailPasswordLoginScreen extends ConsumerStatefulWidget {
   const AdminEmailPasswordLoginScreen({super.key});
 
   @override
-  ConsumerState<AdminEmailPasswordLoginScreen> createState() => _AdminEmailPasswordLoginScreenState();
+  ConsumerState<AdminEmailPasswordLoginScreen> createState() =>
+      _AdminEmailPasswordLoginScreenState();
 }
 
-class _AdminEmailPasswordLoginScreenState extends ConsumerState<AdminEmailPasswordLoginScreen> {
+class _AdminEmailPasswordLoginScreenState
+    extends ConsumerState<AdminEmailPasswordLoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
@@ -49,10 +51,10 @@ class _AdminEmailPasswordLoginScreenState extends ConsumerState<AdminEmailPasswo
       );
 
       if (!mounted) return;
-      
+
       // Trigger auth state check to update the provider
       ref.read(authNotifierProvider.notifier).checkAuthStatus();
-      
+
       // Navigate to splash to let auth state resolve
       context.go('/splash');
     } catch (e) {
@@ -67,7 +69,7 @@ class _AdminEmailPasswordLoginScreenState extends ConsumerState<AdminEmailPasswo
     }
   }
 
-        @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Admin Login')),

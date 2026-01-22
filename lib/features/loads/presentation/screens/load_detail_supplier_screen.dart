@@ -54,8 +54,9 @@ class _LoadDetailSupplierScreenState
     );
 
     if (confirmed == true) {
-      final success =
-          await ref.read(loadsNotifierProvider.notifier).deleteLoad(widget.loadId);
+      final success = await ref
+          .read(loadsNotifierProvider.notifier)
+          .deleteLoad(widget.loadId);
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Load deleted')),
@@ -158,7 +159,8 @@ class _LoadDetailSupplierScreenState
                     _DetailSection(
                       title: 'Route',
                       children: [
-                        _DetailRow(label: 'From', value: load.fromLocationDisplay),
+                        _DetailRow(
+                            label: 'From', value: load.fromLocationDisplay),
                         _DetailRow(label: 'To', value: load.toLocationDisplay),
                       ],
                     ),
@@ -166,7 +168,8 @@ class _LoadDetailSupplierScreenState
                       title: 'Load',
                       children: [
                         _DetailRow(label: 'Material', value: load.loadType),
-                        _DetailRow(label: 'Truck', value: load.truckTypeRequired),
+                        _DetailRow(
+                            label: 'Truck', value: load.truckTypeRequired),
                         if (load.weight != null)
                           _DetailRow(
                             label: 'Weight',
@@ -222,7 +225,8 @@ class _LoadDetailSupplierScreenState
                     _DetailSection(
                       title: 'Stats',
                       children: [
-                        _DetailRow(label: 'Views', value: load.viewCount.toString()),
+                        _DetailRow(
+                            label: 'Views', value: load.viewCount.toString()),
                         _DetailRow(
                           label: 'Status',
                           value: load.isExpired ? 'Expired' : load.status,

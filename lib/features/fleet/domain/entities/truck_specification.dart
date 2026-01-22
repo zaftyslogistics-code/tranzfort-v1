@@ -56,7 +56,8 @@ class TruckSpecification extends Equatable {
       width: width ?? this.width,
       height: height ?? this.height,
       specialFeatures: specialFeatures ?? this.specialFeatures,
-      complianceCertificates: complianceCertificates ?? this.complianceCertificates,
+      complianceCertificates:
+          complianceCertificates ?? this.complianceCertificates,
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -127,7 +128,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // 6 Tyres - Small Trucks
       TruckSpecification(
         id: 'spec_6_tyre_small',
@@ -141,7 +142,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // 10 Tyres - Medium Trucks
       TruckSpecification(
         id: 'spec_10_tyre_medium',
@@ -155,7 +156,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // 12 Tyres - Medium Heavy
       TruckSpecification(
         id: 'spec_12_tyre_medium_heavy',
@@ -169,7 +170,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // 14 Tyres - Heavy
       TruckSpecification(
         id: 'spec_14_tyre_heavy',
@@ -183,7 +184,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // 16 Tyres - Very Heavy
       TruckSpecification(
         id: 'spec_16_tyre_very_heavy',
@@ -197,7 +198,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // 18 Tyres - Ultra Heavy
       TruckSpecification(
         id: 'spec_18_tyre_ultra_heavy',
@@ -211,7 +212,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // 22+ Tyres - Super Heavy
       TruckSpecification(
         id: 'spec_22_tyre_super_heavy',
@@ -243,9 +244,24 @@ class TruckSpecification extends Equatable {
   // Simplified capacity ranges
   static const List<Map<String, dynamic>> capacityRanges = [
     {'min': 0.0, 'max': 5.0, 'label': 'Light (0-5 tons)', 'category': 'Small'},
-    {'min': 5.0, 'max': 15.0, 'label': 'Medium (5-15 tons)', 'category': 'Medium'},
-    {'min': 15.0, 'max': 25.0, 'label': 'Heavy (15-25 tons)', 'category': 'Heavy'},
-    {'min': 25.0, 'max': 50.0, 'label': 'Super Heavy (25+ tons)', 'category': 'Super Heavy'},
+    {
+      'min': 5.0,
+      'max': 15.0,
+      'label': 'Medium (5-15 tons)',
+      'category': 'Medium'
+    },
+    {
+      'min': 15.0,
+      'max': 25.0,
+      'label': 'Heavy (15-25 tons)',
+      'category': 'Heavy'
+    },
+    {
+      'min': 25.0,
+      'max': 50.0,
+      'label': 'Super Heavy (25+ tons)',
+      'category': 'Super Heavy'
+    },
   ];
 
   // Smart combinations based on Indian market reality
@@ -270,7 +286,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // Medium Trucks - Regional transport
       TruckSpecification(
         id: 'spec_medium_open',
@@ -290,7 +306,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // Heavy Trucks - Long haul
       TruckSpecification(
         id: 'spec_heavy_container',
@@ -310,7 +326,7 @@ class TruckSpecification extends Equatable {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
-      
+
       // Super Heavy Trucks - Bulk transport
       TruckSpecification(
         id: 'spec_super_heavy_container',

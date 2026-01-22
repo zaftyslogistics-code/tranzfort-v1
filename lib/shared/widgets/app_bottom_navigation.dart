@@ -14,11 +14,11 @@ class AppBottomNavigation extends ConsumerWidget {
     final authState = ref.watch(authNotifierProvider);
     final user = authState.user;
     final location = GoRouterState.of(context).uri.toString();
-    
+
     // Determine which navigation to show based on user role
     final isSupplier = user?.isSupplierEnabled ?? false;
     final isTrucker = user?.isTruckerEnabled ?? false;
-    
+
     if (!isSupplier && !isTrucker) {
       return const SizedBox.shrink(); // No navigation if no role selected
     }
@@ -43,57 +43,57 @@ class AppBottomNavigation extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-            if (isSupplier) ...[
+              if (isSupplier) ...[
+                _NavItem(
+                  icon: Icons.dashboard_outlined,
+                  label: 'Dashboard',
+                  isSelected: location == '/supplier-dashboard',
+                  onTap: () => context.go('/supplier-dashboard'),
+                ),
+                _NavItem(
+                  icon: Icons.add_box_outlined,
+                  label: 'Post Load',
+                  isSelected: location == '/post-load-step1',
+                  onTap: () => context.go('/post-load-step1'),
+                ),
+                _NavItem(
+                  icon: Icons.list_alt_outlined,
+                  label: 'My Loads',
+                  isSelected: location == '/my-loads',
+                  onTap: () => context.go('/my-loads'),
+                ),
+              ] else if (isTrucker) ...[
+                _NavItem(
+                  icon: Icons.local_shipping_outlined,
+                  label: 'Find Loads',
+                  isSelected: location == '/trucker-feed',
+                  onTap: () => context.go('/trucker-feed'),
+                ),
+                _NavItem(
+                  icon: Icons.chat_outlined,
+                  label: 'Chat',
+                  isSelected: location == '/chat-list',
+                  onTap: () => context.go('/chat-list'),
+                ),
+                _NavItem(
+                  icon: Icons.directions_car_outlined,
+                  label: 'My Fleet',
+                  isSelected: location == '/fleet-management',
+                  onTap: () => context.go('/fleet-management'),
+                ),
+                _NavItem(
+                  icon: Icons.person_outline,
+                  label: 'Profile',
+                  isSelected: location == '/verification',
+                  onTap: () => context.go('/verification'),
+                ),
+              ],
               _NavItem(
-                icon: Icons.dashboard_outlined,
-                label: 'Dashboard',
-                isSelected: location == '/supplier-dashboard',
-                onTap: () => context.go('/supplier-dashboard'),
+                icon: Icons.settings_outlined,
+                label: 'Settings',
+                isSelected: location == '/settings',
+                onTap: () => context.go('/settings'),
               ),
-              _NavItem(
-                icon: Icons.add_box_outlined,
-                label: 'Post Load',
-                isSelected: location == '/post-load-step1',
-                onTap: () => context.go('/post-load-step1'),
-              ),
-              _NavItem(
-                icon: Icons.list_alt_outlined,
-                label: 'My Loads',
-                isSelected: location == '/my-loads',
-                onTap: () => context.go('/my-loads'),
-              ),
-            ] else if (isTrucker) ...[
-              _NavItem(
-                icon: Icons.local_shipping_outlined,
-                label: 'Find Loads',
-                isSelected: location == '/trucker-feed',
-                onTap: () => context.go('/trucker-feed'),
-              ),
-              _NavItem(
-                icon: Icons.chat_outlined,
-                label: 'Chat',
-                isSelected: location == '/chat-list',
-                onTap: () => context.go('/chat-list'),
-              ),
-              _NavItem(
-                icon: Icons.directions_car_outlined,
-                label: 'My Fleet',
-                isSelected: location == '/fleet-management',
-                onTap: () => context.go('/fleet-management'),
-              ),
-              _NavItem(
-                icon: Icons.person_outline,
-                label: 'Profile',
-                isSelected: location == '/verification',
-                onTap: () => context.go('/verification'),
-              ),
-            ],
-            _NavItem(
-              icon: Icons.settings_outlined,
-              label: 'Settings',
-              isSelected: location == '/settings',
-              onTap: () => context.go('/settings'),
-            ),
             ],
           ),
         ),
@@ -139,8 +139,11 @@ class _NavItem extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isSelected ? AppColors.primary : AppColors.textPrimary,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.textPrimary,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
                       fontSize: 11,
                     ),
                 textAlign: TextAlign.center,

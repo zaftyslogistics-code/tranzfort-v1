@@ -4,7 +4,8 @@ import '../../data/datasources/notifications_datasource.dart';
 import '../../data/models/notification_model.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
-final notificationsDataSourceProvider = Provider<NotificationsDataSource>((ref) {
+final notificationsDataSourceProvider =
+    Provider<NotificationsDataSource>((ref) {
   final supabase = Supabase.instance.client;
   return NotificationsDataSource(supabase);
 });
@@ -25,7 +26,8 @@ final unreadNotificationsCountProvider = FutureProvider<int>((ref) async {
   return ds.getUnreadCount(user.id);
 });
 
-final markAllNotificationsAsReadProvider = Provider<Future<void> Function()>((ref) {
+final markAllNotificationsAsReadProvider =
+    Provider<Future<void> Function()>((ref) {
   return () async {
     final user = ref.read(authNotifierProvider).user;
     if (user == null) return;
@@ -35,7 +37,8 @@ final markAllNotificationsAsReadProvider = Provider<Future<void> Function()>((re
   };
 });
 
-final markNotificationAsReadProvider = Provider<Future<void> Function(String)>((ref) {
+final markNotificationAsReadProvider =
+    Provider<Future<void> Function(String)>((ref) {
   return (notificationId) async {
     final ds = ref.read(notificationsDataSourceProvider);
     await ds.markAsRead(notificationId);

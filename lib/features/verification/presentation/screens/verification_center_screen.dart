@@ -145,11 +145,11 @@ class VerificationCenterScreen extends ConsumerWidget {
 
   Widget _buildRoleRequirements(BuildContext context, String role) {
     final isSupplier = role == 'supplier';
-    final documents = isSupplier 
+    final documents = isSupplier
         ? ['Aadhaar Card', 'PAN Card', 'Transport License']
         : ['Aadhaar Card', 'PAN Card', 'Truck RC'];
-    
-    final optionalDocs = isSupplier 
+
+    final optionalDocs = isSupplier
         ? ['GST Certificate (Optional)']
         : ['Additional Truck RC (Optional)'];
 
@@ -182,35 +182,37 @@ class VerificationCenterScreen extends ConsumerWidget {
           ),
           const SizedBox(height: AppDimensions.sm),
           ...documents.map((doc) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: Row(
-              children: [
-                Icon(Icons.check_circle, color: AppColors.success, size: 16),
-                const SizedBox(width: AppDimensions.sm),
-                Text(
-                  doc,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.white,
-                      ),
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Row(
+                  children: [
+                    Icon(Icons.check_circle,
+                        color: AppColors.success, size: 16),
+                    const SizedBox(width: AppDimensions.sm),
+                    Text(
+                      doc,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              )),
           ...optionalDocs.map((doc) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: Row(
-              children: [
-                Icon(Icons.add_circle_outline, color: AppColors.textSecondary, size: 16),
-                const SizedBox(width: AppDimensions.sm),
-                Text(
-                  doc,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Row(
+                  children: [
+                    Icon(Icons.add_circle_outline,
+                        color: AppColors.textSecondary, size: 16),
+                    const SizedBox(width: AppDimensions.sm),
+                    Text(
+                      doc,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              )),
         ],
       ),
     );

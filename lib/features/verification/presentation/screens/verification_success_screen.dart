@@ -75,10 +75,7 @@ class VerificationSuccessScreen extends ConsumerWidget {
                     const SizedBox(height: AppDimensions.sm),
                     Text(
                       'No payment required - completely free!',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.freeModelGreen,
                             fontWeight: FontWeight.bold,
                           ),

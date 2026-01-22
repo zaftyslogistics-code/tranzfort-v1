@@ -25,7 +25,8 @@ class SupabaseVerificationDataSource {
   }) async {
     final user = _supabase.auth.currentUser;
     if (user == null) {
-      throw ServerException('User session not found. Please log in to submit verification.');
+      throw ServerException(
+          'User session not found. Please log in to submit verification.');
     }
 
     try {
@@ -47,23 +48,26 @@ class SupabaseVerificationDataSource {
 
       final request = VerificationRequestModel.fromJson(inserted);
 
-      final frontPath = '${user.id}/$roleType/${request.id}/front_${front.name}';
+      final frontPath =
+          '${user.id}/$roleType/${request.id}/front_${front.name}';
       final backPath = '${user.id}/$roleType/${request.id}/back_${back.name}';
 
       // Compress images
       final File frontFile = File(front.path);
       final File backFile = File(back.path);
 
-      final File? compressedFront = await ImageCompressor.compressImage(frontFile);
-      final File? compressedBack = await ImageCompressor.compressImage(backFile);
+      final File? compressedFront =
+          await ImageCompressor.compressImage(frontFile);
+      final File? compressedBack =
+          await ImageCompressor.compressImage(backFile);
 
       // Use compressed file if available, otherwise fallback to original
-      final frontBytes = compressedFront != null 
-          ? await compressedFront.readAsBytes() 
+      final frontBytes = compressedFront != null
+          ? await compressedFront.readAsBytes()
           : await front.readAsBytes();
-      
-      final backBytes = compressedBack != null 
-          ? await compressedBack.readAsBytes() 
+
+      final backBytes = compressedBack != null
+          ? await compressedBack.readAsBytes()
           : await back.readAsBytes();
 
       await _upload(frontPath, Uint8List.fromList(frontBytes),
@@ -103,7 +107,8 @@ class SupabaseVerificationDataSource {
         );
   }
 
-  Future<List<VerificationRequestModel>> getPendingVerificationRequests() async {
+  Future<List<VerificationRequestModel>>
+      getPendingVerificationRequests() async {
     try {
       final response = await _supabase
           .from('verification_requests')

@@ -12,10 +12,12 @@ class AdminVerificationDashboard extends ConsumerStatefulWidget {
   const AdminVerificationDashboard({super.key});
 
   @override
-  ConsumerState<AdminVerificationDashboard> createState() => _AdminVerificationDashboardState();
+  ConsumerState<AdminVerificationDashboard> createState() =>
+      _AdminVerificationDashboardState();
 }
 
-class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDashboard> {
+class _AdminVerificationDashboardState
+    extends ConsumerState<AdminVerificationDashboard> {
   bool _isLoading = true;
   List<VerificationRequestModel> _pendingRequests = [];
   String? _error;
@@ -61,7 +63,8 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
     }
   }
 
-  Future<void> _updateStatus(String requestId, String status, {String? reason}) async {
+  Future<void> _updateStatus(String requestId, String status,
+      {String? reason}) async {
     final messenger = ScaffoldMessenger.of(context);
 
     try {
@@ -71,7 +74,7 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
         'updated_at': DateTime.now().toIso8601String(),
         'reviewed_at': DateTime.now().toIso8601String(),
       };
-      
+
       if (reason != null) {
         updates['rejection_reason'] = reason;
       }
@@ -86,7 +89,8 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
       messenger.showSnackBar(
         SnackBar(
           content: Text('Request $status'),
-          backgroundColor: status == 'approved' ? AppColors.success : AppColors.danger,
+          backgroundColor:
+              status == 'approved' ? AppColors.success : AppColors.danger,
         ),
       );
 
@@ -108,27 +112,32 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.glassSurfaceStrong,
-        title: const Text('Reject Request', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Reject Request', style: TextStyle(color: Colors.white)),
         content: TextField(
           controller: reasonController,
           decoration: const InputDecoration(
             labelText: 'Reason for rejection',
             labelStyle: TextStyle(color: AppColors.textSecondary),
-            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.glassBorder)),
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.glassBorder)),
           ),
           style: const TextStyle(color: Colors.white),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+            child: const Text('Cancel',
+                style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              _updateStatus(requestId, 'rejected', reason: reasonController.text);
+              _updateStatus(requestId, 'rejected',
+                  reason: reasonController.text);
             },
-            child: const Text('Reject', style: TextStyle(color: AppColors.danger)),
+            child:
+                const Text('Reject', style: TextStyle(color: AppColors.danger)),
           ),
         ],
       ),
@@ -166,7 +175,9 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
           if (_isLoading)
             const Center(child: CircularProgressIndicator())
           else if (_error != null)
-            Center(child: Text('Error: $_error', style: const TextStyle(color: AppColors.danger)))
+            Center(
+                child: Text('Error: $_error',
+                    style: const TextStyle(color: AppColors.danger)))
           else if (_pendingRequests.isEmpty)
             const Center(
               child: Text(
@@ -191,12 +202,14 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
                           children: [
                             GradientText(
                               request.roleType.toUpperCase(),
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const Spacer(),
                             Text(
                               _formatDate(request.createdAt),
-                              style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                              style: const TextStyle(
+                                  color: AppColors.textSecondary, fontSize: 12),
                             ),
                           ],
                         ),
@@ -207,20 +220,26 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
                         ),
                         Text(
                           'Doc: ${request.documentType} ${request.documentNumber ?? ""}',
-                          style: const TextStyle(color: AppColors.textSecondary),
+                          style:
+                              const TextStyle(color: AppColors.textSecondary),
                         ),
                         if (request.companyName != null)
-                          Text('Company: ${request.companyName}', style: const TextStyle(color: Colors.white)),
+                          Text('Company: ${request.companyName}',
+                              style: const TextStyle(color: Colors.white)),
                         if (request.vehicleNumber != null)
-                          Text('Vehicle: ${request.vehicleNumber}', style: const TextStyle(color: Colors.white)),
-                        
+                          Text('Vehicle: ${request.vehicleNumber}',
+                              style: const TextStyle(color: Colors.white)),
                         const SizedBox(height: AppDimensions.md),
                         Row(
                           children: [
                             if (request.documentFrontUrl != null)
-                              Expanded(child: _buildDocLink('Front', request.documentFrontUrl!)),
+                              Expanded(
+                                  child: _buildDocLink(
+                                      'Front', request.documentFrontUrl!)),
                             if (request.documentBackUrl != null)
-                              Expanded(child: _buildDocLink('Back', request.documentBackUrl!)),
+                              Expanded(
+                                  child: _buildDocLink(
+                                      'Back', request.documentBackUrl!)),
                           ],
                         ),
                         const SizedBox(height: AppDimensions.md),
@@ -228,19 +247,23 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
                           children: [
                             Expanded(
                               child: ElevatedButton.icon(
-                                onPressed: () => _updateStatus(request.id, 'approved'),
+                                onPressed: () =>
+                                    _updateStatus(request.id, 'approved'),
                                 icon: const Icon(Icons.check),
                                 label: const Text('Approve'),
-                                style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.success),
                               ),
                             ),
                             const SizedBox(width: AppDimensions.md),
                             Expanded(
                               child: OutlinedButton.icon(
-                                onPressed: () => _showRejectionDialog(request.id),
+                                onPressed: () =>
+                                    _showRejectionDialog(request.id),
                                 icon: const Icon(Icons.close),
                                 label: const Text('Reject'),
-                                style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger),
+                                style: OutlinedButton.styleFrom(
+                                    foregroundColor: AppColors.danger),
                               ),
                             ),
                           ],
@@ -265,7 +288,8 @@ class _AdminVerificationDashboardState extends ConsumerState<AdminVerificationDa
       onPressed: () {
         // TODO: Implement image viewer
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Image viewing not implemented in this version')),
+          const SnackBar(
+              content: Text('Image viewing not implemented in this version')),
         );
       },
       icon: const Icon(Icons.image, size: 16),

@@ -79,32 +79,31 @@ class _$ChatMessageModelCopyWithImpl<$Res, $Val extends ChatMessageModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            chatId: null == chatId
-                ? _value.chatId
-                : chatId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            senderId: null == senderId
-                ? _value.senderId
-                : senderId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            messageText: null == messageText
-                ? _value.messageText
-                : messageText // ignore: cast_nullable_to_non_nullable
-                      as String,
-            isRead: null == isRead
-                ? _value.isRead
-                : isRead // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        chatId: null == chatId
+            ? _value.chatId
+            : chatId // ignore: cast_nullable_to_non_nullable
+                as String,
+        senderId: null == senderId
+            ? _value.senderId
+            : senderId // ignore: cast_nullable_to_non_nullable
+                as String,
+        messageText: null == messageText
+            ? _value.messageText
+            : messageText // ignore: cast_nullable_to_non_nullable
+                as String,
+        isRead: null == isRead
+            ? _value.isRead
+            : isRead // ignore: cast_nullable_to_non_nullable
+                as bool,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+      ) as $Val,
     );
   }
 }
@@ -154,27 +153,27 @@ class __$$ChatMessageModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         chatId: null == chatId
             ? _value.chatId
             : chatId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         senderId: null == senderId
             ? _value.senderId
             : senderId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         messageText: null == messageText
             ? _value.messageText
             : messageText // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         isRead: null == isRead
             ? _value.isRead
             : isRead // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                as bool,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
       ),
     );
   }
@@ -233,14 +232,14 @@ class _$ChatMessageModelImpl implements _ChatMessageModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    chatId,
-    senderId,
-    messageText,
-    isRead,
-    createdAt,
-  );
+        runtimeType,
+        id,
+        chatId,
+        senderId,
+        messageText,
+        isRead,
+        createdAt,
+      );
 
   /// Create a copy of ChatMessageModel
   /// with the given fields replaced by the non-null parameter values.

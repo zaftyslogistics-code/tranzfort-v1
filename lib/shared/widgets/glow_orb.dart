@@ -41,37 +41,77 @@ class GlowOrb extends StatelessWidget {
 class GlowOrbPresets {
   static const Map<String, List<Map<String, dynamic>>> screenPresets = {
     'auth': [
-      {'size': 280.0, 'color': AppColors.cyanGlowStrong, 'alignment': Alignment.topRight},
-      {'size': 320.0, 'color': AppColors.primary, 'alignment': Alignment.bottomLeft},
+      {
+        'size': 280.0,
+        'color': AppColors.cyanGlowStrong,
+        'alignment': Alignment.topRight
+      },
+      {
+        'size': 320.0,
+        'color': AppColors.primary,
+        'alignment': Alignment.bottomLeft
+      },
     ],
     'load': [
-      {'size': 240.0, 'color': AppColors.cyanGlowStrong, 'alignment': Alignment.topRight},
-      {'size': 280.0, 'color': AppColors.primary, 'alignment': Alignment.bottomLeft},
+      {
+        'size': 240.0,
+        'color': AppColors.cyanGlowStrong,
+        'alignment': Alignment.topRight
+      },
+      {
+        'size': 280.0,
+        'color': AppColors.primary,
+        'alignment': Alignment.bottomLeft
+      },
     ],
     'chat': [
-      {'size': 200.0, 'color': AppColors.cyanGlowStrong, 'alignment': Alignment.topRight},
-      {'size': 240.0, 'color': AppColors.primary, 'alignment': Alignment.bottomLeft},
+      {
+        'size': 200.0,
+        'color': AppColors.cyanGlowStrong,
+        'alignment': Alignment.topRight
+      },
+      {
+        'size': 240.0,
+        'color': AppColors.primary,
+        'alignment': Alignment.bottomLeft
+      },
     ],
     'profile': [
-      {'size': 260.0, 'color': AppColors.cyanGlowStrong, 'alignment': Alignment.topRight},
-      {'size': 300.0, 'color': AppColors.primary, 'alignment': Alignment.bottomLeft},
+      {
+        'size': 260.0,
+        'color': AppColors.cyanGlowStrong,
+        'alignment': Alignment.topRight
+      },
+      {
+        'size': 300.0,
+        'color': AppColors.primary,
+        'alignment': Alignment.bottomLeft
+      },
     ],
     'verification': [
-      {'size': 220.0, 'color': AppColors.cyanGlowStrong, 'alignment': Alignment.topRight},
-      {'size': 260.0, 'color': AppColors.primary, 'alignment': Alignment.bottomLeft},
+      {
+        'size': 220.0,
+        'color': AppColors.cyanGlowStrong,
+        'alignment': Alignment.topRight
+      },
+      {
+        'size': 260.0,
+        'color': AppColors.primary,
+        'alignment': Alignment.bottomLeft
+      },
     ],
   };
 
   static List<Widget> getGlowOrbsForScreen(String screenType) {
     final presets = screenPresets[screenType] ?? screenPresets['auth']!;
-    
+
     return presets.map((preset) {
       final alignment = preset['alignment'] as Alignment;
       final top = alignment.y == -1.0 ? -140.0 : null;
       final bottom = alignment.y == 1.0 ? -160.0 : null;
       final right = alignment.x == 1.0 ? -120.0 : null;
       final left = alignment.x == -1.0 ? -140.0 : null;
-      
+
       return Positioned(
         top: top,
         bottom: bottom,

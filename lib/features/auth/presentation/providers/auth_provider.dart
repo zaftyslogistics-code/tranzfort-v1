@@ -151,7 +151,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
 
     final result = await getCurrentUserUseCase();
-    
+
     await result.fold(
       (failure) async {
         _cancelSessionTimer(); // No active session
@@ -274,15 +274,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<bool> updateUserProfile(Map<String, dynamic> updates) async {
     Logger.info('🔧 AUTH: Updating user profile with updates: $updates');
     Logger.info('🔧 AUTH: Current user state: ${state.user?.id ?? "null"}');
-    
+
     if (state.user == null) {
       Logger.error('❌ AUTH: Cannot update profile - user is null');
       return false;
     }
-    
+
     state = state.copyWith(isLoading: true, error: null);
-    Logger.info('🔧 AUTH: Calling updateProfileUseCase for user: ${state.user!.id}');
-    
+    Logger.info(
+        '🔧 AUTH: Calling updateProfileUseCase for user: ${state.user!.id}');
+
     final result = await updateProfileUseCase(state.user!.id, updates);
     return result.fold(
       (failure) {
@@ -291,7 +292,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return false;
       },
       (user) {
-        Logger.info('✅ AUTH: Profile updated successfully for user: ${user.id}');
+        Logger.info(
+            '✅ AUTH: Profile updated successfully for user: ${user.id}');
         state = state.copyWith(user: user, isLoading: false);
         return true;
       },
@@ -329,7 +331,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   bool get isBiometricEnabled => biometricService.isBiometricEnabled;
 }
 
-final authNotifierProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+final authNotifierProvider =
+    StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
     signUpWithEmailPasswordUseCase:
         ref.read(signUpWithEmailPasswordUseCaseProvider),

@@ -24,7 +24,7 @@ class PerformanceMonitor {
 
     _isInitialized = true;
     _startMemoryMonitoring();
-    
+
     Logger.info('📈 Performance monitoring initialized');
   }
 
@@ -34,18 +34,20 @@ class PerformanceMonitor {
   }
 
   /// End timing an operation and track the duration
-  Future<void> endOperation(String operationName, {Map<String, dynamic>? metadata}) async {
+  Future<void> endOperation(String operationName,
+      {Map<String, dynamic>? metadata}) async {
     final startTime = _operationStartTimes.remove(operationName);
     if (startTime == null) {
       Logger.warning('No start time found for operation: $operationName');
       return;
     }
 
-    final duration = DateTime.now().difference(startTime).inMilliseconds.toDouble();
-    
+    final duration =
+        DateTime.now().difference(startTime).inMilliseconds.toDouble();
+
     // Store metric for analysis
     _performanceMetrics.putIfAbsent(operationName, () => []).add(duration);
-    
+
     // Track in analytics
     await _analytics.trackPerformance(operationName, duration, properties: {
       'operation_type': 'duration_ms',
@@ -56,8 +58,10 @@ class PerformanceMonitor {
   }
 
   /// Track API call performance
-  Future<void> trackApiCall(String endpoint, int statusCode, double durationMs, {Map<String, dynamic>? metadata}) async {
-    await _analytics.trackPerformance('api_call_duration', durationMs, properties: {
+  Future<void> trackApiCall(String endpoint, int statusCode, double durationMs,
+      {Map<String, dynamic>? metadata}) async {
+    await _analytics
+        .trackPerformance('api_call_duration', durationMs, properties: {
       'endpoint': endpoint,
       'status_code': statusCode,
       'operation_type': 'api_call',
@@ -74,8 +78,10 @@ class PerformanceMonitor {
   }
 
   /// Track screen load performance
-  Future<void> trackScreenLoad(String screenName, double loadTimeMs, {Map<String, dynamic>? metadata}) async {
-    await _analytics.trackPerformance('screen_load_time', loadTimeMs, properties: {
+  Future<void> trackScreenLoad(String screenName, double loadTimeMs,
+      {Map<String, dynamic>? metadata}) async {
+    await _analytics
+        .trackPerformance('screen_load_time', loadTimeMs, properties: {
       'screen_name': screenName,
       'operation_type': 'screen_load',
       'metadata': metadata ?? {},
@@ -85,8 +91,11 @@ class PerformanceMonitor {
   }
 
   /// Track image processing performance
-  Future<void> trackImageProcessing(String operation, double durationMs, int fileSizeBytes, {Map<String, dynamic>? metadata}) async {
-    await _analytics.trackPerformance('image_processing_time', durationMs, properties: {
+  Future<void> trackImageProcessing(
+      String operation, double durationMs, int fileSizeBytes,
+      {Map<String, dynamic>? metadata}) async {
+    await _analytics
+        .trackPerformance('image_processing_time', durationMs, properties: {
       'operation': operation,
       'file_size_bytes': fileSizeBytes,
       'operation_type': 'image_processing',
@@ -95,8 +104,10 @@ class PerformanceMonitor {
   }
 
   /// Track database query performance
-  Future<void> trackDatabaseQuery(String queryType, double durationMs, {int? recordCount, Map<String, dynamic>? metadata}) async {
-    await _analytics.trackPerformance('database_query_time', durationMs, properties: {
+  Future<void> trackDatabaseQuery(String queryType, double durationMs,
+      {int? recordCount, Map<String, dynamic>? metadata}) async {
+    await _analytics
+        .trackPerformance('database_query_time', durationMs, properties: {
       'query_type': queryType,
       'record_count': recordCount,
       'operation_type': 'database_query',
@@ -105,7 +116,9 @@ class PerformanceMonitor {
   }
 
   /// Track cache hit/miss performance
-  Future<void> trackCacheOperation(String operation, bool hit, double durationMs, {Map<String, dynamic>? metadata}) async {
+  Future<void> trackCacheOperation(
+      String operation, bool hit, double durationMs,
+      {Map<String, dynamic>? metadata}) async {
     await _analytics.trackEvent('cache_operation', {
       'operation': operation,
       'cache_hit': hit,
@@ -121,11 +134,13 @@ class PerformanceMonitor {
         // On mobile platforms, we can track basic memory info
         final memoryInfo = await _getMemoryInfo();
         if (memoryInfo != null) {
-          await _analytics.trackPerformance('memory_usage_mb', memoryInfo['used_mb']!, properties: {
-            'total_mb': memoryInfo['total_mb'],
-            'available_mb': memoryInfo['available_mb'],
-            'operation_type': 'memory_monitoring',
-          });
+          await _analytics.trackPerformance(
+              'memory_usage_mb', memoryInfo['used_mb']!,
+              properties: {
+                'total_mb': memoryInfo['total_mb'],
+                'available_mb': memoryInfo['available_mb'],
+                'operation_type': 'memory_monitoring',
+              });
         }
       }
     } catch (e) {
@@ -159,7 +174,7 @@ class PerformanceMonitor {
   /// Get performance summary for debugging
   Map<String, dynamic> getPerformanceSummary() {
     final summary = <String, dynamic>{};
-    
+
     for (final entry in _performanceMetrics.entries) {
       final metrics = entry.value;
       if (metrics.isNotEmpty) {
@@ -171,7 +186,7 @@ class PerformanceMonitor {
         };
       }
     }
-    
+
     return summary;
   }
 
@@ -202,7 +217,8 @@ class PerformanceTracker {
   }
 
   /// Create a new performance tracker
-  factory PerformanceTracker.start(String operationName, {Map<String, dynamic>? metadata}) {
+  factory PerformanceTracker.start(String operationName,
+      {Map<String, dynamic>? metadata}) {
     return PerformanceTracker._(operationName, PerformanceMonitor(), metadata);
   }
 
@@ -215,7 +231,8 @@ class PerformanceTracker {
 /// Extension for easy performance tracking on Future operations
 extension PerformanceTrackingFuture<T> on Future<T> {
   /// Track the performance of this Future operation
-  Future<T> trackPerformance(String operationName, {Map<String, dynamic>? metadata}) async {
+  Future<T> trackPerformance(String operationName,
+      {Map<String, dynamic>? metadata}) async {
     final tracker = PerformanceTracker.start(operationName, metadata: metadata);
     try {
       final result = await this;

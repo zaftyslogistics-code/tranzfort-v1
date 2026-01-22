@@ -36,7 +36,8 @@ class AdminUsersNotifier extends StateNotifier<AdminUsersState> {
   AdminUsersNotifier(this._client) : super(AdminUsersState());
 
   Future<void> fetchUsers({String? query}) async {
-    state = state.copyWith(isLoading: true, error: null, searchQuery: query ?? state.searchQuery);
+    state = state.copyWith(
+        isLoading: true, error: null, searchQuery: query ?? state.searchQuery);
 
     try {
       var q = _client.from('users').select('*');
@@ -44,8 +45,7 @@ class AdminUsersNotifier extends StateNotifier<AdminUsersState> {
       final effectiveQuery = (query ?? state.searchQuery).trim();
       if (effectiveQuery.isNotEmpty) {
         q = q.or(
-          'mobile_number.ilike.%$effectiveQuery%,name.ilike.%$effectiveQuery%'
-        );
+            'mobile_number.ilike.%$effectiveQuery%,name.ilike.%$effectiveQuery%');
       }
 
       final data = await q.order('created_at', ascending: false) as List;
@@ -72,7 +72,9 @@ class AdminUsersNotifier extends StateNotifier<AdminUsersState> {
           .single();
 
       final updatedUser = UserModel.fromJson(updated);
-      final next = state.users.map((u) => u.id == userId ? updatedUser : u).toList(growable: false);
+      final next = state.users
+          .map((u) => u.id == userId ? updatedUser : u)
+          .toList(growable: false);
       state = state.copyWith(isLoading: false, users: next);
       return true;
     } catch (e) {

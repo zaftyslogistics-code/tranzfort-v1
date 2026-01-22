@@ -25,9 +25,13 @@ class RatingsScreen extends ConsumerWidget {
               value: selectedReason,
               decoration: const InputDecoration(labelText: 'Reason'),
               items: const [
-                DropdownMenuItem(value: 'Inaccurate Rating', child: Text('Inaccurate Rating')),
-                DropdownMenuItem(value: 'Fake Review', child: Text('Fake Review')),
-                DropdownMenuItem(value: 'Harassment', child: Text('Harassment')),
+                DropdownMenuItem(
+                    value: 'Inaccurate Rating',
+                    child: Text('Inaccurate Rating')),
+                DropdownMenuItem(
+                    value: 'Fake Review', child: Text('Fake Review')),
+                DropdownMenuItem(
+                    value: 'Harassment', child: Text('Harassment')),
                 DropdownMenuItem(value: 'Spam', child: Text('Spam')),
                 DropdownMenuItem(value: 'Other', child: Text('Other')),
               ],
@@ -127,12 +131,16 @@ class RatingsScreen extends ConsumerWidget {
                           Icon(
                             Icons.star_border,
                             size: 64,
-                            color: AppColors.textSecondary.withValues(alpha: 0.5),
+                            color:
+                                AppColors.textSecondary.withValues(alpha: 0.5),
                           ),
                           const SizedBox(height: AppDimensions.md),
                           Text(
                             'No ratings yet',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
                                   color: AppColors.textSecondary,
                                 ),
                           ),
@@ -145,16 +153,21 @@ class RatingsScreen extends ConsumerWidget {
                     children: items
                         .map(
                           (r) => Padding(
-                            padding: const EdgeInsets.only(bottom: AppDimensions.md),
+                            padding:
+                                const EdgeInsets.only(bottom: AppDimensions.md),
                             child: GlassmorphicCard(
                               padding: const EdgeInsets.all(AppDimensions.md),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.star, color: AppColors.accent),
+                                  const Icon(Icons.star,
+                                      color: AppColors.accent),
                                   const SizedBox(width: AppDimensions.sm),
                                   Text(
                                     '${r.ratingValue}/5',
-                                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                         ),
                                   ),
@@ -165,12 +178,16 @@ class RatingsScreen extends ConsumerWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(color: AppColors.textSecondary),
+                                          ?.copyWith(
+                                              color: AppColors.textSecondary),
                                     ),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.report_problem_outlined, color: AppColors.warning),
-                                    onPressed: () => _showDisputeDialog(context, r.id),
+                                    icon: const Icon(
+                                        Icons.report_problem_outlined,
+                                        color: AppColors.warning),
+                                    onPressed: () =>
+                                        _showDisputeDialog(context, r.id),
                                     tooltip: 'Report Issue',
                                   ),
                                 ],

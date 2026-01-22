@@ -22,7 +22,8 @@ class _BookmarkButtonState extends State<BookmarkButton> {
       onPressed: widget.onToggle,
       icon: Icon(
         widget.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-        color: widget.isBookmarked ? AppColors.primary : AppColors.textSecondary,
+        color:
+            widget.isBookmarked ? AppColors.primary : AppColors.textSecondary,
       ),
       tooltip: widget.isBookmarked ? 'Remove bookmark' : 'Bookmark this load',
     );

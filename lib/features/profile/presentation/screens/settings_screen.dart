@@ -80,7 +80,9 @@ class SettingsScreen extends ConsumerWidget {
                       subtitle: 'Manage notification preferences',
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Notification settings coming soon')),
+                          const SnackBar(
+                              content:
+                                  Text('Notification settings coming soon')),
                         );
                       },
                     ),
@@ -91,7 +93,8 @@ class SettingsScreen extends ConsumerWidget {
                       subtitle: 'Privacy and security settings',
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Privacy settings coming soon')),
+                          const SnackBar(
+                              content: Text('Privacy settings coming soon')),
                         );
                       },
                     ),
@@ -102,7 +105,8 @@ class SettingsScreen extends ConsumerWidget {
                       subtitle: 'Get help and contact support',
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Help & support coming soon')),
+                          const SnackBar(
+                              content: Text('Help & support coming soon')),
                         );
                       },
                     ),

@@ -45,17 +45,19 @@ class TruckCard extends StatelessWidget {
                       children: [
                         Text(
                           truck.truckNumber,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         const SizedBox(height: AppDimensions.xs),
                         Text(
                           truck.truckType,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
                         ),
                       ],
                     ),
@@ -80,10 +82,11 @@ class TruckCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           truck.statusText,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: statusColor,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: statusColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                       ],
                     ),
@@ -91,24 +94,26 @@ class TruckCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppDimensions.md),
-              
+
               // Truck specifications
               Row(
                 children: [
-                  _buildSpecItem('Capacity', '${truck.capacity} tons', Icons.local_shipping),
+                  _buildSpecItem('Capacity', '${truck.capacity} tons',
+                      Icons.local_shipping),
                   const SizedBox(width: AppDimensions.lg),
-                  _buildSpecItem('RC', truck.rcExpiryDate != null 
-                      ? 'Valid' 
-                      : 'Not Uploaded', Icons.description),
+                  _buildSpecItem(
+                      'RC',
+                      truck.rcExpiryDate != null ? 'Valid' : 'Not Uploaded',
+                      Icons.description),
                 ],
               ),
               const SizedBox(height: AppDimensions.md),
-              
+
               // Document Status
               _buildDocumentStatus(context),
-              
+
               const SizedBox(height: AppDimensions.md),
-              
+
               // Action Buttons
               Row(
                 children: [
@@ -207,7 +212,9 @@ class TruckCard extends StatelessWidget {
             Icon(
               Icons.description,
               size: 16,
-              color: truck.rcExpiryDate != null ? AppColors.success : AppColors.textSecondary,
+              color: truck.rcExpiryDate != null
+                  ? AppColors.success
+                  : AppColors.textSecondary,
             ),
             const SizedBox(width: 4),
             Text(
@@ -221,7 +228,9 @@ class TruckCard extends StatelessWidget {
             Icon(
               Icons.description,
               size: 16,
-              color: truck.insuranceExpiryDate != null ? AppColors.success : AppColors.textSecondary,
+              color: truck.insuranceExpiryDate != null
+                  ? AppColors.success
+                  : AppColors.textSecondary,
             ),
             const SizedBox(width: 4),
             Text(

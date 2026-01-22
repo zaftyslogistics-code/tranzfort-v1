@@ -37,12 +37,15 @@ class AdminVerificationNotifier extends StateNotifier<AdminVerificationState> {
     final result = await useCase();
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
-      (requests) => state = state.copyWith(isLoading: false, pendingRequests: requests),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
+      (requests) =>
+          state = state.copyWith(isLoading: false, pendingRequests: requests),
     );
   }
 
-  Future<bool> updateStatus(String requestId, String status, {String? reason}) async {
+  Future<bool> updateStatus(String requestId, String status,
+      {String? reason}) async {
     state = state.copyWith(isLoading: true, error: null);
     final useCase = _ref.read(updateVerificationStatusUseCaseProvider);
     final result = await useCase(
@@ -57,9 +60,8 @@ class AdminVerificationNotifier extends StateNotifier<AdminVerificationState> {
         return false;
       },
       (updatedRequest) {
-        final updatedList = state.pendingRequests
-            .where((req) => req.id != requestId)
-            .toList();
+        final updatedList =
+            state.pendingRequests.where((req) => req.id != requestId).toList();
         state = state.copyWith(isLoading: false, pendingRequests: updatedList);
         return true;
       },
@@ -68,6 +70,7 @@ class AdminVerificationNotifier extends StateNotifier<AdminVerificationState> {
 }
 
 final adminVerificationNotifierProvider =
-    StateNotifierProvider<AdminVerificationNotifier, AdminVerificationState>((ref) {
+    StateNotifierProvider<AdminVerificationNotifier, AdminVerificationState>(
+        (ref) {
   return AdminVerificationNotifier(ref);
 });

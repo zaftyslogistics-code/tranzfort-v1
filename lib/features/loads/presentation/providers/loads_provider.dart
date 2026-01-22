@@ -111,7 +111,8 @@ class LoadsNotifier extends StateNotifier<LoadsState> {
     required this.deleteLoadUseCase,
   }) : super(LoadsState());
 
-  Future<void> fetchLoads({String? status, String? supplierId, String? searchQuery}) async {
+  Future<void> fetchLoads(
+      {String? status, String? supplierId, String? searchQuery}) async {
     state = state.copyWith(isLoading: true, error: null);
     final result = await getLoadsUseCase(
       status: status,
@@ -192,7 +193,8 @@ class LoadsNotifier extends StateNotifier<LoadsState> {
         return false;
       },
       (_) {
-        final updatedLoads = state.loads.where((load) => load.id != id).toList();
+        final updatedLoads =
+            state.loads.where((load) => load.id != id).toList();
         state = state.copyWith(loads: updatedLoads, isLoading: false);
         return true;
       },

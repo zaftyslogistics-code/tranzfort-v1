@@ -146,100 +146,99 @@ class _$LoadModelCopyWithImpl<$Res, $Val extends LoadModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            supplierId: null == supplierId
-                ? _value.supplierId
-                : supplierId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            fromLocation: null == fromLocation
-                ? _value.fromLocation
-                : fromLocation // ignore: cast_nullable_to_non_nullable
-                      as String,
-            fromCity: null == fromCity
-                ? _value.fromCity
-                : fromCity // ignore: cast_nullable_to_non_nullable
-                      as String,
-            fromState: freezed == fromState
-                ? _value.fromState
-                : fromState // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            toLocation: null == toLocation
-                ? _value.toLocation
-                : toLocation // ignore: cast_nullable_to_non_nullable
-                      as String,
-            toCity: null == toCity
-                ? _value.toCity
-                : toCity // ignore: cast_nullable_to_non_nullable
-                      as String,
-            toState: freezed == toState
-                ? _value.toState
-                : toState // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            loadType: null == loadType
-                ? _value.loadType
-                : loadType // ignore: cast_nullable_to_non_nullable
-                      as String,
-            truckTypeRequired: null == truckTypeRequired
-                ? _value.truckTypeRequired
-                : truckTypeRequired // ignore: cast_nullable_to_non_nullable
-                      as String,
-            weight: freezed == weight
-                ? _value.weight
-                : weight // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            price: freezed == price
-                ? _value.price
-                : price // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            priceType: null == priceType
-                ? _value.priceType
-                : priceType // ignore: cast_nullable_to_non_nullable
-                      as String,
-            paymentTerms: freezed == paymentTerms
-                ? _value.paymentTerms
-                : paymentTerms // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            loadingDate: freezed == loadingDate
-                ? _value.loadingDate
-                : loadingDate // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            notes: freezed == notes
-                ? _value.notes
-                : notes // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            contactPreferencesCall: null == contactPreferencesCall
-                ? _value.contactPreferencesCall
-                : contactPreferencesCall // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            contactPreferencesChat: null == contactPreferencesChat
-                ? _value.contactPreferencesChat
-                : contactPreferencesChat // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
-            expiresAt: null == expiresAt
-                ? _value.expiresAt
-                : expiresAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            viewCount: null == viewCount
-                ? _value.viewCount
-                : viewCount // ignore: cast_nullable_to_non_nullable
-                      as int,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            updatedAt: null == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        supplierId: null == supplierId
+            ? _value.supplierId
+            : supplierId // ignore: cast_nullable_to_non_nullable
+                as String,
+        fromLocation: null == fromLocation
+            ? _value.fromLocation
+            : fromLocation // ignore: cast_nullable_to_non_nullable
+                as String,
+        fromCity: null == fromCity
+            ? _value.fromCity
+            : fromCity // ignore: cast_nullable_to_non_nullable
+                as String,
+        fromState: freezed == fromState
+            ? _value.fromState
+            : fromState // ignore: cast_nullable_to_non_nullable
+                as String?,
+        toLocation: null == toLocation
+            ? _value.toLocation
+            : toLocation // ignore: cast_nullable_to_non_nullable
+                as String,
+        toCity: null == toCity
+            ? _value.toCity
+            : toCity // ignore: cast_nullable_to_non_nullable
+                as String,
+        toState: freezed == toState
+            ? _value.toState
+            : toState // ignore: cast_nullable_to_non_nullable
+                as String?,
+        loadType: null == loadType
+            ? _value.loadType
+            : loadType // ignore: cast_nullable_to_non_nullable
+                as String,
+        truckTypeRequired: null == truckTypeRequired
+            ? _value.truckTypeRequired
+            : truckTypeRequired // ignore: cast_nullable_to_non_nullable
+                as String,
+        weight: freezed == weight
+            ? _value.weight
+            : weight // ignore: cast_nullable_to_non_nullable
+                as double?,
+        price: freezed == price
+            ? _value.price
+            : price // ignore: cast_nullable_to_non_nullable
+                as double?,
+        priceType: null == priceType
+            ? _value.priceType
+            : priceType // ignore: cast_nullable_to_non_nullable
+                as String,
+        paymentTerms: freezed == paymentTerms
+            ? _value.paymentTerms
+            : paymentTerms // ignore: cast_nullable_to_non_nullable
+                as String?,
+        loadingDate: freezed == loadingDate
+            ? _value.loadingDate
+            : loadingDate // ignore: cast_nullable_to_non_nullable
+                as DateTime?,
+        notes: freezed == notes
+            ? _value.notes
+            : notes // ignore: cast_nullable_to_non_nullable
+                as String?,
+        contactPreferencesCall: null == contactPreferencesCall
+            ? _value.contactPreferencesCall
+            : contactPreferencesCall // ignore: cast_nullable_to_non_nullable
+                as bool,
+        contactPreferencesChat: null == contactPreferencesChat
+            ? _value.contactPreferencesChat
+            : contactPreferencesChat // ignore: cast_nullable_to_non_nullable
+                as bool,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                as String,
+        expiresAt: null == expiresAt
+            ? _value.expiresAt
+            : expiresAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        viewCount: null == viewCount
+            ? _value.viewCount
+            : viewCount // ignore: cast_nullable_to_non_nullable
+                as int,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+      ) as $Val,
     );
   }
 }
@@ -323,95 +322,95 @@ class __$$LoadModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         supplierId: null == supplierId
             ? _value.supplierId
             : supplierId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         fromLocation: null == fromLocation
             ? _value.fromLocation
             : fromLocation // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         fromCity: null == fromCity
             ? _value.fromCity
             : fromCity // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         fromState: freezed == fromState
             ? _value.fromState
             : fromState // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         toLocation: null == toLocation
             ? _value.toLocation
             : toLocation // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         toCity: null == toCity
             ? _value.toCity
             : toCity // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         toState: freezed == toState
             ? _value.toState
             : toState // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         loadType: null == loadType
             ? _value.loadType
             : loadType // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         truckTypeRequired: null == truckTypeRequired
             ? _value.truckTypeRequired
             : truckTypeRequired // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         weight: freezed == weight
             ? _value.weight
             : weight // ignore: cast_nullable_to_non_nullable
-                  as double?,
+                as double?,
         price: freezed == price
             ? _value.price
             : price // ignore: cast_nullable_to_non_nullable
-                  as double?,
+                as double?,
         priceType: null == priceType
             ? _value.priceType
             : priceType // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         paymentTerms: freezed == paymentTerms
             ? _value.paymentTerms
             : paymentTerms // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         loadingDate: freezed == loadingDate
             ? _value.loadingDate
             : loadingDate // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
+                as DateTime?,
         notes: freezed == notes
             ? _value.notes
             : notes // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         contactPreferencesCall: null == contactPreferencesCall
             ? _value.contactPreferencesCall
             : contactPreferencesCall // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                as bool,
         contactPreferencesChat: null == contactPreferencesChat
             ? _value.contactPreferencesChat
             : contactPreferencesChat // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                as bool,
         status: null == status
             ? _value.status
             : status // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         expiresAt: null == expiresAt
             ? _value.expiresAt
             : expiresAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         viewCount: null == viewCount
             ? _value.viewCount
             : viewCount // ignore: cast_nullable_to_non_nullable
-                  as int,
+                as int,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         updatedAt: null == updatedAt
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
       ),
     );
   }
@@ -571,31 +570,31 @@ class _$LoadModelImpl implements _LoadModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
-    runtimeType,
-    id,
-    supplierId,
-    fromLocation,
-    fromCity,
-    fromState,
-    toLocation,
-    toCity,
-    toState,
-    loadType,
-    truckTypeRequired,
-    weight,
-    price,
-    priceType,
-    paymentTerms,
-    loadingDate,
-    notes,
-    contactPreferencesCall,
-    contactPreferencesChat,
-    status,
-    expiresAt,
-    viewCount,
-    createdAt,
-    updatedAt,
-  ]);
+        runtimeType,
+        id,
+        supplierId,
+        fromLocation,
+        fromCity,
+        fromState,
+        toLocation,
+        toCity,
+        toState,
+        loadType,
+        truckTypeRequired,
+        weight,
+        price,
+        priceType,
+        paymentTerms,
+        loadingDate,
+        notes,
+        contactPreferencesCall,
+        contactPreferencesChat,
+        status,
+        expiresAt,
+        viewCount,
+        createdAt,
+        updatedAt,
+      ]);
 
   /// Create a copy of LoadModel
   /// with the given fields replaced by the non-null parameter values.

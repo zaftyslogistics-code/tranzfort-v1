@@ -105,56 +105,55 @@ class _$UserReportModelCopyWithImpl<$Res, $Val extends UserReportModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            reporterId: null == reporterId
-                ? _value.reporterId
-                : reporterId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            reportedEntityType: null == reportedEntityType
-                ? _value.reportedEntityType
-                : reportedEntityType // ignore: cast_nullable_to_non_nullable
-                      as String,
-            reportedEntityId: null == reportedEntityId
-                ? _value.reportedEntityId
-                : reportedEntityId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            reason: null == reason
-                ? _value.reason
-                : reason // ignore: cast_nullable_to_non_nullable
-                      as String,
-            description: freezed == description
-                ? _value.description
-                : description // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
-            adminNotes: freezed == adminNotes
-                ? _value.adminNotes
-                : adminNotes // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            resolvedBy: freezed == resolvedBy
-                ? _value.resolvedBy
-                : resolvedBy // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            resolvedAt: freezed == resolvedAt
-                ? _value.resolvedAt
-                : resolvedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            updatedAt: null == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        reporterId: null == reporterId
+            ? _value.reporterId
+            : reporterId // ignore: cast_nullable_to_non_nullable
+                as String,
+        reportedEntityType: null == reportedEntityType
+            ? _value.reportedEntityType
+            : reportedEntityType // ignore: cast_nullable_to_non_nullable
+                as String,
+        reportedEntityId: null == reportedEntityId
+            ? _value.reportedEntityId
+            : reportedEntityId // ignore: cast_nullable_to_non_nullable
+                as String,
+        reason: null == reason
+            ? _value.reason
+            : reason // ignore: cast_nullable_to_non_nullable
+                as String,
+        description: freezed == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                as String?,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                as String,
+        adminNotes: freezed == adminNotes
+            ? _value.adminNotes
+            : adminNotes // ignore: cast_nullable_to_non_nullable
+                as String?,
+        resolvedBy: freezed == resolvedBy
+            ? _value.resolvedBy
+            : resolvedBy // ignore: cast_nullable_to_non_nullable
+                as String?,
+        resolvedAt: freezed == resolvedAt
+            ? _value.resolvedAt
+            : resolvedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime?,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+      ) as $Val,
     );
   }
 }
@@ -216,51 +215,51 @@ class __$$UserReportModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         reporterId: null == reporterId
             ? _value.reporterId
             : reporterId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         reportedEntityType: null == reportedEntityType
             ? _value.reportedEntityType
             : reportedEntityType // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         reportedEntityId: null == reportedEntityId
             ? _value.reportedEntityId
             : reportedEntityId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         reason: null == reason
             ? _value.reason
             : reason // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         description: freezed == description
             ? _value.description
             : description // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         status: null == status
             ? _value.status
             : status // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         adminNotes: freezed == adminNotes
             ? _value.adminNotes
             : adminNotes // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         resolvedBy: freezed == resolvedBy
             ? _value.resolvedBy
             : resolvedBy // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         resolvedAt: freezed == resolvedAt
             ? _value.resolvedAt
             : resolvedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
+                as DateTime?,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         updatedAt: null == updatedAt
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
       ),
     );
   }
@@ -357,20 +356,20 @@ class _$UserReportModelImpl implements _UserReportModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    reporterId,
-    reportedEntityType,
-    reportedEntityId,
-    reason,
-    description,
-    status,
-    adminNotes,
-    resolvedBy,
-    resolvedAt,
-    createdAt,
-    updatedAt,
-  );
+        runtimeType,
+        id,
+        reporterId,
+        reportedEntityType,
+        reportedEntityId,
+        reason,
+        description,
+        status,
+        adminNotes,
+        resolvedBy,
+        resolvedAt,
+        createdAt,
+        updatedAt,
+      );
 
   /// Create a copy of UserReportModel
   /// with the given fields replaced by the non-null parameter values.

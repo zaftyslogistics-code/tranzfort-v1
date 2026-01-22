@@ -14,6 +14,8 @@ class FeedTabScreen extends ConsumerWidget {
 
     final isSupplier = user?.isSupplierEnabled ?? false;
 
-    return isSupplier ? const SupplierDashboardScreen() : const TruckerFeedScreen();
+    return isSupplier
+        ? const SupplierDashboardScreen()
+        : const TruckerFeedScreen();
   }
 }

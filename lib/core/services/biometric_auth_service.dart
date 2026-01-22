@@ -6,7 +6,8 @@ import '../utils/logger.dart';
 /// Biometric authentication service
 /// Provides fingerprint and face recognition authentication
 class BiometricAuthService {
-  static final BiometricAuthService _instance = BiometricAuthService._internal();
+  static final BiometricAuthService _instance =
+      BiometricAuthService._internal();
   factory BiometricAuthService() => _instance;
   BiometricAuthService._internal();
 

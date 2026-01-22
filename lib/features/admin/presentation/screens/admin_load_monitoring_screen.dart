@@ -9,10 +9,12 @@ class AdminLoadMonitoringScreen extends ConsumerStatefulWidget {
   const AdminLoadMonitoringScreen({super.key});
 
   @override
-  ConsumerState<AdminLoadMonitoringScreen> createState() => _AdminLoadMonitoringScreenState();
+  ConsumerState<AdminLoadMonitoringScreen> createState() =>
+      _AdminLoadMonitoringScreenState();
 }
 
-class _AdminLoadMonitoringScreenState extends ConsumerState<AdminLoadMonitoringScreen> {
+class _AdminLoadMonitoringScreenState
+    extends ConsumerState<AdminLoadMonitoringScreen> {
   @override
   void initState() {
     super.initState();
@@ -56,7 +58,8 @@ class _AdminLoadMonitoringScreenState extends ConsumerState<AdminLoadMonitoringS
           scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(
             child: DataTable(
-              headingRowColor: MaterialStateProperty.all(AppColors.secondaryBackground),
+              headingRowColor:
+                  MaterialStateProperty.all(AppColors.secondaryBackground),
               columns: const [
                 DataColumn(label: Text('ID')),
                 DataColumn(label: Text('From')),
@@ -133,7 +136,8 @@ class _AdminLoadMonitoringScreenState extends ConsumerState<AdminLoadMonitoringS
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Load?'),
-        content: const Text('This action will permanently remove the load from the marketplace.'),
+        content: const Text(
+            'This action will permanently remove the load from the marketplace.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -142,7 +146,9 @@ class _AdminLoadMonitoringScreenState extends ConsumerState<AdminLoadMonitoringS
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ref.read(adminMonitoringNotifierProvider.notifier).deleteLoad(loadId);
+              ref
+                  .read(adminMonitoringNotifierProvider.notifier)
+                  .deleteLoad(loadId);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('Delete'),
@@ -184,7 +190,8 @@ class _StatusBadge extends StatelessWidget {
       ),
       child: Text(
         status.toUpperCase(),
-        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
+        style:
+            TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
       ),
     );
   }

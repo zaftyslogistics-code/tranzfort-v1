@@ -17,10 +17,10 @@ class EnvConfig {
 
     return raw;
   }
+
   static String get supabaseAnonKey => dotenv.env['SUPABASE_ANON_KEY'] ?? '';
   static String get environment => dotenv.env['ENVIRONMENT'] ?? 'local';
-  static int get apiTimeout =>
-      int.parse(dotenv.env['API_TIMEOUT'] ?? '30000');
+  static int get apiTimeout => int.parse(dotenv.env['API_TIMEOUT'] ?? '30000');
   static bool get enableAds => dotenv.env['ENABLE_ADS'] == 'true';
   static bool get enableAnalytics => dotenv.env['ENABLE_ANALYTICS'] == 'true';
 

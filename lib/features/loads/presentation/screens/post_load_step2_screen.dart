@@ -23,7 +23,8 @@ class PostLoadStep2Screen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<PostLoadStep2Screen> createState() => _PostLoadStep2ScreenState();
+  ConsumerState<PostLoadStep2Screen> createState() =>
+      _PostLoadStep2ScreenState();
 }
 
 class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
@@ -99,7 +100,9 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_isEdit ? 'Load updated successfully' : 'Load posted successfully'),
+          content: Text(_isEdit
+              ? 'Load updated successfully'
+              : 'Load posted successfully'),
         ),
       );
       context.go('/supplier-dashboard');
@@ -172,10 +175,11 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
                         const SizedBox(height: AppDimensions.lg),
                         Text(
                           'Pricing & Preferences',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textPrimary,
+                                  ),
                         ),
                         const SizedBox(height: AppDimensions.lg),
                         LoadFormField(
@@ -214,20 +218,23 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
                         const SizedBox(height: AppDimensions.xl),
                         Text(
                           'Contact Preferences',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textPrimary,
+                                  ),
                         ),
                         const SizedBox(height: AppDimensions.sm),
                         SwitchListTile(
                           value: _allowCall,
-                          onChanged: (value) => setState(() => _allowCall = value),
+                          onChanged: (value) =>
+                              setState(() => _allowCall = value),
                           title: const Text('Allow Calls'),
                         ),
                         SwitchListTile(
                           value: _allowChat,
-                          onChanged: (value) => setState(() => _allowChat = value),
+                          onChanged: (value) =>
+                              setState(() => _allowChat = value),
                           title: const Text('Allow Chat'),
                         ),
                         const SizedBox(height: AppDimensions.xl),
@@ -237,7 +244,8 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
                               ? const SizedBox(
                                   height: 20,
                                   width: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 )
                               : Text(_isEdit ? 'Update Load' : 'Post Load'),
                         ),

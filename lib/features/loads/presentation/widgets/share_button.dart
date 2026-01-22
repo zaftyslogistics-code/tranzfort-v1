@@ -17,10 +17,11 @@ class ShareButton extends StatelessWidget {
   });
 
   void _shareLoad(BuildContext context) {
-    final shareText = 'Check out this load: $fromCity to $toCity ($truckType)\nLoad ID: $loadId';
-    
+    final shareText =
+        'Check out this load: $fromCity to $toCity ($truckType)\nLoad ID: $loadId';
+
     Clipboard.setData(ClipboardData(text: shareText));
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Load details copied to clipboard'),

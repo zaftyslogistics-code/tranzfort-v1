@@ -28,11 +28,12 @@ class OfflineService {
   /// Cache user's loads for offline access
   Future<void> cacheMyLoads(List<Map<String, dynamic>> loads) async {
     if (_prefs == null) return;
-    
+
     try {
       await _prefs!.setString(_cacheKeyMyLoads, jsonEncode(loads));
-      await _prefs!.setString('${_cacheKeyMyLoads}_$_cacheTimestamp', DateTime.now().toIso8601String());
-      
+      await _prefs!.setString('${_cacheKeyMyLoads}_$_cacheTimestamp',
+          DateTime.now().toIso8601String());
+
       if (kDebugMode) {
         print('[OFFLINE] Cached ${loads.length} loads');
       }
@@ -46,16 +47,17 @@ class OfflineService {
   /// Get cached loads
   Future<List<Map<String, dynamic>>?> getCachedLoads() async {
     if (_prefs == null) return null;
-    
+
     try {
       final cached = _prefs!.getString(_cacheKeyMyLoads);
       if (cached == null) return null;
-      
-      final timestamp = _prefs!.getString('${_cacheKeyMyLoads}_$_cacheTimestamp');
+
+      final timestamp =
+          _prefs!.getString('${_cacheKeyMyLoads}_$_cacheTimestamp');
       if (timestamp != null) {
         final cacheTime = DateTime.parse(timestamp);
         final age = DateTime.now().difference(cacheTime);
-        
+
         // Cache expires after 24 hours
         if (age.inHours > 24) {
           if (kDebugMode) {
@@ -64,7 +66,7 @@ class OfflineService {
           return null;
         }
       }
-      
+
       final List<dynamic> decoded = jsonDecode(cached);
       return decoded.cast<Map<String, dynamic>>();
     } catch (e) {
@@ -78,11 +80,12 @@ class OfflineService {
   /// Cache user's trucks for offline access
   Future<void> cacheMyTrucks(List<Map<String, dynamic>> trucks) async {
     if (_prefs == null) return;
-    
+
     try {
       await _prefs!.setString(_cacheKeyMyTrucks, jsonEncode(trucks));
-      await _prefs!.setString('${_cacheKeyMyTrucks}_$_cacheTimestamp', DateTime.now().toIso8601String());
-      
+      await _prefs!.setString('${_cacheKeyMyTrucks}_$_cacheTimestamp',
+          DateTime.now().toIso8601String());
+
       if (kDebugMode) {
         print('[OFFLINE] Cached ${trucks.length} trucks');
       }
@@ -96,20 +99,21 @@ class OfflineService {
   /// Get cached trucks
   Future<List<Map<String, dynamic>>?> getCachedTrucks() async {
     if (_prefs == null) return null;
-    
+
     try {
       final cached = _prefs!.getString(_cacheKeyMyTrucks);
       if (cached == null) return null;
-      
-      final timestamp = _prefs!.getString('${_cacheKeyMyTrucks}_$_cacheTimestamp');
+
+      final timestamp =
+          _prefs!.getString('${_cacheKeyMyTrucks}_$_cacheTimestamp');
       if (timestamp != null) {
         final cacheTime = DateTime.parse(timestamp);
         final age = DateTime.now().difference(cacheTime);
-        
+
         // Cache expires after 24 hours
         if (age.inHours > 24) return null;
       }
-      
+
       final List<dynamic> decoded = jsonDecode(cached);
       return decoded.cast<Map<String, dynamic>>();
     } catch (e) {
@@ -123,10 +127,10 @@ class OfflineService {
   /// Cache user profile
   Future<void> cacheMyProfile(Map<String, dynamic> profile) async {
     if (_prefs == null) return;
-    
+
     try {
       await _prefs!.setString(_cacheKeyMyProfile, jsonEncode(profile));
-      
+
       if (kDebugMode) {
         print('[OFFLINE] Cached user profile');
       }
@@ -140,11 +144,11 @@ class OfflineService {
   /// Get cached profile
   Future<Map<String, dynamic>?> getCachedProfile() async {
     if (_prefs == null) return null;
-    
+
     try {
       final cached = _prefs!.getString(_cacheKeyMyProfile);
       if (cached == null) return null;
-      
+
       return jsonDecode(cached) as Map<String, dynamic>;
     } catch (e) {
       if (kDebugMode) {
@@ -162,12 +166,13 @@ class OfflineService {
       'timestamp': DateTime.now().toIso8601String(),
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
     };
-    
+
     _pendingActions.add(action);
     await _savePendingActions();
-    
+
     if (kDebugMode) {
-      print('[OFFLINE] Queued action: $type (${_pendingActions.length} pending)');
+      print(
+          '[OFFLINE] Queued action: $type (${_pendingActions.length} pending)');
     }
   }
 
@@ -180,9 +185,10 @@ class OfflineService {
   Future<void> removeAction(String actionId) async {
     _pendingActions.removeWhere((action) => action['id'] == actionId);
     await _savePendingActions();
-    
+
     if (kDebugMode) {
-      print('[OFFLINE] Removed action $actionId (${_pendingActions.length} remaining)');
+      print(
+          '[OFFLINE] Removed action $actionId (${_pendingActions.length} remaining)');
     }
   }
 
@@ -190,7 +196,7 @@ class OfflineService {
   Future<void> clearPendingActions() async {
     _pendingActions.clear();
     await _savePendingActions();
-    
+
     if (kDebugMode) {
       print('[OFFLINE] Cleared all pending actions');
     }
@@ -199,9 +205,10 @@ class OfflineService {
   /// Save pending actions to storage
   Future<void> _savePendingActions() async {
     if (_prefs == null) return;
-    
+
     try {
-      await _prefs!.setString(_cacheKeyPendingActions, jsonEncode(_pendingActions));
+      await _prefs!
+          .setString(_cacheKeyPendingActions, jsonEncode(_pendingActions));
     } catch (e) {
       if (kDebugMode) {
         print('[OFFLINE] Failed to save pending actions: $e');
@@ -212,14 +219,14 @@ class OfflineService {
   /// Load pending actions from storage
   Future<void> _loadPendingActions() async {
     if (_prefs == null) return;
-    
+
     try {
       final cached = _prefs!.getString(_cacheKeyPendingActions);
       if (cached != null) {
         final List<dynamic> decoded = jsonDecode(cached);
         _pendingActions.clear();
         _pendingActions.addAll(decoded.cast<Map<String, dynamic>>());
-        
+
         if (kDebugMode) {
           print('[OFFLINE] Loaded ${_pendingActions.length} pending actions');
         }
@@ -234,14 +241,14 @@ class OfflineService {
   /// Clear all cached data
   Future<void> clearCache() async {
     if (_prefs == null) return;
-    
+
     try {
       await _prefs!.remove(_cacheKeyMyLoads);
       await _prefs!.remove(_cacheKeyMyTrucks);
       await _prefs!.remove(_cacheKeyMyProfile);
       await _prefs!.remove('${_cacheKeyMyLoads}_$_cacheTimestamp');
       await _prefs!.remove('${_cacheKeyMyTrucks}_$_cacheTimestamp');
-      
+
       if (kDebugMode) {
         print('[OFFLINE] Cleared all cache');
       }
@@ -255,20 +262,21 @@ class OfflineService {
   /// Check if cache is available
   Future<bool> hasCachedData() async {
     if (_prefs == null) return false;
-    
+
     return _prefs!.containsKey(_cacheKeyMyLoads) ||
-           _prefs!.containsKey(_cacheKeyMyTrucks) ||
-           _prefs!.containsKey(_cacheKeyMyProfile);
+        _prefs!.containsKey(_cacheKeyMyTrucks) ||
+        _prefs!.containsKey(_cacheKeyMyProfile);
   }
 
   /// Get cache age in hours
   Future<int?> getCacheAge() async {
     if (_prefs == null) return null;
-    
+
     try {
-      final timestamp = _prefs!.getString('${_cacheKeyMyLoads}_$_cacheTimestamp');
+      final timestamp =
+          _prefs!.getString('${_cacheKeyMyLoads}_$_cacheTimestamp');
       if (timestamp == null) return null;
-      
+
       final cacheTime = DateTime.parse(timestamp);
       final age = DateTime.now().difference(cacheTime);
       return age.inHours;

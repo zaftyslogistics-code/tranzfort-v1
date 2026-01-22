@@ -5,17 +5,20 @@ import '../../data/repositories/saved_searches_repository.dart';
 import '../../data/models/saved_search_model.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
-final savedSearchesDataSourceProvider = Provider<SavedSearchesDataSource>((ref) {
+final savedSearchesDataSourceProvider =
+    Provider<SavedSearchesDataSource>((ref) {
   final supabase = Supabase.instance.client;
   return SavedSearchesDataSource(supabase);
 });
 
-final savedSearchesRepositoryProvider = Provider<SavedSearchesRepository>((ref) {
+final savedSearchesRepositoryProvider =
+    Provider<SavedSearchesRepository>((ref) {
   final ds = ref.watch(savedSearchesDataSourceProvider);
   return SavedSearchesRepository(ds);
 });
 
-class SavedSearchesNotifier extends StateNotifier<AsyncValue<List<SavedSearchModel>>> {
+class SavedSearchesNotifier
+    extends StateNotifier<AsyncValue<List<SavedSearchModel>>> {
   final SavedSearchesRepository _repository;
   final Ref _ref;
 
@@ -60,7 +63,8 @@ class SavedSearchesNotifier extends StateNotifier<AsyncValue<List<SavedSearchMod
   }
 }
 
-final savedSearchesProvider = StateNotifierProvider<SavedSearchesNotifier, AsyncValue<List<SavedSearchModel>>>((ref) {
+final savedSearchesProvider = StateNotifierProvider<SavedSearchesNotifier,
+    AsyncValue<List<SavedSearchModel>>>((ref) {
   final repository = ref.watch(savedSearchesRepositoryProvider);
   return SavedSearchesNotifier(repository, ref);
 });

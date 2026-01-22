@@ -22,8 +22,12 @@ class LoadModel with _$LoadModel {
     @JsonKey(name: 'payment_terms') String? paymentTerms,
     @JsonKey(name: 'loading_date') DateTime? loadingDate,
     String? notes,
-    @JsonKey(name: 'contact_preferences_call') @Default(true) bool contactPreferencesCall,
-    @JsonKey(name: 'contact_preferences_chat') @Default(true) bool contactPreferencesChat,
+    @JsonKey(name: 'contact_preferences_call')
+    @Default(true)
+    bool contactPreferencesCall,
+    @JsonKey(name: 'contact_preferences_chat')
+    @Default(true)
+    bool contactPreferencesChat,
     @Default('active') String status,
     @JsonKey(name: 'expires_at') required DateTime expiresAt,
     @JsonKey(name: 'view_count') @Default(0) int viewCount,

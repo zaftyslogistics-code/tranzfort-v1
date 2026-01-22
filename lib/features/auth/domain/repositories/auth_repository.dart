@@ -13,11 +13,11 @@ abstract class AuthRepository {
     String email,
     String password,
   );
-  
+
   Future<Either<Failure, User?>> getCurrentUser();
-  
+
   Future<Either<Failure, void>> signOut();
-  
+
   Future<Either<Failure, User>> updateProfile(
     String userId,
     Map<String, dynamic> updates,

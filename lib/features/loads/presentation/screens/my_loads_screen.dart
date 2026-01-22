@@ -111,9 +111,16 @@ class _MyLoadsScreenState extends ConsumerState<MyLoadsScreen> {
                             child: Text(
                               tab[0].toUpperCase() + tab.substring(1),
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: isSelected ? Colors.white : AppColors.textSecondary,
-                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : AppColors.textSecondary,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
                                   ),
                             ),
                           ),
@@ -131,7 +138,10 @@ class _MyLoadsScreenState extends ConsumerState<MyLoadsScreen> {
                         ? Center(
                             child: Text(
                               'Error: ${loadsState.error}',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
                                     color: AppColors.danger,
                                   ),
                             ),
@@ -148,14 +158,17 @@ class _MyLoadsScreenState extends ConsumerState<MyLoadsScreen> {
                                 ),
                               )
                             : ListView.builder(
-                                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: AppDimensions.lg),
                                 itemCount: filteredLoads.length,
                                 itemBuilder: (context, index) {
                                   final load = filteredLoads[index];
                                   return LoadCard(
                                     load: load,
                                     showStatus: true,
-                                    onTap: () => context.push('/load-detail-supplier', extra: load.id),
+                                    onTap: () => context.push(
+                                        '/load-detail-supplier',
+                                        extra: load.id),
                                   );
                                 },
                               ),

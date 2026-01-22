@@ -22,7 +22,10 @@ class InputValidator {
     sanitized = sanitized.replaceAll(RegExp(r'<[^>]*>'), '');
 
     // Remove script tags and content
-    sanitized = sanitized.replaceAll(RegExp(r'<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>', caseSensitive: false), '');
+    sanitized = sanitized.replaceAll(
+        RegExp(r'<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>',
+            caseSensitive: false),
+        '');
 
     // Remove potentially harmful characters
     sanitized = sanitized.replaceAll(RegExp(r'[<>]'), '');
@@ -40,7 +43,7 @@ class InputValidator {
     }
 
     final sanitized = sanitize(value);
-    
+
     if (sanitized.length > maxNameLength) {
       return '$fieldName must be less than $maxNameLength characters';
     }
@@ -64,7 +67,8 @@ class InputValidator {
       return 'Email must be less than $maxEmailLength characters';
     }
 
-    if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(sanitized)) {
+    if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        .hasMatch(sanitized)) {
       return 'Enter a valid email address';
     }
 
@@ -111,7 +115,8 @@ class InputValidator {
   }
 
   /// Validate and sanitize address
-  static String? validateAddress(String? value, {String fieldName = 'Address'}) {
+  static String? validateAddress(String? value,
+      {String fieldName = 'Address'}) {
     if (value == null || value.trim().isEmpty) {
       return '$fieldName is required';
     }
@@ -130,7 +135,8 @@ class InputValidator {
   }
 
   /// Validate and sanitize description/notes
-  static String? validateDescription(String? value, {String fieldName = 'Description', bool required = false}) {
+  static String? validateDescription(String? value,
+      {String fieldName = 'Description', bool required = false}) {
     if (value == null || value.trim().isEmpty) {
       return required ? '$fieldName is required' : null;
     }
@@ -145,7 +151,8 @@ class InputValidator {
   }
 
   /// Validate numeric input
-  static String? validateNumber(String? value, {
+  static String? validateNumber(
+    String? value, {
     String fieldName = 'Value',
     double? min,
     double? max,
@@ -230,7 +237,9 @@ class InputValidator {
   /// Check if string contains SQL injection patterns
   static bool containsSQLInjection(String input) {
     final sqlPatterns = [
-      RegExp(r'(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bDROP\b|\bCREATE\b|\bALTER\b)', caseSensitive: false),
+      RegExp(
+          r'(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bDROP\b|\bCREATE\b|\bALTER\b)',
+          caseSensitive: false),
       RegExp(r'(--|;|\/\*|\*\/|xp_|sp_)', caseSensitive: false),
       RegExp(r'(\bUNION\b|\bEXEC\b|\bEXECUTE\b)', caseSensitive: false),
     ];
@@ -260,10 +269,12 @@ class InputValidator {
   static void logSuspiciousInput(String input, String context) {
     if (kDebugMode) {
       if (containsSQLInjection(input)) {
-        print('[SECURITY] Possible SQL injection attempt in $context: ${input.substring(0, input.length > 50 ? 50 : input.length)}...');
+        print(
+            '[SECURITY] Possible SQL injection attempt in $context: ${input.substring(0, input.length > 50 ? 50 : input.length)}...');
       }
       if (containsXSS(input)) {
-        print('[SECURITY] Possible XSS attempt in $context: ${input.substring(0, input.length > 50 ? 50 : input.length)}...');
+        print(
+            '[SECURITY] Possible XSS attempt in $context: ${input.substring(0, input.length > 50 ? 50 : input.length)}...');
       }
     }
   }

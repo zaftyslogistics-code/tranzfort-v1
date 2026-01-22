@@ -5,7 +5,8 @@ import '../utils/logger.dart';
 /// Push notification service for FCM integration
 /// Handles notification registration, permissions, and delivery
 class PushNotificationService {
-  static final PushNotificationService _instance = PushNotificationService._internal();
+  static final PushNotificationService _instance =
+      PushNotificationService._internal();
   factory PushNotificationService() => _instance;
   PushNotificationService._internal();
 
@@ -28,7 +29,7 @@ class PushNotificationService {
 
       // Get FCM token (placeholder - requires firebase_messaging package)
       _fcmToken = await _getFCMToken();
-      
+
       if (_fcmToken != null) {
         await _saveFCMToken(_fcmToken!);
         Logger.info('✅ FCM Token obtained: ${_fcmToken!.substring(0, 20)}...');
@@ -49,11 +50,11 @@ class PushNotificationService {
       // Placeholder for actual permission request
       // In real implementation, use firebase_messaging
       Logger.info('Requesting notification permission');
-      
+
       // Save permission status
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(_notificationsEnabledKey, true);
-      
+
       return true;
     } catch (e) {
       Logger.error('Failed to request permission', error: e);
@@ -66,12 +67,12 @@ class PushNotificationService {
     try {
       // Placeholder for actual FCM token retrieval
       // In real implementation, use FirebaseMessaging.instance.getToken()
-      
+
       // For now, generate a mock token
       if (kDebugMode) {
         return 'mock_fcm_token_${DateTime.now().millisecondsSinceEpoch}';
       }
-      
+
       return null;
     } catch (e) {
       Logger.error('Failed to get FCM token', error: e);
@@ -84,7 +85,7 @@ class PushNotificationService {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_fcmTokenKey, token);
-      
+
       // TODO: Send token to backend for storage
       Logger.info('FCM token saved locally');
     } catch (e) {
@@ -107,15 +108,15 @@ class PushNotificationService {
   void _setupMessageHandlers() {
     // Placeholder for message handlers
     // In real implementation, use FirebaseMessaging callbacks
-    
+
     Logger.info('Setting up message handlers');
-    
+
     // Handle foreground messages
     _handleForegroundMessages();
-    
+
     // Handle background messages
     _handleBackgroundMessages();
-    
+
     // Handle notification taps
     _handleNotificationTaps();
   }
@@ -147,10 +148,10 @@ class PushNotificationService {
   }) async {
     try {
       Logger.info('Sending notification to user $userId');
-      
+
       // TODO: Implement actual notification sending via backend API
       // This would typically call your backend which uses FCM Admin SDK
-      
+
       if (kDebugMode) {
         print('📬 Notification: $title - $body');
       }

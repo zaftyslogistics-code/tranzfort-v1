@@ -100,60 +100,59 @@ class _$SavedSearchModelCopyWithImpl<$Res, $Val extends SavedSearchModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            userId: null == userId
-                ? _value.userId
-                : userId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            searchName: freezed == searchName
-                ? _value.searchName
-                : searchName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            fromLocation: freezed == fromLocation
-                ? _value.fromLocation
-                : fromLocation // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            toLocation: freezed == toLocation
-                ? _value.toLocation
-                : toLocation // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            truckType: freezed == truckType
-                ? _value.truckType
-                : truckType // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            weightRangeMin: freezed == weightRangeMin
-                ? _value.weightRangeMin
-                : weightRangeMin // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            weightRangeMax: freezed == weightRangeMax
-                ? _value.weightRangeMax
-                : weightRangeMax // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            priceRangeMin: freezed == priceRangeMin
-                ? _value.priceRangeMin
-                : priceRangeMin // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            priceRangeMax: freezed == priceRangeMax
-                ? _value.priceRangeMax
-                : priceRangeMax // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            isAlertEnabled: null == isAlertEnabled
-                ? _value.isAlertEnabled
-                : isAlertEnabled // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            updatedAt: null == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                as String,
+        searchName: freezed == searchName
+            ? _value.searchName
+            : searchName // ignore: cast_nullable_to_non_nullable
+                as String?,
+        fromLocation: freezed == fromLocation
+            ? _value.fromLocation
+            : fromLocation // ignore: cast_nullable_to_non_nullable
+                as String?,
+        toLocation: freezed == toLocation
+            ? _value.toLocation
+            : toLocation // ignore: cast_nullable_to_non_nullable
+                as String?,
+        truckType: freezed == truckType
+            ? _value.truckType
+            : truckType // ignore: cast_nullable_to_non_nullable
+                as String?,
+        weightRangeMin: freezed == weightRangeMin
+            ? _value.weightRangeMin
+            : weightRangeMin // ignore: cast_nullable_to_non_nullable
+                as double?,
+        weightRangeMax: freezed == weightRangeMax
+            ? _value.weightRangeMax
+            : weightRangeMax // ignore: cast_nullable_to_non_nullable
+                as double?,
+        priceRangeMin: freezed == priceRangeMin
+            ? _value.priceRangeMin
+            : priceRangeMin // ignore: cast_nullable_to_non_nullable
+                as double?,
+        priceRangeMax: freezed == priceRangeMax
+            ? _value.priceRangeMax
+            : priceRangeMax // ignore: cast_nullable_to_non_nullable
+                as double?,
+        isAlertEnabled: null == isAlertEnabled
+            ? _value.isAlertEnabled
+            : isAlertEnabled // ignore: cast_nullable_to_non_nullable
+                as bool,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+      ) as $Val,
     );
   }
 }
@@ -217,55 +216,55 @@ class __$$SavedSearchModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         userId: null == userId
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         searchName: freezed == searchName
             ? _value.searchName
             : searchName // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         fromLocation: freezed == fromLocation
             ? _value.fromLocation
             : fromLocation // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         toLocation: freezed == toLocation
             ? _value.toLocation
             : toLocation // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         truckType: freezed == truckType
             ? _value.truckType
             : truckType // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         weightRangeMin: freezed == weightRangeMin
             ? _value.weightRangeMin
             : weightRangeMin // ignore: cast_nullable_to_non_nullable
-                  as double?,
+                as double?,
         weightRangeMax: freezed == weightRangeMax
             ? _value.weightRangeMax
             : weightRangeMax // ignore: cast_nullable_to_non_nullable
-                  as double?,
+                as double?,
         priceRangeMin: freezed == priceRangeMin
             ? _value.priceRangeMin
             : priceRangeMin // ignore: cast_nullable_to_non_nullable
-                  as double?,
+                as double?,
         priceRangeMax: freezed == priceRangeMax
             ? _value.priceRangeMax
             : priceRangeMax // ignore: cast_nullable_to_non_nullable
-                  as double?,
+                as double?,
         isAlertEnabled: null == isAlertEnabled
             ? _value.isAlertEnabled
             : isAlertEnabled // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                as bool,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         updatedAt: null == updatedAt
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
       ),
     );
   }
@@ -360,21 +359,21 @@ class _$SavedSearchModelImpl implements _SavedSearchModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    userId,
-    searchName,
-    fromLocation,
-    toLocation,
-    truckType,
-    weightRangeMin,
-    weightRangeMax,
-    priceRangeMin,
-    priceRangeMax,
-    isAlertEnabled,
-    createdAt,
-    updatedAt,
-  );
+        runtimeType,
+        id,
+        userId,
+        searchName,
+        fromLocation,
+        toLocation,
+        truckType,
+        weightRangeMin,
+        weightRangeMax,
+        priceRangeMin,
+        priceRangeMax,
+        isAlertEnabled,
+        createdAt,
+        updatedAt,
+      );
 
   /// Create a copy of SavedSearchModel
   /// with the given fields replaced by the non-null parameter values.

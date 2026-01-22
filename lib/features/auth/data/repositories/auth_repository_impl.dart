@@ -17,7 +17,8 @@ class AuthRepositoryImpl implements AuthRepository {
     String password,
   ) async {
     try {
-      final userModel = await dataSource.signUpWithEmailPassword(email, password);
+      final userModel =
+          await dataSource.signUpWithEmailPassword(email, password);
       return Right(_modelToEntity(userModel));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -32,7 +33,8 @@ class AuthRepositoryImpl implements AuthRepository {
     String password,
   ) async {
     try {
-      final userModel = await dataSource.signInWithEmailPassword(email, password);
+      final userModel =
+          await dataSource.signInWithEmailPassword(email, password);
       return Right(_modelToEntity(userModel));
     } on AuthException catch (e) {
       return Left(AuthFailure(e.message));

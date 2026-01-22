@@ -66,9 +66,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isOnAdmin = state.matchedLocation.startsWith('/admin');
 
       if (!isAuthenticated) {
-        return (isOnLogin || isOnSignup || isOnAdminLogin)
-            ? null
-            : '/login';
+        return (isOnLogin || isOnSignup || isOnAdminLogin) ? null : '/login';
       }
 
       if (isAuthenticated && user != null) {
@@ -97,11 +95,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         // If user has selected an intent, redirect to appropriate dashboard
         if (!needsIntentSelection) {
           // Only redirect if we're not already on the target page
-          final isOnSupplierDashboard = state.matchedLocation == '/supplier-dashboard';
+          final isOnSupplierDashboard =
+              state.matchedLocation == '/supplier-dashboard';
           final isOnTruckerFeed = state.matchedLocation == '/trucker-feed';
-          
-          if ((isOnIntent || isOnLogin || isOnSignup || isOnSplash) && 
-              !isOnSupplierDashboard && !isOnTruckerFeed) {
+
+          if ((isOnIntent || isOnLogin || isOnSignup || isOnSplash) &&
+              !isOnSupplierDashboard &&
+              !isOnTruckerFeed) {
             if (user.isSupplierEnabled) {
               return '/supplier-dashboard';
             }

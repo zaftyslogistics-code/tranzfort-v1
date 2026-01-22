@@ -19,12 +19,19 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
 
   Map<String, dynamic> _toInsertPayload(Map<String, dynamic> loadData) {
     final now = DateTime.now();
-    final dynamic loadingDateRaw = loadData['loadingDate'] ?? loadData['loading_date'];
+    final dynamic loadingDateRaw =
+        loadData['loadingDate'] ?? loadData['loading_date'];
 
-    // Map to database columns - note: DB has both old (material_type, truck_type) 
+    // Map to database columns - note: DB has both old (material_type, truck_type)
     // and new (load_type, truck_type_required) columns, but old ones have NOT NULL constraints
-    final materialType = loadData['loadType'] ?? loadData['load_type'] ?? loadData['materialType'] ?? loadData['material_type'];
-    final truckType = loadData['truckTypeRequired'] ?? loadData['truck_type_required'] ?? loadData['truckType'] ?? loadData['truck_type'];
+    final materialType = loadData['loadType'] ??
+        loadData['load_type'] ??
+        loadData['materialType'] ??
+        loadData['material_type'];
+    final truckType = loadData['truckTypeRequired'] ??
+        loadData['truck_type_required'] ??
+        loadData['truckType'] ??
+        loadData['truck_type'];
 
     return {
       'supplier_id': loadData['supplierId'] ?? loadData['supplier_id'],
@@ -42,17 +49,22 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       'weight': loadData['weight'],
       'weight_in_tons': loadData['weight'], // Also populate old column
       'price': loadData['price'],
-      'price_type': loadData['priceType'] ?? loadData['price_type'] ?? 'negotiable',
+      'price_type':
+          loadData['priceType'] ?? loadData['price_type'] ?? 'negotiable',
       'payment_terms': loadData['paymentTerms'] ?? loadData['payment_terms'],
       'loading_date': loadingDateRaw is DateTime
           ? loadingDateRaw.toIso8601String()
           : loadingDateRaw,
       'notes': loadData['notes'],
-      'contact_preferences_call':
-          loadData['contactPreferencesCall'] ?? loadData['contact_preferences_call'] ?? true,
-      'contact_preferences_chat':
-          loadData['contactPreferencesChat'] ?? loadData['contact_preferences_chat'] ?? true,
-      'expires_at': loadData['expiresAt'] ?? loadData['expires_at'] ?? now.add(const Duration(days: 90)).toIso8601String(),
+      'contact_preferences_call': loadData['contactPreferencesCall'] ??
+          loadData['contact_preferences_call'] ??
+          true,
+      'contact_preferences_chat': loadData['contactPreferencesChat'] ??
+          loadData['contact_preferences_chat'] ??
+          true,
+      'expires_at': loadData['expiresAt'] ??
+          loadData['expires_at'] ??
+          now.add(const Duration(days: 90)).toIso8601String(),
     };
   }
 
@@ -60,26 +72,38 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
     // Security: Whitelist allowed fields to prevent malicious updates
     // (e.g. preventing updates to supplier_id, view_count, created_at)
     const allowedFields = {
-      'from_location', 'from_city', 'from_state',
-      'to_location', 'to_city', 'to_state',
-      'load_type', 'truck_type_required',
-      'weight', 'price', 'price_type',
-      'payment_terms', 'loading_date',
+      'from_location',
+      'from_city',
+      'from_state',
+      'to_location',
+      'to_city',
+      'to_state',
+      'load_type',
+      'truck_type_required',
+      'weight',
+      'price',
+      'price_type',
+      'payment_terms',
+      'loading_date',
       'notes',
-      'contact_preferences_call', 'contact_preferences_chat',
+      'contact_preferences_call',
+      'contact_preferences_chat',
       'status'
     };
 
-    final dynamic loadingDateRaw = updates['loadingDate'] ?? updates['loading_date'];
+    final dynamic loadingDateRaw =
+        updates['loadingDate'] ?? updates['loading_date'];
 
     final mapped = <String, dynamic>{
-      if (updates.containsKey('fromLocation') || updates.containsKey('from_location'))
+      if (updates.containsKey('fromLocation') ||
+          updates.containsKey('from_location'))
         'from_location': updates['fromLocation'] ?? updates['from_location'],
       if (updates.containsKey('fromCity') || updates.containsKey('from_city'))
         'from_city': updates['fromCity'] ?? updates['from_city'],
       if (updates.containsKey('fromState') || updates.containsKey('from_state'))
         'from_state': updates['fromState'] ?? updates['from_state'],
-      if (updates.containsKey('toLocation') || updates.containsKey('to_location'))
+      if (updates.containsKey('toLocation') ||
+          updates.containsKey('to_location'))
         'to_location': updates['toLocation'] ?? updates['to_location'],
       if (updates.containsKey('toCity') || updates.containsKey('to_city'))
         'to_city': updates['toCity'] ?? updates['to_city'],
@@ -87,29 +111,37 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
         'to_state': updates['toState'] ?? updates['to_state'],
       if (updates.containsKey('loadType') || updates.containsKey('load_type'))
         'load_type': updates['loadType'] ?? updates['load_type'],
-      if (updates.containsKey('truckTypeRequired') || updates.containsKey('truck_type_required'))
-        'truck_type_required': updates['truckTypeRequired'] ?? updates['truck_type_required'],
+      if (updates.containsKey('truckTypeRequired') ||
+          updates.containsKey('truck_type_required'))
+        'truck_type_required':
+            updates['truckTypeRequired'] ?? updates['truck_type_required'],
       if (updates.containsKey('weight')) 'weight': updates['weight'],
       if (updates.containsKey('price')) 'price': updates['price'],
       if (updates.containsKey('priceType') || updates.containsKey('price_type'))
         'price_type': updates['priceType'] ?? updates['price_type'],
-      if (updates.containsKey('paymentTerms') || updates.containsKey('payment_terms'))
+      if (updates.containsKey('paymentTerms') ||
+          updates.containsKey('payment_terms'))
         'payment_terms': updates['paymentTerms'] ?? updates['payment_terms'],
-      if (updates.containsKey('loadingDate') || updates.containsKey('loading_date'))
+      if (updates.containsKey('loadingDate') ||
+          updates.containsKey('loading_date'))
         'loading_date': loadingDateRaw is DateTime
             ? loadingDateRaw.toIso8601String()
             : loadingDateRaw,
       if (updates.containsKey('notes')) 'notes': updates['notes'],
-      if (updates.containsKey('contactPreferencesCall') || updates.containsKey('contact_preferences_call'))
-        'contact_preferences_call': updates['contactPreferencesCall'] ?? updates['contact_preferences_call'],
-      if (updates.containsKey('contactPreferencesChat') || updates.containsKey('contact_preferences_chat'))
-        'contact_preferences_chat': updates['contactPreferencesChat'] ?? updates['contact_preferences_chat'],
+      if (updates.containsKey('contactPreferencesCall') ||
+          updates.containsKey('contact_preferences_call'))
+        'contact_preferences_call': updates['contactPreferencesCall'] ??
+            updates['contact_preferences_call'],
+      if (updates.containsKey('contactPreferencesChat') ||
+          updates.containsKey('contact_preferences_chat'))
+        'contact_preferences_chat': updates['contactPreferencesChat'] ??
+            updates['contact_preferences_chat'],
       if (updates.containsKey('status')) 'status': updates['status'],
     };
 
     final sanitized = Map<String, dynamic>.from(mapped)
       ..removeWhere((key, value) => !allowedFields.contains(key));
-    
+
     return sanitized;
   }
 
@@ -119,15 +151,15 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       final payload = _toInsertPayload(loadData);
       final Map<String, dynamic> data =
           await _client.from('loads').insert(payload).select().single();
-      
+
       final load = _toLoadModel(data);
-      
+
       // Update cache
       await OfflineCacheService().addItemToList(
         OfflineCacheService.loadsKey,
         load.toJson(),
       );
-      
+
       return load;
     } catch (e) {
       throw ServerException(e.toString());
@@ -163,16 +195,15 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
               'to_state.ilike.%$searchQuery%,'
               'truck_type_required.ilike.%$searchQuery%,'
               'load_type.ilike.%$searchQuery%';
-          
+
           query = query.or(searchFilter);
         }
 
         final from = page * pageSize;
         final to = from + pageSize - 1;
 
-        return await query
-            .order('created_at', ascending: false)
-            .range(from, to) as List;
+        return await query.order('created_at', ascending: false).range(from, to)
+            as List;
       });
 
       final models = data
@@ -204,11 +235,8 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   @override
   Future<LoadModel?> getLoadById(String id) async {
     try {
-      final Map<String, dynamic>? data = await _client
-          .from('loads')
-          .select()
-          .eq('id', id)
-          .maybeSingle();
+      final Map<String, dynamic>? data =
+          await _client.from('loads').select().eq('id', id).maybeSingle();
 
       if (data == null) return null;
       return _toLoadModel(data);
@@ -248,7 +276,7 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   Future<void> deleteLoad(String id) async {
     try {
       await _client.from('loads').update({'status': 'deleted'}).eq('id', id);
-      
+
       // Update cache
       await OfflineCacheService().removeItemFromList(
         OfflineCacheService.loadsKey,
@@ -272,8 +300,10 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
   @override
   Future<List<TruckTypeModel>> getTruckTypes() async {
     try {
-      final data = await _client.from('truck_types').select('name').order('name')
-          as List;
+      final data = await _client
+          .from('truck_types')
+          .select('name')
+          .order('name') as List;
 
       final names = data
           .cast<Map<String, dynamic>>()

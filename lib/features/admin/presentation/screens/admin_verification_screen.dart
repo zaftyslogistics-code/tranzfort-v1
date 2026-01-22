@@ -10,15 +10,18 @@ class AdminVerificationScreen extends ConsumerStatefulWidget {
   const AdminVerificationScreen({super.key});
 
   @override
-  ConsumerState<AdminVerificationScreen> createState() => _AdminVerificationScreenState();
+  ConsumerState<AdminVerificationScreen> createState() =>
+      _AdminVerificationScreenState();
 }
 
-class _AdminVerificationScreenState extends ConsumerState<AdminVerificationScreen> {
+class _AdminVerificationScreenState
+    extends ConsumerState<AdminVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        ref.read(adminVerificationNotifierProvider.notifier).fetchPendingRequests());
+    Future.microtask(() => ref
+        .read(adminVerificationNotifierProvider.notifier)
+        .fetchPendingRequests());
   }
 
   @override
@@ -69,7 +72,8 @@ class _VerificationRequestCard extends ConsumerWidget {
                 ),
                 Text(
                   'Date: ${request.createdAt.toLocal().toString().split('.')[0]}',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                  style: const TextStyle(
+                      color: AppColors.textSecondary, fontSize: 12),
                 ),
               ],
             ),
@@ -101,12 +105,14 @@ class _VerificationRequestCard extends ConsumerWidget {
               children: [
                 TextButton(
                   onPressed: () => _showRejectDialog(context, ref),
-                  child: const Text('Reject', style: TextStyle(color: Colors.red)),
+                  child:
+                      const Text('Reject', style: TextStyle(color: Colors.red)),
                 ),
                 const SizedBox(width: AppDimensions.md),
                 ElevatedButton(
                   onPressed: () => _approveRequest(context, ref),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   child: const Text('Approve'),
                 ),
               ],
@@ -121,7 +127,7 @@ class _VerificationRequestCard extends ConsumerWidget {
     final success = await ref
         .read(adminVerificationNotifierProvider.notifier)
         .updateStatus(request.id, 'approved');
-    
+
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -154,16 +160,17 @@ class _VerificationRequestCard extends ConsumerWidget {
             onPressed: () async {
               final reason = controller.text.trim();
               if (reason.isEmpty) return;
-              
+
               Navigator.pop(context);
               final success = await ref
                   .read(adminVerificationNotifierProvider.notifier)
                   .updateStatus(request.id, 'rejected', reason: reason);
-              
+
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(success ? 'Request Rejected' : 'Action Failed'),
+                    content:
+                        Text(success ? 'Request Rejected' : 'Action Failed'),
                     backgroundColor: success ? Colors.orange : Colors.red,
                   ),
                 );

@@ -60,12 +60,10 @@ class SavedSearchesDataSource {
     }
   }
 
-  Future<void> updateSavedSearch(String id, Map<String, dynamic> updates) async {
+  Future<void> updateSavedSearch(
+      String id, Map<String, dynamic> updates) async {
     try {
-      await _supabase
-          .from('saved_searches')
-          .update(updates)
-          .eq('id', id);
+      await _supabase.from('saved_searches').update(updates).eq('id', id);
     } catch (e) {
       Logger.error('Failed to update saved search: $e');
       rethrow;
@@ -74,10 +72,7 @@ class SavedSearchesDataSource {
 
   Future<void> deleteSavedSearch(String id) async {
     try {
-      await _supabase
-          .from('saved_searches')
-          .delete()
-          .eq('id', id);
+      await _supabase.from('saved_searches').delete().eq('id', id);
     } catch (e) {
       Logger.error('Failed to delete saved search: $e');
       rethrow;

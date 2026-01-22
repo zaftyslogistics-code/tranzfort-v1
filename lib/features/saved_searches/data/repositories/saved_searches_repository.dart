@@ -25,7 +25,8 @@ class SavedSearchesRepository {
     }
   }
 
-  Future<void> updateSavedSearch(String id, Map<String, dynamic> updates) async {
+  Future<void> updateSavedSearch(
+      String id, Map<String, dynamic> updates) async {
     try {
       await _dataSource.updateSavedSearch(id, updates);
     } catch (e) {

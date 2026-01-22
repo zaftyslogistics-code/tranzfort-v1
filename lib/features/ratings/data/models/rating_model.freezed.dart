@@ -88,44 +88,43 @@ class _$RatingModelCopyWithImpl<$Res, $Val extends RatingModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            raterUserId: null == raterUserId
-                ? _value.raterUserId
-                : raterUserId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            ratedUserId: null == ratedUserId
-                ? _value.ratedUserId
-                : ratedUserId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            loadId: freezed == loadId
-                ? _value.loadId
-                : loadId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            ratingValue: null == ratingValue
-                ? _value.ratingValue
-                : ratingValue // ignore: cast_nullable_to_non_nullable
-                      as int,
-            feedbackText: freezed == feedbackText
-                ? _value.feedbackText
-                : feedbackText // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            ratingType: null == ratingType
-                ? _value.ratingType
-                : ratingType // ignore: cast_nullable_to_non_nullable
-                      as String,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            updatedAt: null == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        raterUserId: null == raterUserId
+            ? _value.raterUserId
+            : raterUserId // ignore: cast_nullable_to_non_nullable
+                as String,
+        ratedUserId: null == ratedUserId
+            ? _value.ratedUserId
+            : ratedUserId // ignore: cast_nullable_to_non_nullable
+                as String,
+        loadId: freezed == loadId
+            ? _value.loadId
+            : loadId // ignore: cast_nullable_to_non_nullable
+                as String?,
+        ratingValue: null == ratingValue
+            ? _value.ratingValue
+            : ratingValue // ignore: cast_nullable_to_non_nullable
+                as int,
+        feedbackText: freezed == feedbackText
+            ? _value.feedbackText
+            : feedbackText // ignore: cast_nullable_to_non_nullable
+                as String?,
+        ratingType: null == ratingType
+            ? _value.ratingType
+            : ratingType // ignore: cast_nullable_to_non_nullable
+                as String,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+      ) as $Val,
     );
   }
 }
@@ -181,39 +180,39 @@ class __$$RatingModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         raterUserId: null == raterUserId
             ? _value.raterUserId
             : raterUserId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         ratedUserId: null == ratedUserId
             ? _value.ratedUserId
             : ratedUserId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         loadId: freezed == loadId
             ? _value.loadId
             : loadId // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         ratingValue: null == ratingValue
             ? _value.ratingValue
             : ratingValue // ignore: cast_nullable_to_non_nullable
-                  as int,
+                as int,
         feedbackText: freezed == feedbackText
             ? _value.feedbackText
             : feedbackText // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         ratingType: null == ratingType
             ? _value.ratingType
             : ratingType // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         updatedAt: null == updatedAt
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
       ),
     );
   }
@@ -287,17 +286,17 @@ class _$RatingModelImpl implements _RatingModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    raterUserId,
-    ratedUserId,
-    loadId,
-    ratingValue,
-    feedbackText,
-    ratingType,
-    createdAt,
-    updatedAt,
-  );
+        runtimeType,
+        id,
+        raterUserId,
+        ratedUserId,
+        loadId,
+        ratingValue,
+        feedbackText,
+        ratingType,
+        createdAt,
+        updatedAt,
+      );
 
   /// Create a copy of RatingModel
   /// with the given fields replaced by the non-null parameter values.

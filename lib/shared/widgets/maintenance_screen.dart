@@ -55,9 +55,9 @@ class MaintenanceScreen extends ConsumerWidget {
                     color: Colors.white,
                   ),
                 ),
-                
+
                 const SizedBox(height: AppDimensions.xl),
-                
+
                 // Maintenance Card
                 GlassmorphicCard(
                   padding: const EdgeInsets.all(AppDimensions.xl),
@@ -70,38 +70,41 @@ class MaintenanceScreen extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      
+
                       const SizedBox(height: AppDimensions.lg),
-                      
+
                       configAsync.when(
                         data: (config) => Text(
-                          config.maintenanceMessage ?? 
-                          'Transfort is currently under maintenance. Please try again later.',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: AppColors.textSecondary,
-                            height: 1.5,
-                          ),
+                          config.maintenanceMessage ??
+                              'Transfort is currently under maintenance. Please try again later.',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.textSecondary,
+                                    height: 1.5,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                         loading: () => Text(
                           'Loading maintenance information...',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                         error: (_, __) => Text(
                           'Transfort is currently under maintenance. Please try again later.',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: AppColors.textSecondary,
-                            height: 1.5,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.textSecondary,
+                                    height: 1.5,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      
+
                       const SizedBox(height: AppDimensions.xl),
-                      
+
                       // Refresh Button
                       ElevatedButton.icon(
                         onPressed: () {
@@ -118,22 +121,24 @@ class MaintenanceScreen extends ConsumerWidget {
                             vertical: AppDimensions.md,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                            borderRadius:
+                                BorderRadius.circular(AppDimensions.radiusMd),
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: AppDimensions.xl),
-                
+
                 // Footer
                 Text(
                   'We apologize for the inconvenience and appreciate your patience.',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondary.withAlpha((0.7 * 255).round()),
-                  ),
+                        color: AppColors.textSecondary
+                            .withAlpha((0.7 * 255).round()),
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ],

@@ -33,13 +33,14 @@ class AdminMonitoringNotifier extends StateNotifier<AdminMonitoringState> {
 
   Future<void> fetchAllLoads() async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     // Reusing existing loadsNotifier but with administrative scope (fetching all)
     // In a real app, we'd have a specific Admin fetchAllLoads use case
-    final result = await _ref.read(getLoadsUseCaseProvider)(status: null); 
+    final result = await _ref.read(getLoadsUseCaseProvider)(status: null);
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (loads) => state = state.copyWith(isLoading: false, allLoads: loads),
     );
   }
@@ -47,11 +48,13 @@ class AdminMonitoringNotifier extends StateNotifier<AdminMonitoringState> {
   Future<void> deleteLoad(String loadId) async {
     state = state.copyWith(isLoading: true);
     final result = await _ref.read(deleteLoadUseCaseProvider)(loadId);
-    
+
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (_) {
-        final updatedLoads = state.allLoads.where((l) => l.id != loadId).toList();
+        final updatedLoads =
+            state.allLoads.where((l) => l.id != loadId).toList();
         state = state.copyWith(isLoading: false, allLoads: updatedLoads);
       },
     );

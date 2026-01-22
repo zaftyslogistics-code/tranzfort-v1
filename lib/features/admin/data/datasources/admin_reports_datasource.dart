@@ -3,7 +3,8 @@ import '../models/user_report_model.dart';
 
 abstract class AdminReportsDataSource {
   Future<List<UserReportModel>> getReports({String? status});
-  Future<void> updateReportStatus(String reportId, String status, {String? adminNotes});
+  Future<void> updateReportStatus(String reportId, String status,
+      {String? adminNotes});
 }
 
 class SupabaseAdminReportsDataSource implements AdminReportsDataSource {
@@ -24,7 +25,8 @@ class SupabaseAdminReportsDataSource implements AdminReportsDataSource {
   }
 
   @override
-  Future<void> updateReportStatus(String reportId, String status, {String? adminNotes}) async {
+  Future<void> updateReportStatus(String reportId, String status,
+      {String? adminNotes}) async {
     final updates = {
       'status': status,
       if (adminNotes != null) 'admin_notes': adminNotes,

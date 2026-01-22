@@ -36,7 +36,7 @@ class OfflineBanner extends ConsumerWidget {
                     ref.invalidate(connectivityProvider);
                   },
                   child: Text(
-                    'Retry', 
+                    'Retry',
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.primary,

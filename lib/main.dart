@@ -19,8 +19,9 @@ void main() async {
   // Set up error boundary for production
   ErrorWidget.builder = (FlutterErrorDetails details) {
     // Log error for debugging
-    Logger.error('Widget error caught by error boundary', error: details.exception, stackTrace: details.stack);
-    
+    Logger.error('Widget error caught by error boundary',
+        error: details.exception, stackTrace: details.stack);
+
     return MaterialApp(
       home: Scaffold(
         backgroundColor: AppColors.darkBackground,
@@ -30,11 +31,15 @@ void main() async {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.error_outline, size: 64, color: AppColors.danger),
+                const Icon(Icons.error_outline,
+                    size: 64, color: AppColors.danger),
                 const SizedBox(height: 16),
                 const Text(
                   'Something went wrong',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),

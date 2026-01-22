@@ -57,10 +57,7 @@ class RatingsDataSource {
 
   Future<void> updateRating(String id, Map<String, dynamic> updates) async {
     try {
-      await _supabase
-          .from('ratings')
-          .update(updates)
-          .eq('id', id);
+      await _supabase.from('ratings').update(updates).eq('id', id);
     } catch (e) {
       Logger.error('Failed to update rating: $e');
       rethrow;

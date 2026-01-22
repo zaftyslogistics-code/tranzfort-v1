@@ -4,7 +4,7 @@ import '../../core/theme/app_dimensions.dart';
 
 class RoleBadge extends StatelessWidget {
   final bool isSupplier;
-  
+
   const RoleBadge({
     super.key,
     required this.isSupplier,
@@ -14,7 +14,8 @@ class RoleBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = isSupplier ? AppColors.primary : AppColors.freeModelGreen;
     final label = isSupplier ? 'SUPPLIER' : 'TRUCKER';
-    final icon = isSupplier ? Icons.inventory_2_outlined : Icons.local_shipping_outlined;
+    final icon =
+        isSupplier ? Icons.inventory_2_outlined : Icons.local_shipping_outlined;
 
     return Container(
       padding: const EdgeInsets.symmetric(

@@ -35,13 +35,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authNotifierProvider);
     final user = authState.user;
-    
-    final preferences = user?.preferences ?? {};
-    final loadAlertsEnabled = preferences['load_alerts_enabled'] as bool? ?? true;
-    final chatNotificationsEnabled = preferences['chat_notifications_enabled'] as bool? ?? true;
 
-    final isVerified =
-        (user?.isSupplierVerified ?? false) || (user?.isTruckerVerified ?? false);
+    final preferences = user?.preferences ?? {};
+    final loadAlertsEnabled =
+        preferences['load_alerts_enabled'] as bool? ?? true;
+    final chatNotificationsEnabled =
+        preferences['chat_notifications_enabled'] as bool? ?? true;
+
+    final isVerified = (user?.isSupplierVerified ?? false) ||
+        (user?.isTruckerVerified ?? false);
     final mobileText = user == null
         ? ''
         : isVerified
@@ -222,7 +224,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       value: loadAlertsEnabled,
                       activeColor: AppColors.primary,
-                      onChanged: (value) => _updatePreference('load_alerts_enabled', value),
+                      onChanged: (value) =>
+                          _updatePreference('load_alerts_enabled', value),
                     ),
                     SwitchListTile(
                       title: Text(
@@ -241,7 +244,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       value: chatNotificationsEnabled,
                       activeColor: AppColors.primary,
-                      onChanged: (value) => _updatePreference('chat_notifications_enabled', value),
+                      onChanged: (value) => _updatePreference(
+                          'chat_notifications_enabled', value),
                     ),
                   ],
                 ),
@@ -281,7 +285,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildFleetStat(String label, String value, IconData icon, Color color) {
+  Widget _buildFleetStat(
+      String label, String value, IconData icon, Color color) {
     return Expanded(
       child: Column(
         children: [

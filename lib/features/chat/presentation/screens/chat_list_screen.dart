@@ -22,7 +22,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(authNotifierProvider).user;
     final chatStream = ref.watch(chatListStreamProvider(user?.id));
-    
+
     final isSupplier = user?.isSupplierEnabled ?? false;
     final isTrucker = user?.isTruckerEnabled ?? false;
     final isVerified = isSupplier
@@ -136,7 +136,10 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
                           const SizedBox(height: AppDimensions.sm),
                           Text(
                             'Start a conversation from any load detail page.',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: AppColors.textSecondary,
                                 ),
                             textAlign: TextAlign.center,
@@ -147,7 +150,8 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
                   );
                 }
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: AppDimensions.sm),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: AppDimensions.sm),
                   itemCount: chats.length,
                   itemBuilder: (context, index) {
                     final chat = chats[index];
@@ -160,7 +164,8 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
               },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(
-                child: Text('Error: $error', style: const TextStyle(color: AppColors.danger)),
+                child: Text('Error: $error',
+                    style: const TextStyle(color: AppColors.danger)),
               ),
             ),
         ],

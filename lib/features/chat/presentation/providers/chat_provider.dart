@@ -163,7 +163,8 @@ final chatNotifierProvider =
   );
 });
 
-final chatListStreamProvider = StreamProvider.family<List<Chat>, String?>((ref, userId) {
+final chatListStreamProvider =
+    StreamProvider.family<List<Chat>, String?>((ref, userId) {
   final repository = ref.watch(chatRepositoryProvider);
   return repository.watchChats(userId: userId);
 });

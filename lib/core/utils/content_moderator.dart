@@ -64,7 +64,9 @@ class ContentModerator {
     if (hasProfanity || isSpamContent) {
       return ModerationResult(
         isAllowed: false,
-        reason: hasProfanity ? 'Contains inappropriate language' : 'Detected as spam',
+        reason: hasProfanity
+            ? 'Contains inappropriate language'
+            : 'Detected as spam',
         filteredText: hasProfanity ? filterProfanity(text) : text,
       );
     }
@@ -76,9 +78,11 @@ class ContentModerator {
   }
 
   /// Check if user is posting too frequently (rate limiting)
-  static bool isRateLimited(List<DateTime> recentPosts, {int maxPosts = 5, Duration window = const Duration(minutes: 1)}) {
+  static bool isRateLimited(List<DateTime> recentPosts,
+      {int maxPosts = 5, Duration window = const Duration(minutes: 1)}) {
     final now = DateTime.now();
-    final recentCount = recentPosts.where((time) => now.difference(time) < window).length;
+    final recentCount =
+        recentPosts.where((time) => now.difference(time) < window).length;
     return recentCount >= maxPosts;
   }
 
@@ -100,7 +104,9 @@ class ContentModerator {
     if (RegExp(r'(.)\1{4,}').hasMatch(text)) score += 15;
 
     // Check for spam keywords
-    if (RegExp(r'(buy now|click here|limited offer|free money)', caseSensitive: false).hasMatch(text)) {
+    if (RegExp(r'(buy now|click here|limited offer|free money)',
+            caseSensitive: false)
+        .hasMatch(text)) {
       score += 40;
     }
 

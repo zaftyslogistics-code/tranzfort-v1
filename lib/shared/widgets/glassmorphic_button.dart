@@ -38,16 +38,20 @@ class GlassmorphicButton extends StatelessWidget {
 
     final Color backgroundColor = isPrimary
         ? AppColors.primary.withAlpha(((enabled ? 0.9 : 0.4) * 255).round())
-        : AppColors.glassSurface.withAlpha(((enabled ? 0.6 : 0.3) * 255).round());
+        : AppColors.glassSurface
+            .withAlpha(((enabled ? 0.6 : 0.3) * 255).round());
 
     final Color borderColor = isPrimary
         ? AppColors.primaryVariant
             .withAlpha(((enabled ? 0.7 : 0.3) * 255).round())
-        : AppColors.glassBorder.withAlpha(((enabled ? 1.0 : 0.5) * 255).round());
+        : AppColors.glassBorder
+            .withAlpha(((enabled ? 1.0 : 0.5) * 255).round());
 
-    final Color textColor = isPrimary 
-        ? AppColors.darkOnSurface 
-        : enabled ? AppColors.textPrimary : AppColors.textTertiary;
+    final Color textColor = isPrimary
+        ? AppColors.darkOnSurface
+        : enabled
+            ? AppColors.textPrimary
+            : AppColors.textTertiary;
 
     final List<BoxShadow> shadows = [
       BoxShadow(
@@ -75,8 +79,12 @@ class GlassmorphicButton extends StatelessWidget {
             child: InkWell(
               onTap: enabled ? onPressed : null,
               borderRadius: BorderRadius.circular(borderRadius),
-              splashColor: enabled ? AppColors.primary.withAlpha((0.2 * 255).round()) : Colors.transparent,
-              highlightColor: enabled ? AppColors.primary.withAlpha((0.1 * 255).round()) : Colors.transparent,
+              splashColor: enabled
+                  ? AppColors.primary.withAlpha((0.2 * 255).round())
+                  : Colors.transparent,
+              highlightColor: enabled
+                  ? AppColors.primary.withAlpha((0.1 * 255).round())
+                  : Colors.transparent,
               child: Container(
                 padding: padding,
                 decoration: BoxDecoration(

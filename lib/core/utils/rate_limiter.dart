@@ -9,7 +9,7 @@ class RateLimiter {
 
   // Track failed login attempts by email
   final Map<String, List<DateTime>> _failedAttempts = {};
-  
+
   // Track API call timestamps by endpoint
   final Map<String, List<DateTime>> _apiCalls = {};
 
@@ -23,7 +23,7 @@ class RateLimiter {
   /// Returns null if allowed, error message if blocked
   String? checkLoginAllowed(String email) {
     final attempts = _getRecentAttempts(email);
-    
+
     if (attempts.isEmpty) {
       return null; // No recent attempts, allow login
     }
@@ -31,10 +31,11 @@ class RateLimiter {
     // Check if user is in lockout period
     final lastAttempt = attempts.last;
     final timeSinceLastAttempt = DateTime.now().difference(lastAttempt);
-    
+
     if (attempts.length >= maxLoginAttempts) {
       if (timeSinceLastAttempt < lockoutDuration) {
-        final remainingMinutes = (lockoutDuration - timeSinceLastAttempt).inMinutes;
+        final remainingMinutes =
+            (lockoutDuration - timeSinceLastAttempt).inMinutes;
         return 'Too many failed attempts. Please try again in $remainingMinutes minutes.';
       } else {
         // Lockout period expired, clear attempts
@@ -50,13 +51,14 @@ class RateLimiter {
   void recordFailedLogin(String email) {
     _failedAttempts.putIfAbsent(email, () => []);
     _failedAttempts[email]!.add(DateTime.now());
-    
+
     // Clean up old attempts
     _cleanupOldAttempts(email);
-    
+
     if (kDebugMode) {
       final attempts = _getRecentAttempts(email);
-      print('[RATE_LIMITER] Failed login for $email. Attempts: ${attempts.length}/$maxLoginAttempts');
+      print(
+          '[RATE_LIMITER] Failed login for $email. Attempts: ${attempts.length}/$maxLoginAttempts');
     }
   }
 
@@ -64,7 +66,8 @@ class RateLimiter {
   void recordSuccessfulLogin(String email) {
     _failedAttempts.remove(email);
     if (kDebugMode) {
-      print('[RATE_LIMITER] Successful login for $email. Cleared failed attempts.');
+      print(
+          '[RATE_LIMITER] Successful login for $email. Cleared failed attempts.');
     }
   }
 
@@ -84,7 +87,7 @@ class RateLimiter {
   /// Returns null if allowed, error message if rate limited
   String? checkApiCallAllowed(String endpoint) {
     final calls = _getRecentApiCalls(endpoint);
-    
+
     if (calls.length >= maxApiCallsPerMinute) {
       return 'Rate limit exceeded. Please try again in a moment.';
     }
@@ -96,7 +99,7 @@ class RateLimiter {
   void recordApiCall(String endpoint) {
     _apiCalls.putIfAbsent(endpoint, () => []);
     _apiCalls[endpoint]!.add(DateTime.now());
-    
+
     // Clean up old calls
     _cleanupOldApiCalls(endpoint);
   }

@@ -68,24 +68,23 @@ class _$TruckTypeModelCopyWithImpl<$Res, $Val extends TruckTypeModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as int,
-            name: null == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
-                      as String,
-            category: freezed == category
-                ? _value.category
-                : category // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            displayOrder: null == displayOrder
-                ? _value.displayOrder
-                : displayOrder // ignore: cast_nullable_to_non_nullable
-                      as int,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as int,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                as String,
+        category: freezed == category
+            ? _value.category
+            : category // ignore: cast_nullable_to_non_nullable
+                as String?,
+        displayOrder: null == displayOrder
+            ? _value.displayOrder
+            : displayOrder // ignore: cast_nullable_to_non_nullable
+                as int,
+      ) as $Val,
     );
   }
 }
@@ -126,19 +125,19 @@ class __$$TruckTypeModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as int,
+                as int,
         name: null == name
             ? _value.name
             : name // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         category: freezed == category
             ? _value.category
             : category // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         displayOrder: null == displayOrder
             ? _value.displayOrder
             : displayOrder // ignore: cast_nullable_to_non_nullable
-                  as int,
+                as int,
       ),
     );
   }

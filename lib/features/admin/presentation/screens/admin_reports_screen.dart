@@ -17,7 +17,8 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(adminReportsProvider.notifier).fetchReports());
+    Future.microtask(
+        () => ref.read(adminReportsProvider.notifier).fetchReports());
   }
 
   @override
@@ -30,9 +31,12 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () => ref.read(adminReportsProvider.notifier).fetchReports(
-              status: state.currentFilter == 'all' ? null : state.currentFilter,
-            ),
+            onPressed: () =>
+                ref.read(adminReportsProvider.notifier).fetchReports(
+                      status: state.currentFilter == 'all'
+                          ? null
+                          : state.currentFilter,
+                    ),
           ),
         ],
       ),
@@ -47,31 +51,41 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                 _FilterChip(
                   label: 'All',
                   isSelected: state.currentFilter == 'all',
-                  onSelected: () => ref.read(adminReportsProvider.notifier).fetchReports(status: 'all'),
+                  onSelected: () => ref
+                      .read(adminReportsProvider.notifier)
+                      .fetchReports(status: 'all'),
                 ),
                 const SizedBox(width: AppDimensions.sm),
                 _FilterChip(
                   label: 'Pending',
                   isSelected: state.currentFilter == 'pending',
-                  onSelected: () => ref.read(adminReportsProvider.notifier).fetchReports(status: 'pending'),
+                  onSelected: () => ref
+                      .read(adminReportsProvider.notifier)
+                      .fetchReports(status: 'pending'),
                 ),
                 const SizedBox(width: AppDimensions.sm),
                 _FilterChip(
                   label: 'Investigating',
                   isSelected: state.currentFilter == 'investigating',
-                  onSelected: () => ref.read(adminReportsProvider.notifier).fetchReports(status: 'investigating'),
+                  onSelected: () => ref
+                      .read(adminReportsProvider.notifier)
+                      .fetchReports(status: 'investigating'),
                 ),
                 const SizedBox(width: AppDimensions.sm),
                 _FilterChip(
                   label: 'Resolved',
                   isSelected: state.currentFilter == 'resolved',
-                  onSelected: () => ref.read(adminReportsProvider.notifier).fetchReports(status: 'resolved'),
+                  onSelected: () => ref
+                      .read(adminReportsProvider.notifier)
+                      .fetchReports(status: 'resolved'),
                 ),
                 const SizedBox(width: AppDimensions.sm),
                 _FilterChip(
                   label: 'Dismissed',
                   isSelected: state.currentFilter == 'dismissed',
-                  onSelected: () => ref.read(adminReportsProvider.notifier).fetchReports(status: 'dismissed'),
+                  onSelected: () => ref
+                      .read(adminReportsProvider.notifier)
+                      .fetchReports(status: 'dismissed'),
                 ),
               ],
             ),
@@ -82,7 +96,9 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
             child: state.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : state.error != null
-                    ? Center(child: Text('Error: ${state.error}', style: const TextStyle(color: AppColors.danger)))
+                    ? Center(
+                        child: Text('Error: ${state.error}',
+                            style: const TextStyle(color: AppColors.danger)))
                     : state.reports.isEmpty
                         ? const Center(child: Text('No reports found'))
                         : ListView.builder(
@@ -160,9 +176,11 @@ class _ReportCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(report.status).withValues(alpha: 0.1),
+                    color:
+                        _getStatusColor(report.status).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                     border: Border.all(color: _getStatusColor(report.status)),
                   ),
@@ -177,7 +195,8 @@ class _ReportCard extends ConsumerWidget {
                 ),
                 Text(
                   timeago.format(report.createdAt),
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                  style: const TextStyle(
+                      color: AppColors.textSecondary, fontSize: 12),
                 ),
               ],
             ),
@@ -189,15 +208,18 @@ class _ReportCard extends ConsumerWidget {
             const SizedBox(height: 4),
             Text(
               'Type: ${report.reportedEntityType} (ID: ${report.reportedEntityId.substring(0, 8)}...)',
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+              style:
+                  const TextStyle(color: AppColors.textSecondary, fontSize: 12),
             ),
             const SizedBox(height: AppDimensions.sm),
             if (report.description != null) ...[
-              const Text('Description:', style: TextStyle(fontWeight: FontWeight.w500)),
-              Text(report.description!, style: const TextStyle(color: AppColors.textSecondary)),
+              const Text('Description:',
+                  style: TextStyle(fontWeight: FontWeight.w500)),
+              Text(report.description!,
+                  style: const TextStyle(color: AppColors.textSecondary)),
               const SizedBox(height: AppDimensions.md),
             ],
-            
+
             // Action Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -206,17 +228,23 @@ class _ReportCard extends ConsumerWidget {
                   TextButton.icon(
                     icon: const Icon(Icons.search, size: 16),
                     label: const Text('Investigate'),
-                    onPressed: () => _updateStatus(context, ref, 'investigating'),
+                    onPressed: () =>
+                        _updateStatus(context, ref, 'investigating'),
                   ),
-                if (report.status != 'resolved' && report.status != 'dismissed') ...[
+                if (report.status != 'resolved' &&
+                    report.status != 'dismissed') ...[
                   TextButton.icon(
-                    icon: const Icon(Icons.check_circle_outline, size: 16, color: AppColors.success),
-                    label: const Text('Resolve', style: TextStyle(color: AppColors.success)),
+                    icon: const Icon(Icons.check_circle_outline,
+                        size: 16, color: AppColors.success),
+                    label: const Text('Resolve',
+                        style: TextStyle(color: AppColors.success)),
                     onPressed: () => _updateStatus(context, ref, 'resolved'),
                   ),
                   TextButton.icon(
-                    icon: const Icon(Icons.close, size: 16, color: AppColors.textSecondary),
-                    label: const Text('Dismiss', style: TextStyle(color: AppColors.textSecondary)),
+                    icon: const Icon(Icons.close,
+                        size: 16, color: AppColors.textSecondary),
+                    label: const Text('Dismiss',
+                        style: TextStyle(color: AppColors.textSecondary)),
                     onPressed: () => _updateStatus(context, ref, 'dismissed'),
                   ),
                 ],
@@ -228,9 +256,10 @@ class _ReportCard extends ConsumerWidget {
     );
   }
 
-  Future<void> _updateStatus(BuildContext context, WidgetRef ref, String newStatus) async {
+  Future<void> _updateStatus(
+      BuildContext context, WidgetRef ref, String newStatus) async {
     final adminNotesController = TextEditingController();
-    
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -248,7 +277,9 @@ class _ReportCard extends ConsumerWidget {
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             child: const Text('Confirm'),
@@ -259,10 +290,12 @@ class _ReportCard extends ConsumerWidget {
 
     if (confirmed == true) {
       await ref.read(adminReportsProvider.notifier).updateReportStatus(
-        report.id, 
-        newStatus,
-        adminNotes: adminNotesController.text.isNotEmpty ? adminNotesController.text : null,
-      );
+            report.id,
+            newStatus,
+            adminNotes: adminNotesController.text.isNotEmpty
+                ? adminNotesController.text
+                : null,
+          );
     }
   }
 }

@@ -41,7 +41,8 @@ class Logger {
     }
   }
 
-  static void error(String message, {String tag = 'ERROR', Object? error, StackTrace? stackTrace}) {
+  static void error(String message,
+      {String tag = 'ERROR', Object? error, StackTrace? stackTrace}) {
     if (kDebugMode) {
       print('[$tag] ${_sanitize(message)}');
       if (error != null) {

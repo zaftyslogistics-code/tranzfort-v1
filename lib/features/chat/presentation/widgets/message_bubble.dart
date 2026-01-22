@@ -56,14 +56,17 @@ class MessageBubble extends StatelessWidget {
             Text(
               message.messageText,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: isMe ? AppColors.darkOnSurface : AppColors.textPrimary,
+                    color:
+                        isMe ? AppColors.darkOnSurface : AppColors.textPrimary,
                   ),
             ),
             const SizedBox(height: AppDimensions.xxs),
             Text(
               Formatters.formatTime(message.createdAt),
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: isMe ? AppColors.textSecondary : AppColors.textSecondary,
+                    color: isMe
+                        ? AppColors.textSecondary
+                        : AppColors.textSecondary,
                   ),
             ),
           ],

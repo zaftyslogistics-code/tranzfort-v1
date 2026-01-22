@@ -10,10 +10,16 @@ class UserModel with _$UserModel {
     @JsonKey(name: 'mobile_number') required String mobileNumber,
     @JsonKey(name: 'country_code') @Default('+91') String countryCode,
     String? name,
-    @JsonKey(name: 'is_supplier_enabled') @Default(false) bool isSupplierEnabled,
+    @JsonKey(name: 'is_supplier_enabled')
+    @Default(false)
+    bool isSupplierEnabled,
     @JsonKey(name: 'is_trucker_enabled') @Default(false) bool isTruckerEnabled,
-    @JsonKey(name: 'supplier_verification_status') @Default('unverified') String supplierVerificationStatus,
-    @JsonKey(name: 'trucker_verification_status') @Default('unverified') String truckerVerificationStatus,
+    @JsonKey(name: 'supplier_verification_status')
+    @Default('unverified')
+    String supplierVerificationStatus,
+    @JsonKey(name: 'trucker_verification_status')
+    @Default('unverified')
+    String truckerVerificationStatus,
     @Default({}) Map<String, dynamic> preferences,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'last_login_at') required DateTime lastLoginAt,

@@ -16,13 +16,15 @@ class SmartTruckSpecificationSelector extends StatefulWidget {
   });
 
   @override
-  State<SmartTruckSpecificationSelector> createState() => _SmartTruckSpecificationSelectorState();
+  State<SmartTruckSpecificationSelector> createState() =>
+      _SmartTruckSpecificationSelectorState();
 }
 
-class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificationSelector> {
+class _SmartTruckSpecificationSelectorState
+    extends State<SmartTruckSpecificationSelector> {
   int _selectedCategory = 0; // 0: Small, 1: Medium, 2: Heavy, 3: Super Heavy
   TruckSpecification? _selectedSpec;
-  
+
   final List<Map<String, dynamic>> _categories = [
     {
       'name': 'Small Trucks',
@@ -102,11 +104,11 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
                 ),
           ),
           const SizedBox(height: AppDimensions.lg),
-          
+
           // Category Selection
           _buildCategorySelector(),
           const SizedBox(height: AppDimensions.lg),
-          
+
           // Specification Details
           _buildSpecificationDetails(),
         ],
@@ -123,7 +125,7 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
         itemBuilder: (context, index) {
           final category = _categories[index];
           final isSelected = _selectedCategory == index;
-          
+
           return GestureDetector(
             onTap: () {
               setState(() {
@@ -137,12 +139,18 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
               decoration: BoxDecoration(
                 gradient: isSelected
                     ? LinearGradient(
-                        colors: [category['color'], category['color'].withAlpha((0.8 * 255).round())],
+                        colors: [
+                          category['color'],
+                          category['color'].withAlpha((0.8 * 255).round())
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )
                     : LinearGradient(
-                        colors: [AppColors.glassSurface, AppColors.glassSurface],
+                        colors: [
+                          AppColors.glassSurface,
+                          AppColors.glassSurface
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -173,7 +181,9 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
                   Text(
                     category['description'],
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: isSelected ? Colors.white.withAlpha((0.9 * 255).round()) : AppColors.textSecondary,
+                          color: isSelected
+                              ? Colors.white.withAlpha((0.9 * 255).round())
+                              : AppColors.textSecondary,
                           fontSize: 10,
                         ),
                     textAlign: TextAlign.center,
@@ -188,8 +198,9 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
   }
 
   Widget _buildSpecificationDetails() {
-    final specs = _categories[_selectedCategory]['specs'] as List<TruckSpecification>;
-    
+    final specs =
+        _categories[_selectedCategory]['specs'] as List<TruckSpecification>;
+
     if (specs.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(AppDimensions.lg),
@@ -222,7 +233,7 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
 
   Widget _buildSpecificationCard(TruckSpecification spec) {
     final isSelected = _selectedSpec?.id == spec.id;
-    
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -271,7 +282,9 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
                       Text(
                         spec.capacityRange,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: isSelected ? Colors.white.withAlpha((0.9 * 255).round()) : AppColors.textSecondary,
+                              color: isSelected
+                                  ? Colors.white.withAlpha((0.9 * 255).round())
+                                  : AppColors.textSecondary,
                             ),
                       ),
                     ],
@@ -285,7 +298,8 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white.withAlpha((0.2 * 255).round()),
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+                      borderRadius:
+                          BorderRadius.circular(AppDimensions.radiusSm),
                     ),
                     child: Text(
                       'SELECTED',
@@ -298,13 +312,19 @@ class _SmartTruckSpecificationSelectorState extends State<SmartTruckSpecificatio
                   ),
               ],
             ),
-            if (spec.length != null && spec.width != null && spec.height != null)
+            if (spec.length != null &&
+                spec.width != null &&
+                spec.height != null)
               const SizedBox(height: AppDimensions.sm),
-            if (spec.length != null && spec.width != null && spec.height != null)
+            if (spec.length != null &&
+                spec.width != null &&
+                spec.height != null)
               Text(
                 'Dimensions: ${spec.dimensions}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isSelected ? Colors.white.withAlpha((0.9 * 255).round()) : AppColors.textSecondary,
+                      color: isSelected
+                          ? Colors.white.withAlpha((0.9 * 255).round())
+                          : AppColors.textSecondary,
                     ),
               ),
           ],
@@ -328,7 +348,7 @@ class QuickTruckTypeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final specs = TruckSpecification.getSmartIndianTruckSpecifications();
-    
+
     return SizedBox(
       height: 80,
       child: ListView.builder(
@@ -337,7 +357,7 @@ class QuickTruckTypeSelector extends StatelessWidget {
         itemBuilder: (context, index) {
           final spec = specs[index];
           final isSelected = selectedSpec?.id == spec.id;
-          
+
           return GestureDetector(
             onTap: () => onSelected(spec),
             child: Container(
@@ -347,18 +367,26 @@ class QuickTruckTypeSelector extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: isSelected
                     ? LinearGradient(
-                        colors: [AppColors.truckPrimary, AppColors.truckSecondary],
+                        colors: [
+                          AppColors.truckPrimary,
+                          AppColors.truckSecondary
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )
                     : LinearGradient(
-                        colors: [AppColors.glassSurface, AppColors.glassSurface],
+                        colors: [
+                          AppColors.glassSurface,
+                          AppColors.glassSurface
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                 borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
                 border: Border.all(
-                  color: isSelected ? AppColors.truckPrimary : AppColors.glassBorder,
+                  color: isSelected
+                      ? AppColors.truckPrimary
+                      : AppColors.glassBorder,
                   width: 1,
                 ),
               ),
@@ -368,7 +396,9 @@ class QuickTruckTypeSelector extends StatelessWidget {
                   Text(
                     '${spec.tyreCount}T',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: isSelected ? Colors.white : AppColors.truckPrimary,
+                          color: isSelected
+                              ? Colors.white
+                              : AppColors.truckPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -376,7 +406,9 @@ class QuickTruckTypeSelector extends StatelessWidget {
                   Text(
                     spec.bodyType,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: isSelected ? Colors.white.withAlpha((0.9 * 255).round()) : AppColors.textSecondary,
+                          color: isSelected
+                              ? Colors.white.withAlpha((0.9 * 255).round())
+                              : AppColors.textSecondary,
                           fontSize: 10,
                         ),
                     textAlign: TextAlign.center,
@@ -385,7 +417,9 @@ class QuickTruckTypeSelector extends StatelessWidget {
                   Text(
                     spec.capacityRange,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: isSelected ? Colors.white.withAlpha((0.9 * 255).round()) : AppColors.textSecondary,
+                          color: isSelected
+                              ? Colors.white.withAlpha((0.9 * 255).round())
+                              : AppColors.textSecondary,
                           fontSize: 9,
                         ),
                   ),

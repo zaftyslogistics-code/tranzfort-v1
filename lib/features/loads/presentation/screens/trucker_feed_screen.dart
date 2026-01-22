@@ -51,14 +51,14 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
   Future<void> _fetchLoads() async {
     final status = _filter == 'Active' ? 'active' : null;
     final query = _searchController.text.trim();
-    
+
     await ref.read(loadsNotifierProvider.notifier).fetchLoads(
-      status: status,
-      searchQuery: query.isNotEmpty ? query : null,
-    );
+          status: status,
+          searchQuery: query.isNotEmpty ? query : null,
+        );
   }
 
-  // NOTE: We now do server-side filtering, so this local filter is mainly for 
+  // NOTE: We now do server-side filtering, so this local filter is mainly for
   // ensuring the UI state is consistent or for offline fallback if we implemented that logic.
   // But for now, we rely on the provider's loads which are already filtered by the server.
   List<dynamic> _applyFilters(List<dynamic> loads) {
@@ -80,7 +80,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
       _fetchLoads();
     });
   }
-  
+
   Timer? _debounceTimer;
 
   @override
@@ -173,7 +173,8 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
                     : filteredLoads.isEmpty
                         ? EmptyStateWidget(
                             message: 'No Loads Found',
-                            subMessage: 'Try adjusting your filters or search query.',
+                            subMessage:
+                                'Try adjusting your filters or search query.',
                             icon: Icons.search_off,
                             actionLabel: 'Clear Filters',
                             onAction: () {
@@ -193,11 +194,13 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
                               itemCount: filteredLoads.length,
                               itemBuilder: (context, index) {
                                 // Show native ad every 5 loads (after 4th, 9th, 14th, etc.)
-                                if (index % 5 == 4 && index != filteredLoads.length - 1) {
+                                if (index % 5 == 4 &&
+                                    index != filteredLoads.length - 1) {
                                   return ConditionalAdWidget(
                                     screenName: 'load_feed',
                                     userId: user?.id,
-                                    isVerifiedUser: user?.isTruckerVerified ?? false,
+                                    isVerifiedUser:
+                                        user?.isTruckerVerified ?? false,
                                     impressionTracker: _adImpressionTracker,
                                   );
                                 }

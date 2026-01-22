@@ -31,7 +31,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       if (!mounted) return;
       final user = ref.read(authNotifierProvider).user;
       if (user != null) {
-        ref.read(chatNotifierProvider.notifier).markAsRead(widget.chatId, user.id);
+        ref
+            .read(chatNotifierProvider.notifier)
+            .markAsRead(widget.chatId, user.id);
       }
       ref.read(chatNotifierProvider.notifier).selectChat(widget.chatId);
     });
@@ -122,7 +124,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         Expanded(
                           child: Text(
                             'Load #${selectedChat.loadId.substring(0, 6)}',
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
                                   color: AppColors.textPrimary,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -131,11 +136,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         if (selectedChat.unreadCount > 0)
                           Text(
                             '${selectedChat.unreadCount} unread',
-                            style:
-                                Theme.of(context).textTheme.labelSmall?.copyWith(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
                       ],
                     ),
@@ -154,7 +161,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       },
                     );
                   },
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (_, __) => Center(
                     child: Text(
                       'Failed to load messages',

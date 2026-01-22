@@ -22,7 +22,6 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.darkBackground,
       textTheme: AppTextStyles.textTheme,
-      
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.darkSurface,
         foregroundColor: AppColors.darkOnSurface,
@@ -32,7 +31,6 @@ class AppTheme {
           color: AppColors.darkOnSurface,
         ),
       ),
-
       cardTheme: CardThemeData(
         color: AppColors.glassSurface,
         elevation: AppDimensions.elevation0,
@@ -46,7 +44,6 @@ class AppTheme {
           vertical: AppDimensions.xs,
         ),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary.withAlpha((0.9 * 255).round()),
@@ -64,7 +61,6 @@ class AppTheme {
           textStyle: AppTextStyles.button,
         ),
       ),
-
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.textPrimary,
@@ -81,7 +77,6 @@ class AppTheme {
           textStyle: AppTextStyles.button,
         ),
       ),
-
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primary,
@@ -92,7 +87,6 @@ class AppTheme {
           textStyle: AppTextStyles.button,
         ),
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.glassSurfaceStrong,
@@ -142,7 +136,6 @@ class AppTheme {
         suffixIconColor: AppColors.textSecondary,
         prefixIconColor: AppColors.textSecondary,
       ),
-
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.glassSurface,
         selectedColor: AppColors.primary,
@@ -155,7 +148,6 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
         ),
       ),
-
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.darkSurface,
         shape: RoundedRectangleBorder(
@@ -164,14 +156,12 @@ class AppTheme {
           ),
         ),
       ),
-
       dialogTheme: DialogThemeData(
         backgroundColor: AppColors.darkSurface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
         ),
       ),
-
       dividerTheme: const DividerThemeData(
         color: AppColors.glassBorder,
         thickness: 1,

@@ -24,12 +24,13 @@ class SystemConfig {
   }) {
     return SystemConfig(
       enableAds: enableAds ?? this.enableAds,
-      verificationFeeTrucker: verificationFeeTrucker ?? this.verificationFeeTrucker,
-      verificationFeeSupplier: verificationFeeSupplier ?? this.verificationFeeSupplier,
+      verificationFeeTrucker:
+          verificationFeeTrucker ?? this.verificationFeeTrucker,
+      verificationFeeSupplier:
+          verificationFeeSupplier ?? this.verificationFeeSupplier,
       loadExpiryDays: loadExpiryDays ?? this.loadExpiryDays,
     );
   }
-
 }
 
 class AdminConfigState {
@@ -94,7 +95,8 @@ class AdminConfigNotifier extends StateNotifier<AdminConfigState> {
         enableAds: (row['enable_ads'] as bool?) ?? state.config.enableAds,
         verificationFeeTrucker: 0,
         verificationFeeSupplier: 0,
-        loadExpiryDays: (row['load_expiry_days'] as int?) ?? state.config.loadExpiryDays,
+        loadExpiryDays:
+            (row['load_expiry_days'] as int?) ?? state.config.loadExpiryDays,
       );
 
       state = state.copyWith(isLoading: false, config: config);
@@ -117,14 +119,11 @@ class AdminConfigNotifier extends StateNotifier<AdminConfigState> {
     state = state.copyWith(isSaving: true, error: null);
 
     try {
-      await _client
-          .from('system_config')
-          .update({
-            'enable_ads': state.config.enableAds,
-            'load_expiry_days': state.config.loadExpiryDays,
-            'updated_at': DateTime.now().toIso8601String(),
-          })
-          .eq('id', 1);
+      await _client.from('system_config').update({
+        'enable_ads': state.config.enableAds,
+        'load_expiry_days': state.config.loadExpiryDays,
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', 1);
 
       state = state.copyWith(isSaving: false);
       return true;

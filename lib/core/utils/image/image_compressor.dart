@@ -14,8 +14,9 @@ class ImageCompressor {
     try {
       final String fileName = p.basename(file.path);
       final String fileExt = p.extension(file.path);
-      final String tempName = '${p.basenameWithoutExtension(fileName)}_compressed$fileExt';
-      
+      final String tempName =
+          '${p.basenameWithoutExtension(fileName)}_compressed$fileExt';
+
       final Directory tempDir = await getTemporaryDirectory();
       final String targetPath = p.join(tempDir.path, tempName);
 
@@ -41,13 +42,15 @@ class ImageCompressor {
       }
 
       final compressedFile = File(result.path);
-      
+
       // Log savings
       final originalSize = await file.length();
       final compressedSize = await compressedFile.length();
-      final savings = ((originalSize - compressedSize) / originalSize * 100).toStringAsFixed(1);
-      
-      Logger.info('Compression complete: $originalSize bytes -> $compressedSize bytes ($savings% saved)');
+      final savings = ((originalSize - compressedSize) / originalSize * 100)
+          .toStringAsFixed(1);
+
+      Logger.info(
+          'Compression complete: $originalSize bytes -> $compressedSize bytes ($savings% saved)');
 
       return compressedFile;
     } catch (e) {

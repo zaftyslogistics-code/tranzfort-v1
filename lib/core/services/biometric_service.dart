@@ -76,7 +76,8 @@ class BiometricService {
   Future<bool> authenticateWithFallback() async {
     // Try biometric first
     if (isBiometricEnabled && await isBiometricAvailable) {
-      final biometricSuccess = await authenticate('Authenticate to access your account');
+      final biometricSuccess =
+          await authenticate('Authenticate to access your account');
       if (biometricSuccess) return true;
     }
 

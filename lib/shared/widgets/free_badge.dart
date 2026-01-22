@@ -17,10 +17,11 @@ class FreeBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding ?? const EdgeInsets.symmetric(
-        horizontal: AppDimensions.sm,
-        vertical: AppDimensions.xs,
-      ),
+      padding: padding ??
+          const EdgeInsets.symmetric(
+            horizontal: AppDimensions.sm,
+            vertical: AppDimensions.xs,
+          ),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
@@ -42,11 +43,11 @@ class FreeBadge extends StatelessWidget {
       child: Text(
         text,
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-          color: Colors.white,
-          fontSize: fontSize ?? 10,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 1.2,
-        ),
+              color: Colors.white,
+              fontSize: fontSize ?? 10,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
       ),
     );
   }

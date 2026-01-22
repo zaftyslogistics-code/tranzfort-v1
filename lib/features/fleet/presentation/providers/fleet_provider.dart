@@ -53,14 +53,17 @@ class FleetNotifier extends StateNotifier<FleetState> {
     state = state.copyWith(isLoading: true, error: null);
     final result = await _repository.getTrucks();
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (trucks) => state = state.copyWith(isLoading: false, trucks: trucks),
     );
   }
 
-  Future<bool> addTruck(Map<String, dynamic> truckData, {XFile? rcDocument, XFile? insuranceDocument}) async {
+  Future<bool> addTruck(Map<String, dynamic> truckData,
+      {XFile? rcDocument, XFile? insuranceDocument}) async {
     state = state.copyWith(isLoading: true, error: null);
-    final result = await _repository.addTruck(truckData, rcDocument: rcDocument, insuranceDocument: insuranceDocument);
+    final result = await _repository.addTruck(truckData,
+        rcDocument: rcDocument, insuranceDocument: insuranceDocument);
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
@@ -76,16 +79,19 @@ class FleetNotifier extends StateNotifier<FleetState> {
     );
   }
 
-  Future<bool> updateTruck(String id, Map<String, dynamic> updates, {XFile? rcDocument, XFile? insuranceDocument}) async {
+  Future<bool> updateTruck(String id, Map<String, dynamic> updates,
+      {XFile? rcDocument, XFile? insuranceDocument}) async {
     state = state.copyWith(isLoading: true, error: null);
-    final result = await _repository.updateTruck(id, updates, rcDocument: rcDocument, insuranceDocument: insuranceDocument);
+    final result = await _repository.updateTruck(id, updates,
+        rcDocument: rcDocument, insuranceDocument: insuranceDocument);
     return result.fold(
       (failure) {
         state = state.copyWith(isLoading: false, error: failure.message);
         return false;
       },
       (updatedTruck) {
-        final updatedList = state.trucks.map((t) => t.id == id ? updatedTruck : t).toList();
+        final updatedList =
+            state.trucks.map((t) => t.id == id ? updatedTruck : t).toList();
         state = state.copyWith(isLoading: false, trucks: updatedList);
         return true;
       },
@@ -110,7 +116,8 @@ class FleetNotifier extends StateNotifier<FleetState> {
 }
 
 // Provider
-final fleetNotifierProvider = StateNotifierProvider<FleetNotifier, FleetState>((ref) {
+final fleetNotifierProvider =
+    StateNotifierProvider<FleetNotifier, FleetState>((ref) {
   final repository = ref.watch(fleetRepositoryProvider);
   return FleetNotifier(repository);
 });

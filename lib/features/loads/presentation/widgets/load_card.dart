@@ -99,7 +99,8 @@ class LoadCard extends StatelessWidget {
                         borderRadius:
                             BorderRadius.circular(AppDimensions.radiusSm),
                         border: Border.all(
-                          color: AppColors.danger.withAlpha((0.4 * 255).round()),
+                          color:
+                              AppColors.danger.withAlpha((0.4 * 255).round()),
                         ),
                       ),
                       child: Text(

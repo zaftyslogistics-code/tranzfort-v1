@@ -51,7 +51,8 @@ class AdminAnalyticsNotifier extends StateNotifier<AdminAnalyticsState> {
       final growthData = await _client.rpc('get_user_growth_last_7_days');
 
       // Ensure growthData is List<int>
-      final List<int> growthList = (growthData as List).map((e) => e as int).toList();
+      final List<int> growthList =
+          (growthData as List).map((e) => e as int).toList();
 
       state = state.copyWith(
         isLoading: false,

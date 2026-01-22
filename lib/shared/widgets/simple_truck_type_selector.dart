@@ -15,7 +15,8 @@ class SimpleTruckTypeSelector extends StatefulWidget {
   });
 
   @override
-  State<SimpleTruckTypeSelector> createState() => _SimpleTruckTypeSelectorState();
+  State<SimpleTruckTypeSelector> createState() =>
+      _SimpleTruckTypeSelectorState();
 }
 
 class _SimpleTruckTypeSelectorState extends State<SimpleTruckTypeSelector> {
@@ -73,59 +74,66 @@ class _SimpleTruckTypeSelectorState extends State<SimpleTruckTypeSelector> {
         ),
         const SizedBox(height: AppDimensions.md),
         ..._truckTypes.map((truck) => Padding(
-          padding: const EdgeInsets.only(bottom: AppDimensions.sm),
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GlassmorphicCard(
-              padding: const EdgeInsets.all(AppDimensions.md),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedType = truck['name'] as String;
-                  });
-                  widget.onTruckTypeSelected(truck['name'] as String);
-                },
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
-                child: Row(
-                  children: [
-                    Icon(
-                      truck['icon'] as IconData,
-                      color: _selectedType == truck['name'] 
-                          ? AppColors.primary 
-                          : AppColors.textSecondary,
-                      size: 32,
-                    ),
-                    const SizedBox(width: AppDimensions.md),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            truck['name'] as String,
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                  color: _selectedType == truck['name'] 
-                                      ? AppColors.primary 
-                                      : AppColors.textPrimary,
-                                  fontWeight: FontWeight.w600,
-                                ),
+              padding: const EdgeInsets.only(bottom: AppDimensions.sm),
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GlassmorphicCard(
+                  padding: const EdgeInsets.all(AppDimensions.md),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedType = truck['name'] as String;
+                      });
+                      widget.onTruckTypeSelected(truck['name'] as String);
+                    },
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                    child: Row(
+                      children: [
+                        Icon(
+                          truck['icon'] as IconData,
+                          color: _selectedType == truck['name']
+                              ? AppColors.primary
+                              : AppColors.textSecondary,
+                          size: 32,
+                        ),
+                        const SizedBox(width: AppDimensions.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                truck['name'] as String,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                      color: _selectedType == truck['name']
+                                          ? AppColors.primary
+                                          : AppColors.textPrimary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                              Text(
+                                '${truck['category']} • ${truck['capacity']} tons capacity',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: AppColors.textSecondary,
+                                    ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            '${truck['category']} • ${truck['capacity']} tons capacity',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
-                          ),
-                        ],
-                      ),
+                        ),
+                        if (_selectedType == truck['name'])
+                          const Icon(Icons.check_circle,
+                              color: AppColors.primary),
+                      ],
                     ),
-                    if (_selectedType == truck['name'])
-                      const Icon(Icons.check_circle, color: AppColors.primary),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        )),
+            )),
       ],
     );
   }

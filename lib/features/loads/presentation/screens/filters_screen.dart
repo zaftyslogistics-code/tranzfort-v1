@@ -144,14 +144,15 @@ class _FiltersScreenState extends ConsumerState<FiltersScreen> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge
-                                        ?.copyWith(color: AppColors.textPrimary),
+                                        ?.copyWith(
+                                            color: AppColors.textPrimary),
                                   ),
                                 ))
                             .toList(),
                         onChanged: (value) =>
                             setState(() => _selectedTruckType = value),
-                        decoration:
-                            const InputDecoration(hintText: 'Select truck type'),
+                        decoration: const InputDecoration(
+                            hintText: 'Select truck type'),
                       ),
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
@@ -188,7 +189,8 @@ class _FiltersScreenState extends ConsumerState<FiltersScreen> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge
-                                        ?.copyWith(color: AppColors.textPrimary),
+                                        ?.copyWith(
+                                            color: AppColors.textPrimary),
                                   ),
                                 ))
                             .toList(),

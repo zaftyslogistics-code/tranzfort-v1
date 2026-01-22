@@ -9,16 +9,19 @@ class AdminUserManagementScreen extends ConsumerStatefulWidget {
   const AdminUserManagementScreen({super.key});
 
   @override
-  ConsumerState<AdminUserManagementScreen> createState() => _AdminUserManagementScreenState();
+  ConsumerState<AdminUserManagementScreen> createState() =>
+      _AdminUserManagementScreenState();
 }
 
-class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementScreen> {
+class _AdminUserManagementScreenState
+    extends ConsumerState<AdminUserManagementScreen> {
   final _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(adminUsersNotifierProvider.notifier).fetchUsers());
+    Future.microtask(
+        () => ref.read(adminUsersNotifierProvider.notifier).fetchUsers());
   }
 
   @override
@@ -38,9 +41,10 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
           IconButton(
             onPressed: state.isLoading
                 ? null
-                : () => ref.read(adminUsersNotifierProvider.notifier).fetchUsers(
-                      query: _searchController.text,
-                    ),
+                : () =>
+                    ref.read(adminUsersNotifierProvider.notifier).fetchUsers(
+                          query: _searchController.text,
+                        ),
             icon: const Icon(Icons.refresh),
           )
         ],
@@ -56,7 +60,9 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
                 prefixIcon: Icon(Icons.search),
               ),
               onSubmitted: (value) {
-                ref.read(adminUsersNotifierProvider.notifier).fetchUsers(query: value);
+                ref
+                    .read(adminUsersNotifierProvider.notifier)
+                    .fetchUsers(query: value);
               },
             ),
             const SizedBox(height: AppDimensions.md),
@@ -108,7 +114,8 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
         scrollDirection: Axis.horizontal,
         child: SingleChildScrollView(
           child: DataTable(
-            headingRowColor: MaterialStateProperty.all(AppColors.secondaryBackground),
+            headingRowColor:
+                MaterialStateProperty.all(AppColors.secondaryBackground),
             columns: const [
               DataColumn(label: Text('ID')),
               DataColumn(label: Text('Mobile')),
@@ -156,10 +163,12 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Supplier', style: TextStyle(fontWeight: FontWeight.w500)),
+                      const Text('Supplier',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
                       Switch(
                         value: user.isSupplierEnabled,
-                        onChanged: (val) => _updateUser(user.id, {'is_supplier_enabled': val}),
+                        onChanged: (val) =>
+                            _updateUser(user.id, {'is_supplier_enabled': val}),
                       ),
                     ],
                   ),
@@ -168,10 +177,12 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Trucker', style: TextStyle(fontWeight: FontWeight.w500)),
+                      const Text('Trucker',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
                       Switch(
                         value: user.isTruckerEnabled,
-                        onChanged: (val) => _updateUser(user.id, {'is_trucker_enabled': val}),
+                        onChanged: (val) =>
+                            _updateUser(user.id, {'is_trucker_enabled': val}),
                       ),
                     ],
                   ),
@@ -185,10 +196,12 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Supplier KYC', style: TextStyle(fontWeight: FontWeight.w500)),
+                      const Text('Supplier KYC',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
                       _StatusDropdown(
                         value: user.supplierVerificationStatus,
-                        onChanged: (val) => _updateUser(user.id, {'supplier_verification_status': val}),
+                        onChanged: (val) => _updateUser(
+                            user.id, {'supplier_verification_status': val}),
                       ),
                     ],
                   ),
@@ -197,10 +210,12 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Trucker KYC', style: TextStyle(fontWeight: FontWeight.w500)),
+                      const Text('Trucker KYC',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
                       _StatusDropdown(
                         value: user.truckerVerificationStatus,
-                        onChanged: (val) => _updateUser(user.id, {'trucker_verification_status': val}),
+                        onChanged: (val) => _updateUser(
+                            user.id, {'trucker_verification_status': val}),
                       ),
                     ],
                   ),
@@ -222,29 +237,35 @@ class _AdminUserManagementScreenState extends ConsumerState<AdminUserManagementS
         DataCell(
           Switch(
             value: user.isSupplierEnabled,
-            onChanged: (val) => _updateUser(user.id, {'is_supplier_enabled': val}),
+            onChanged: (val) =>
+                _updateUser(user.id, {'is_supplier_enabled': val}),
           ),
         ),
         DataCell(
           Switch(
             value: user.isTruckerEnabled,
-            onChanged: (val) => _updateUser(user.id, {'is_trucker_enabled': val}),
+            onChanged: (val) =>
+                _updateUser(user.id, {'is_trucker_enabled': val}),
           ),
         ),
         DataCell(_StatusDropdown(
           value: user.supplierVerificationStatus,
-          onChanged: (val) => _updateUser(user.id, {'supplier_verification_status': val}),
+          onChanged: (val) =>
+              _updateUser(user.id, {'supplier_verification_status': val}),
         )),
         DataCell(_StatusDropdown(
           value: user.truckerVerificationStatus,
-          onChanged: (val) => _updateUser(user.id, {'trucker_verification_status': val}),
+          onChanged: (val) =>
+              _updateUser(user.id, {'trucker_verification_status': val}),
         )),
       ],
     );
   }
 
   Future<void> _updateUser(String userId, Map<String, dynamic> updates) async {
-    final success = await ref.read(adminUsersNotifierProvider.notifier).updateUser(userId, updates);
+    final success = await ref
+        .read(adminUsersNotifierProvider.notifier)
+        .updateUser(userId, updates);
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

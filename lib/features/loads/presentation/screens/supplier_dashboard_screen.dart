@@ -116,12 +116,14 @@ class _SupplierDashboardScreenState
                 if (filteredLoads.isEmpty) {
                   return EmptyStateWidget(
                     message: 'No $tab loads yet',
-                    subMessage: tab == 'Active' 
-                        ? 'Post a load to start receiving bids from truckers.' 
+                    subMessage: tab == 'Active'
+                        ? 'Post a load to start receiving bids from truckers.'
                         : 'Your load history will appear here.',
                     icon: Icons.inventory_2_outlined,
                     actionLabel: tab == 'Active' ? 'Post a Load' : null,
-                    onAction: tab == 'Active' ? () => context.push('/post-load-step1') : null,
+                    onAction: tab == 'Active'
+                        ? () => context.push('/post-load-step1')
+                        : null,
                   );
                 }
 
@@ -145,7 +147,10 @@ class _SupplierDashboardScreenState
                             const SizedBox(height: AppDimensions.xs),
                             Text(
                               tab,
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
                             ),
@@ -157,8 +162,8 @@ class _SupplierDashboardScreenState
                         (load) => LoadCard(
                           load: load,
                           showStatus: true,
-                          onTap: () =>
-                              context.push('/load-detail-supplier', extra: load.id),
+                          onTap: () => context.push('/load-detail-supplier',
+                              extra: load.id),
                         ),
                       ),
                     ],

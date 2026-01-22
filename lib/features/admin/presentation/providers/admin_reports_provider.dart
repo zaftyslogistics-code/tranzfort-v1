@@ -41,20 +41,25 @@ class AdminReportsNotifier extends StateNotifier<AdminReportsState> {
   AdminReportsNotifier(this._dataSource) : super(AdminReportsState());
 
   Future<void> fetchReports({String? status}) async {
-    state = state.copyWith(isLoading: true, error: null, currentFilter: status ?? 'all');
+    state = state.copyWith(
+        isLoading: true, error: null, currentFilter: status ?? 'all');
     try {
-      final reports = await _dataSource.getReports(status: status == 'all' ? null : status);
+      final reports =
+          await _dataSource.getReports(status: status == 'all' ? null : status);
       state = state.copyWith(isLoading: false, reports: reports);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
-  Future<void> updateReportStatus(String reportId, String newStatus, {String? adminNotes}) async {
+  Future<void> updateReportStatus(String reportId, String newStatus,
+      {String? adminNotes}) async {
     try {
-      await _dataSource.updateReportStatus(reportId, newStatus, adminNotes: adminNotes);
+      await _dataSource.updateReportStatus(reportId, newStatus,
+          adminNotes: adminNotes);
       // Refresh list
-      await fetchReports(status: state.currentFilter == 'all' ? null : state.currentFilter);
+      await fetchReports(
+          status: state.currentFilter == 'all' ? null : state.currentFilter);
     } catch (e) {
       state = state.copyWith(error: e.toString());
     }

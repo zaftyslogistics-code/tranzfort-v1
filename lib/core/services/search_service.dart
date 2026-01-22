@@ -46,7 +46,8 @@ class SearchService {
     final results = <T>[];
     for (final item in items) {
       final text = getSearchableText(item);
-      final distance = levenshteinDistance(query.toLowerCase(), text.toLowerCase());
+      final distance =
+          levenshteinDistance(query.toLowerCase(), text.toLowerCase());
       if (distance <= maxDistance) {
         results.add(item);
       }

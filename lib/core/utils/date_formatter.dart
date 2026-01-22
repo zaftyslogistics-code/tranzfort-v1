@@ -3,10 +3,13 @@ import 'package:intl/intl.dart';
 /// Utility class for consistent date and time formatting across the app
 class DateFormatter {
   // Standard date formats
-  static final DateFormat _dateFormat = DateFormat('dd MMM yyyy'); // 22 Jan 2026
-  static final DateFormat _dateTimeFormat = DateFormat('dd MMM yyyy, hh:mm a'); // 22 Jan 2026, 10:30 PM
+  static final DateFormat _dateFormat =
+      DateFormat('dd MMM yyyy'); // 22 Jan 2026
+  static final DateFormat _dateTimeFormat =
+      DateFormat('dd MMM yyyy, hh:mm a'); // 22 Jan 2026, 10:30 PM
   static final DateFormat _timeFormat = DateFormat('hh:mm a'); // 10:30 PM
-  static final DateFormat _shortDateFormat = DateFormat('dd/MM/yyyy'); // 22/01/2026
+  static final DateFormat _shortDateFormat =
+      DateFormat('dd/MM/yyyy'); // 22/01/2026
   static final DateFormat _monthYearFormat = DateFormat('MMM yyyy'); // Jan 2026
   static final DateFormat _dayMonthFormat = DateFormat('dd MMM'); // 22 Jan
 
@@ -120,17 +123,17 @@ class DateFormatter {
   /// Check if date is today
   static bool isToday(DateTime date) {
     final now = DateTime.now();
-    return date.year == now.year && 
-           date.month == now.month && 
-           date.day == now.day;
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 
   /// Check if date is yesterday
   static bool isYesterday(DateTime date) {
     final yesterday = DateTime.now().subtract(const Duration(days: 1));
-    return date.year == yesterday.year && 
-           date.month == yesterday.month && 
-           date.day == yesterday.day;
+    return date.year == yesterday.year &&
+        date.month == yesterday.month &&
+        date.day == yesterday.day;
   }
 
   /// Check if date is within the last 7 days
@@ -197,7 +200,7 @@ class DateFormatter {
 
   /// Get end of month
   static DateTime endOfMonth(DateTime date) {
-    final nextMonth = date.month == 12 
+    final nextMonth = date.month == 12
         ? DateTime(date.year + 1, 1, 1)
         : DateTime(date.year, date.month + 1, 1);
     return nextMonth.subtract(const Duration(microseconds: 1));

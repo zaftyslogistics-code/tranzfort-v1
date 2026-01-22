@@ -17,7 +17,8 @@ class DocumentUploadScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<DocumentUploadScreen> createState() => _DocumentUploadScreenState();
+  ConsumerState<DocumentUploadScreen> createState() =>
+      _DocumentUploadScreenState();
 }
 
 class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
@@ -61,7 +62,8 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
   Future<void> _submit() async {
     if (_front == null || _back == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please upload both front and back images')),
+        const SnackBar(
+            content: Text('Please upload both front and back images')),
       );
       return;
     }
@@ -166,13 +168,15 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                           borderSide: BorderSide(color: AppColors.glassBorder),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.primary, width: 2),
+                          borderSide:
+                              BorderSide(color: AppColors.primary, width: 2),
                         ),
                       ),
                       items: _requiredDocuments.map((doc) {
                         return DropdownMenuItem(
                           value: doc.toLowerCase().replaceAll(' ', '_'),
-                          child: Text(doc, style: TextStyle(color: Colors.white)),
+                          child:
+                              Text(doc, style: TextStyle(color: Colors.white)),
                         );
                       }).toList(),
                       onChanged: (v) {
@@ -184,8 +188,8 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                     TextField(
                       controller: _documentNumberController,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.textPrimary,
-                      ),
+                            color: AppColors.textPrimary,
+                          ),
                       decoration: InputDecoration(
                         labelText: 'Document Number (optional)',
                         labelStyle: TextStyle(color: AppColors.textSecondary),
@@ -196,7 +200,8 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                           borderSide: BorderSide(color: AppColors.glassBorder),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.primary, width: 2),
+                          borderSide:
+                              BorderSide(color: AppColors.primary, width: 2),
                         ),
                       ),
                     ),
@@ -206,7 +211,8 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                       child: OutlinedButton.icon(
                         onPressed: _isSubmitting ? null : () => _pick(true),
                         icon: const Icon(Icons.camera_alt_outlined),
-                        label: Text(_front == null ? 'Upload Front' : 'Front selected'),
+                        label: Text(
+                            _front == null ? 'Upload Front' : 'Front selected'),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.sm),
@@ -215,19 +221,23 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                       child: OutlinedButton.icon(
                         onPressed: _isSubmitting ? null : () => _pick(false),
                         icon: const Icon(Icons.camera_alt_outlined),
-                        label: Text(_back == null ? 'Upload Back' : 'Back selected'),
+                        label: Text(
+                            _back == null ? 'Upload Back' : 'Back selected'),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.lg),
                     MouseRegion(
-                      cursor: _isSubmitting ? SystemMouseCursors.basic : SystemMouseCursors.click,
+                      cursor: _isSubmitting
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
                       child: ElevatedButton(
                         onPressed: _isSubmitting ? null : _submit,
                         child: _isSubmitting
                             ? const SizedBox(
                                 height: 18,
                                 width: 18,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
                               )
                             : const Text('Submit Documents'),
                       ),

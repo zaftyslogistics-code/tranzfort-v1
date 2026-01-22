@@ -45,7 +45,8 @@ class LocationInput extends StatelessWidget {
                 label: 'City',
                 controller: cityController,
                 hint: 'City name',
-                validator: (value) => Validators.validateRequired(value, 'city'),
+                validator: (value) =>
+                    Validators.validateRequired(value, 'city'),
               ),
             ),
             const SizedBox(width: AppDimensions.sm),

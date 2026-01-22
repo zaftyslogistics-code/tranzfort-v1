@@ -9,7 +9,7 @@ class ImageOptimizer {
   static const int maxWidth = 1920;
   static const int maxHeight = 1920;
   static const int thumbnailSize = 300;
-  
+
   /// JPEG quality (0-100)
   static const int defaultQuality = 85;
   static const int thumbnailQuality = 75;
@@ -24,7 +24,7 @@ class ImageOptimizer {
     try {
       // Read image bytes
       final bytes = await imageFile.readAsBytes();
-      
+
       // Decode image
       img.Image? image = img.decodeImage(bytes);
       if (image == null) {
@@ -34,7 +34,7 @@ class ImageOptimizer {
       // Resize if needed
       final targetWidth = maxWidth ?? ImageOptimizer.maxWidth;
       final targetHeight = maxHeight ?? ImageOptimizer.maxHeight;
-      
+
       if (image.width > targetWidth || image.height > targetHeight) {
         image = img.copyResize(
           image,
@@ -55,8 +55,10 @@ class ImageOptimizer {
       if (kDebugMode) {
         final originalSize = bytes.length / 1024;
         final optimizedSize = optimizedBytes.length / 1024;
-        final reduction = ((originalSize - optimizedSize) / originalSize * 100).toStringAsFixed(1);
-        print('[IMAGE_OPTIMIZER] Original: ${originalSize.toStringAsFixed(1)}KB, Optimized: ${optimizedSize.toStringAsFixed(1)}KB, Reduction: $reduction%');
+        final reduction = ((originalSize - optimizedSize) / originalSize * 100)
+            .toStringAsFixed(1);
+        print(
+            '[IMAGE_OPTIMIZER] Original: ${originalSize.toStringAsFixed(1)}KB, Optimized: ${optimizedSize.toStringAsFixed(1)}KB, Reduction: $reduction%');
       }
 
       return optimizedFile;
@@ -76,7 +78,7 @@ class ImageOptimizer {
     try {
       final bytes = await imageFile.readAsBytes();
       img.Image? image = img.decodeImage(bytes);
-      
+
       if (image == null) {
         throw Exception('Failed to decode image');
       }
@@ -85,7 +87,8 @@ class ImageOptimizer {
       final thumbnail = img.copyResizeCropSquare(image, size: size);
 
       // Encode with lower quality for thumbnails
-      final thumbnailBytes = img.encodeJpg(thumbnail, quality: thumbnailQuality);
+      final thumbnailBytes =
+          img.encodeJpg(thumbnail, quality: thumbnailQuality);
 
       // Save thumbnail
       final tempDir = await getTemporaryDirectory();
@@ -94,7 +97,8 @@ class ImageOptimizer {
       await thumbnailFile.writeAsBytes(thumbnailBytes);
 
       if (kDebugMode) {
-        print('[IMAGE_OPTIMIZER] Generated thumbnail: ${thumbnailBytes.length / 1024}KB');
+        print(
+            '[IMAGE_OPTIMIZER] Generated thumbnail: ${thumbnailBytes.length / 1024}KB');
       }
 
       return thumbnailFile;
@@ -121,7 +125,7 @@ class ImageOptimizer {
 
       final targetWidth = maxWidth ?? ImageOptimizer.maxWidth;
       final targetHeight = maxHeight ?? ImageOptimizer.maxHeight;
-      
+
       if (image.width > targetWidth || image.height > targetHeight) {
         image = img.copyResize(
           image,
@@ -144,7 +148,7 @@ class ImageOptimizer {
     try {
       final bytes = await imageFile.readAsBytes();
       final sizeInMB = bytes.length / (1024 * 1024);
-      
+
       // Optimize if larger than 2MB
       if (sizeInMB > 2) return true;
 
@@ -163,7 +167,7 @@ class ImageOptimizer {
     try {
       final bytes = await imageFile.readAsBytes();
       img.Image? image = img.decodeImage(bytes);
-      
+
       if (image == null) return null;
 
       return {

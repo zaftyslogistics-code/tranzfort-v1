@@ -119,7 +119,7 @@ class AdminDashboardScreen extends ConsumerWidget {
   Widget _buildMainContent(BuildContext context, dynamic admin) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth <= 768;
-    
+
     return Container(
       padding: EdgeInsets.all(isMobile ? AppDimensions.md : AppDimensions.xl),
       child: SingleChildScrollView(
@@ -288,8 +288,8 @@ class _StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth <= 768;
-    
-    return isMobile 
+
+    return isMobile
         ? Card(
             color: AppColors.glassSurfaceStrong,
             child: Padding(
@@ -328,10 +328,11 @@ class _StatCard extends StatelessWidget {
                     const SizedBox(height: AppDimensions.md),
                     Text(
                       value,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: AppColors.textPrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     Text(
                       title,

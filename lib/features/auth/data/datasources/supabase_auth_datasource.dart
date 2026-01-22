@@ -16,7 +16,8 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<UserModel> signUpWithEmailPassword(String email, String password) async {
+  Future<UserModel> signUpWithEmailPassword(
+      String email, String password) async {
     try {
       Logger.info('Signing up with email/password: $email');
       final response = await supabaseClient.auth.signUp(
@@ -48,7 +49,8 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
                   response.user!.phone ?? _mobilePlaceholder(response.user!.id),
               'country_code':
                   response.user!.userMetadata?['country_code'] ?? '+91',
-              'name': response.user!.userMetadata?['name'] ?? response.user!.email,
+              'name':
+                  response.user!.userMetadata?['name'] ?? response.user!.email,
               'email': response.user!.email,
               'last_login_at': DateTime.now().toIso8601String(),
               'updated_at': DateTime.now().toIso8601String(),
@@ -64,12 +66,15 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
 
       if (userProfile != null) return userProfile;
 
-      final createdAt = DateTime.tryParse(response.user!.createdAt) ?? DateTime.now();
+      final createdAt =
+          DateTime.tryParse(response.user!.createdAt) ?? DateTime.now();
       return UserModel(
         id: userId,
         mobileNumber: SUBSTRING_PLACEHOLDER,
         countryCode: '+91',
-        name: response.user!.userMetadata?['name'] ?? response.user!.email ?? 'User',
+        name: response.user!.userMetadata?['name'] ??
+            response.user!.email ??
+            'User',
         createdAt: createdAt,
         lastLoginAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -81,7 +86,8 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<UserModel> signInWithEmailPassword(String email, String password) async {
+  Future<UserModel> signInWithEmailPassword(
+      String email, String password) async {
     try {
       Logger.info('Signing in with email/password: $email');
       final response = await supabaseClient.auth.signInWithPassword(
@@ -97,12 +103,15 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
       if (userProfile != null) return userProfile;
 
       // If no profile found but user is authenticated, create a basic user model
-      final createdAt = DateTime.tryParse(response.user!.createdAt) ?? DateTime.now();
+      final createdAt =
+          DateTime.tryParse(response.user!.createdAt) ?? DateTime.now();
       return UserModel(
         id: response.user!.id,
         mobileNumber: SUBSTRING_PLACEHOLDER,
         countryCode: '+91',
-        name: response.user!.userMetadata?['name'] ?? response.user!.email ?? 'User',
+        name: response.user!.userMetadata?['name'] ??
+            response.user!.email ??
+            'User',
         createdAt: createdAt,
         lastLoginAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -135,13 +144,15 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
 
       // If no profile found but user is authenticated, create a basic user model
       Logger.info('No user profile found, creating basic user from session');
-      final createdAt = DateTime.tryParse(session.user.createdAt) ?? DateTime.now();
-      
+      final createdAt =
+          DateTime.tryParse(session.user.createdAt) ?? DateTime.now();
+
       return UserModel(
         id: userId,
         mobileNumber: SUBSTRING_PLACEHOLDER,
         countryCode: '+91',
-        name: session.user.userMetadata?['name'] ?? session.user.email ?? 'User',
+        name:
+            session.user.userMetadata?['name'] ?? session.user.email ?? 'User',
         createdAt: createdAt,
         lastLoginAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -158,8 +169,9 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
     Map<String, dynamic> updates,
   ) async {
     try {
-      Logger.info('🔧 DATASOURCE: Updating profile for user: $userId with updates: $updates');
-      
+      Logger.info(
+          '🔧 DATASOURCE: Updating profile for user: $userId with updates: $updates');
+
       // Add updated_at timestamp
       final Map<String, dynamic> updateData = {
         ...updates,
@@ -185,7 +197,8 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
             onConflict: 'id',
           );
         } catch (e) {
-          Logger.error('Failed to upsert user profile during updateProfile', error: e);
+          Logger.error('Failed to upsert user profile during updateProfile',
+              error: e);
         }
 
         updatedProfile = await _getUserProfile(userId);
@@ -231,6 +244,7 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
       return null;
     }
   }
+
   Future<UserModel?> _getUserProfile(String userId) async {
     try {
       final response = await supabaseClient

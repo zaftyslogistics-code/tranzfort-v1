@@ -104,12 +104,13 @@ class _AdvancedFiltersDialogState extends State<AdvancedFiltersDialog> {
                   ),
                   IconButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close, color: AppColors.textSecondary),
+                    icon:
+                        const Icon(Icons.close, color: AppColors.textSecondary),
                   ),
                 ],
               ),
               const SizedBox(height: AppDimensions.lg),
-              
+
               // Price Range
               Text(
                 'Price Range',

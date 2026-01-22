@@ -15,7 +15,8 @@ class _AdminConfigScreenState extends ConsumerState<AdminConfigScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(adminConfigNotifierProvider.notifier).fetchConfig());
+    Future.microtask(
+        () => ref.read(adminConfigNotifierProvider.notifier).fetchConfig());
   }
 
   @override
@@ -57,7 +58,8 @@ class _AdminConfigScreenState extends ConsumerState<AdminConfigScreen> {
               children: [
                 SwitchListTile(
                   title: const Text('Enable AdMob Ads'),
-                  subtitle: const Text('Global toggle for all banner and native ads'),
+                  subtitle:
+                      const Text('Global toggle for all banner and native ads'),
                   value: config.enableAds,
                   onChanged: notifier.updateEnableAds,
                   activeColor: AppColors.primary,
@@ -71,7 +73,8 @@ class _AdminConfigScreenState extends ConsumerState<AdminConfigScreen> {
                 _ConfigInput(
                   label: 'Load Expiry (Days)',
                   value: config.loadExpiryDays.toString(),
-                  onChanged: (val) => notifier.updateLoadExpiryDays(int.tryParse(val) ?? 0),
+                  onChanged: (val) =>
+                      notifier.updateLoadExpiryDays(int.tryParse(val) ?? 0),
                 ),
               ],
             ),
@@ -88,7 +91,8 @@ class _AdminConfigScreenState extends ConsumerState<AdminConfigScreen> {
                           content: Text(ok
                               ? 'Configuration saved successfully'
                               : 'Failed to save configuration'),
-                          backgroundColor: ok ? AppColors.success : AppColors.danger,
+                          backgroundColor:
+                              ok ? AppColors.success : AppColors.danger,
                         ),
                       );
                     },

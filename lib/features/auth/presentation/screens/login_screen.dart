@@ -80,13 +80,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!success) {
       // Record failed attempt
       _rateLimiter.recordFailedLogin(email);
-      
+
       final remainingAttempts = _rateLimiter.getRemainingAttempts(email);
       final error = ref.read(authNotifierProvider).error;
-      
+
       setState(() {
         if (remainingAttempts > 0) {
-          _generalError = '${error ?? 'Login failed'}. $remainingAttempts attempts remaining.';
+          _generalError =
+              '${error ?? 'Login failed'}. $remainingAttempts attempts remaining.';
         } else {
           _generalError = error ?? 'Login failed';
         }
@@ -171,9 +172,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const SizedBox(height: AppDimensions.sm),
                         Text(
                           AppConfig.appTagline,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -188,10 +190,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         Text(
                           'Welcome to Transfort',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textPrimary,
+                                  ),
                         ),
                         const SizedBox(height: AppDimensions.lg),
                         TextField(
@@ -245,12 +248,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: Text.rich(
                           TextSpan(
                             text: 'I accept the ',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: AppColors.textSecondary,
+                                    ),
                             children: const [
                               TextSpan(
                                 text: 'Terms & Conditions',
@@ -283,8 +284,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: AppDimensions.sm),
                   TextButton(
-                    onPressed:
-                        authState.isLoading ? null : () => context.push('/signup'),
+                    onPressed: authState.isLoading
+                        ? null
+                        : () => context.push('/signup'),
                     child: const Text('Create an account'),
                   ),
                 ],

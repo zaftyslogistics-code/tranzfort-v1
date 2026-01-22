@@ -8,7 +8,7 @@ class AnalyticsService {
   AnalyticsService._internal();
 
   final SupabaseClient _client = Supabase.instance.client;
-  
+
   bool _isInitialized = false;
   String? _userId;
   String? _sessionId;
@@ -21,9 +21,9 @@ class AnalyticsService {
       _sessionId = _generateSessionId();
       _sessionStart = DateTime.now();
       _isInitialized = true;
-      
+
       Logger.info('📊 Analytics service initialized');
-      
+
       // Track app launch
       await trackEvent('app_launch', {
         'session_id': _sessionId,
@@ -36,7 +36,8 @@ class AnalyticsService {
   }
 
   /// Track custom events
-  Future<void> trackEvent(String eventName, Map<String, dynamic> properties) async {
+  Future<void> trackEvent(
+      String eventName, Map<String, dynamic> properties) async {
     if (!_isInitialized) {
       Logger.warning('Analytics not initialized, skipping event: $eventName');
       return;
@@ -52,7 +53,7 @@ class AnalyticsService {
       };
 
       await _client.from('analytics_events').insert(eventData);
-      
+
       Logger.info('📊 Event tracked: $eventName');
     } catch (e) {
       Logger.error('Failed to track event: $eventName', error: e);
@@ -60,7 +61,8 @@ class AnalyticsService {
   }
 
   /// Track screen views
-  Future<void> trackScreenView(String screenName, {Map<String, dynamic>? properties}) async {
+  Future<void> trackScreenView(String screenName,
+      {Map<String, dynamic>? properties}) async {
     await trackEvent('screen_view', {
       'screen_name': screenName,
       'session_duration': _getSessionDuration(),
@@ -69,7 +71,8 @@ class AnalyticsService {
   }
 
   /// Track user actions
-  Future<void> trackUserAction(String action, {Map<String, dynamic>? properties}) async {
+  Future<void> trackUserAction(String action,
+      {Map<String, dynamic>? properties}) async {
     await trackEvent('user_action', {
       'action': action,
       'session_duration': _getSessionDuration(),
@@ -78,7 +81,8 @@ class AnalyticsService {
   }
 
   /// Track performance metrics
-  Future<void> trackPerformance(String metric, double value, {Map<String, dynamic>? properties}) async {
+  Future<void> trackPerformance(String metric, double value,
+      {Map<String, dynamic>? properties}) async {
     await trackEvent('performance_metric', {
       'metric_name': metric,
       'metric_value': value,
@@ -88,7 +92,8 @@ class AnalyticsService {
   }
 
   /// Track errors and crashes
-  Future<void> trackError(String error, {String? stackTrace, Map<String, dynamic>? properties}) async {
+  Future<void> trackError(String error,
+      {String? stackTrace, Map<String, dynamic>? properties}) async {
     await trackEvent('error', {
       'error_message': error,
       'stack_trace': stackTrace,
@@ -98,7 +103,8 @@ class AnalyticsService {
   }
 
   /// Track feature usage
-  Future<void> trackFeatureUsage(String feature, {Map<String, dynamic>? properties}) async {
+  Future<void> trackFeatureUsage(String feature,
+      {Map<String, dynamic>? properties}) async {
     await trackEvent('feature_usage', {
       'feature_name': feature,
       'session_duration': _getSessionDuration(),
@@ -107,7 +113,8 @@ class AnalyticsService {
   }
 
   /// Track business events
-  Future<void> trackBusinessEvent(String event, {Map<String, dynamic>? properties}) async {
+  Future<void> trackBusinessEvent(String event,
+      {Map<String, dynamic>? properties}) async {
     await trackEvent('business_event', {
       'business_event': event,
       'session_duration': _getSessionDuration(),
@@ -135,7 +142,7 @@ class AnalyticsService {
         'session_id': _sessionId,
       });
     }
-    
+
     _sessionId = null;
     _sessionStart = null;
     Logger.info('📊 Analytics session ended');
@@ -171,42 +178,42 @@ class AnalyticsEvents {
   static const String loginSuccess = 'login_success';
   static const String loginFailure = 'login_failure';
   static const String logout = 'logout';
-  
+
   // Load management events
   static const String loadCreated = 'load_created';
   static const String loadUpdated = 'load_updated';
   static const String loadDeleted = 'load_deleted';
   static const String loadSearched = 'load_searched';
   static const String loadViewed = 'load_viewed';
-  
+
   // Fleet management events
   static const String truckAdded = 'truck_added';
   static const String truckUpdated = 'truck_updated';
   static const String truckDeleted = 'truck_deleted';
   static const String fleetViewed = 'fleet_viewed';
-  
+
   // Chat events
   static const String chatStarted = 'chat_started';
   static const String messageSent = 'message_sent';
   static const String chatViewed = 'chat_viewed';
-  
+
   // Verification events
   static const String verificationStarted = 'verification_started';
   static const String verificationCompleted = 'verification_completed';
   static const String documentsUploaded = 'documents_uploaded';
-  
+
   // Feature usage events
   static const String searchUsed = 'search_used';
   static const String filterApplied = 'filter_applied';
   static const String bookmarkAdded = 'bookmark_added';
   static const String shareUsed = 'share_used';
-  
+
   // Performance events
   static const String appLaunch = 'app_launch';
   static const String screenLoad = 'screen_load';
   static const String apiCall = 'api_call';
   static const String imageUpload = 'image_upload';
-  
+
   // Business events
   static const String loadMatched = 'load_matched';
   static const String contactRevealed = 'contact_revealed';

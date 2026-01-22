@@ -91,48 +91,47 @@ class _$NotificationModelCopyWithImpl<$Res, $Val extends NotificationModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            userId: null == userId
-                ? _value.userId
-                : userId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            notificationType: null == notificationType
-                ? _value.notificationType
-                : notificationType // ignore: cast_nullable_to_non_nullable
-                      as String,
-            title: null == title
-                ? _value.title
-                : title // ignore: cast_nullable_to_non_nullable
-                      as String,
-            message: null == message
-                ? _value.message
-                : message // ignore: cast_nullable_to_non_nullable
-                      as String,
-            relatedEntityType: freezed == relatedEntityType
-                ? _value.relatedEntityType
-                : relatedEntityType // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            relatedEntityId: freezed == relatedEntityId
-                ? _value.relatedEntityId
-                : relatedEntityId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            isRead: null == isRead
-                ? _value.isRead
-                : isRead // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            readAt: freezed == readAt
-                ? _value.readAt
-                : readAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                as String,
+        notificationType: null == notificationType
+            ? _value.notificationType
+            : notificationType // ignore: cast_nullable_to_non_nullable
+                as String,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                as String,
+        message: null == message
+            ? _value.message
+            : message // ignore: cast_nullable_to_non_nullable
+                as String,
+        relatedEntityType: freezed == relatedEntityType
+            ? _value.relatedEntityType
+            : relatedEntityType // ignore: cast_nullable_to_non_nullable
+                as String?,
+        relatedEntityId: freezed == relatedEntityId
+            ? _value.relatedEntityId
+            : relatedEntityId // ignore: cast_nullable_to_non_nullable
+                as String?,
+        isRead: null == isRead
+            ? _value.isRead
+            : isRead // ignore: cast_nullable_to_non_nullable
+                as bool,
+        readAt: freezed == readAt
+            ? _value.readAt
+            : readAt // ignore: cast_nullable_to_non_nullable
+                as DateTime?,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+      ) as $Val,
     );
   }
 }
@@ -190,43 +189,43 @@ class __$$NotificationModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         userId: null == userId
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         notificationType: null == notificationType
             ? _value.notificationType
             : notificationType // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         title: null == title
             ? _value.title
             : title // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         message: null == message
             ? _value.message
             : message // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         relatedEntityType: freezed == relatedEntityType
             ? _value.relatedEntityType
             : relatedEntityType // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         relatedEntityId: freezed == relatedEntityId
             ? _value.relatedEntityId
             : relatedEntityId // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         isRead: null == isRead
             ? _value.isRead
             : isRead // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                as bool,
         readAt: freezed == readAt
             ? _value.readAt
             : readAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
+                as DateTime?,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
       ),
     );
   }
@@ -302,18 +301,18 @@ class _$NotificationModelImpl implements _NotificationModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    userId,
-    notificationType,
-    title,
-    message,
-    relatedEntityType,
-    relatedEntityId,
-    isRead,
-    readAt,
-    createdAt,
-  );
+        runtimeType,
+        id,
+        userId,
+        notificationType,
+        title,
+        message,
+        relatedEntityType,
+        relatedEntityId,
+        isRead,
+        readAt,
+        createdAt,
+      );
 
   /// Create a copy of NotificationModel
   /// with the given fields replaced by the non-null parameter values.

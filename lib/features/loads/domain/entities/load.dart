@@ -55,14 +55,12 @@ class Load extends Equatable {
   bool get isExpired => DateTime.now().isAfter(expiresAt);
   bool get hasPrice => price != null && price! > 0;
   bool get hasWeight => weight != null && weight! > 0;
-  
-  String get fromLocationDisplay => fromState != null 
-      ? '$fromCity, $fromState' 
-      : fromCity;
-  
-  String get toLocationDisplay => toState != null 
-      ? '$toCity, $toState' 
-      : toCity;
+
+  String get fromLocationDisplay =>
+      fromState != null ? '$fromCity, $fromState' : fromCity;
+
+  String get toLocationDisplay =>
+      toState != null ? '$toCity, $toState' : toCity;
 
   factory Load.fromJson(Map<String, dynamic> json) {
     return Load(
@@ -80,8 +78,8 @@ class Load extends Equatable {
       price: json['price'] as double?,
       priceType: json['price_type'] as String,
       paymentTerms: json['payment_terms'] as String?,
-      loadingDate: json['loading_date'] != null 
-          ? DateTime.parse(json['loading_date'] as String) 
+      loadingDate: json['loading_date'] != null
+          ? DateTime.parse(json['loading_date'] as String)
           : null,
       notes: json['notes'] as String?,
       contactPreferencesCall: json['contact_preferences_call'] as bool,

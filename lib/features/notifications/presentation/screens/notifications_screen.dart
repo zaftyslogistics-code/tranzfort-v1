@@ -24,7 +24,8 @@ class NotificationsScreen extends ConsumerWidget {
               await markAllAsRead();
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('All notifications marked as read')),
+                const SnackBar(
+                    content: Text('All notifications marked as read')),
               );
             },
             child: const Text('Mark all read'),
@@ -60,12 +61,16 @@ class NotificationsScreen extends ConsumerWidget {
                           Icon(
                             Icons.notifications_off,
                             size: 64,
-                            color: AppColors.textSecondary.withValues(alpha: 0.5),
+                            color:
+                                AppColors.textSecondary.withValues(alpha: 0.5),
                           ),
                           const SizedBox(height: AppDimensions.md),
                           Text(
                             'No notifications yet',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
                                   color: AppColors.textSecondary,
                                 ),
                           ),
@@ -124,50 +129,53 @@ class NotificationsScreen extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: AppDimensions.md),
       child: GlassmorphicCard(
         padding: const EdgeInsets.all(AppDimensions.md),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(AppDimensions.sm),
-            decoration: BoxDecoration(
-              color: isRead
-                  ? AppColors.textSecondary.withValues(alpha: 0.2)
-                  : AppColors.primary.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(AppDimensions.sm),
+              decoration: BoxDecoration(
+                color: isRead
+                    ? AppColors.textSecondary.withValues(alpha: 0.2)
+                    : AppColors.primary.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+              ),
+              child: Icon(
+                icon,
+                color: isRead ? AppColors.textSecondary : AppColors.primary,
+                size: 24,
+              ),
             ),
-            child: Icon(
-              icon,
-              color: isRead ? AppColors.textSecondary : AppColors.primary,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: AppDimensions.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: isRead ? FontWeight.normal : FontWeight.bold,
-                              color: AppColors.textPrimary,
-                            ),
-                      ),
-                    ),
-                    if (!isRead)
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
+            const SizedBox(width: AppDimensions.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    fontWeight: isRead
+                                        ? FontWeight.normal
+                                        : FontWeight.bold,
+                                    color: AppColors.textPrimary,
+                                  ),
                         ),
                       ),
-                  ],
-                ),
+                      if (!isRead)
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                    ],
+                  ),
                   const SizedBox(height: AppDimensions.xs),
                   Text(
                     message,

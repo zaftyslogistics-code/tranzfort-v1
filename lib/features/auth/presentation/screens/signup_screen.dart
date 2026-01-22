@@ -61,7 +61,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     }
 
     if (!password.contains(RegExp(r'[A-Z]'))) {
-      setState(() => _error = 'Password must contain at least one uppercase letter');
+      setState(
+          () => _error = 'Password must contain at least one uppercase letter');
       return;
     }
 

@@ -70,25 +70,18 @@ class DataExportService {
 
     try {
       // User profile
-      final profile = await _client
-          .from('users')
-          .select()
-          .eq('id', userId)
-          .single();
+      final profile =
+          await _client.from('users').select().eq('id', userId).single();
       data['profile'] = profile;
 
       // User loads
-      final loads = await _client
-          .from('loads')
-          .select()
-          .eq('supplier_id', userId);
+      final loads =
+          await _client.from('loads').select().eq('supplier_id', userId);
       data['loads'] = loads;
 
       // User trucks
-      final trucks = await _client
-          .from('trucks')
-          .select()
-          .eq('transporter_id', userId);
+      final trucks =
+          await _client.from('trucks').select().eq('transporter_id', userId);
       data['trucks'] = trucks;
 
       // User chats
@@ -106,10 +99,8 @@ class DataExportService {
       data['ratings'] = ratings;
 
       // User notifications
-      final notifications = await _client
-          .from('notifications')
-          .select()
-          .eq('user_id', userId);
+      final notifications =
+          await _client.from('notifications').select().eq('user_id', userId);
       data['notifications'] = notifications;
 
       // Verification requests
@@ -157,14 +148,16 @@ class DataExportService {
     data.forEach((category, value) {
       if (value is Map) {
         value.forEach((field, fieldValue) {
-          buffer.writeln('$category,$field,"${_escapeCSV(fieldValue.toString())}"');
+          buffer.writeln(
+              '$category,$field,"${_escapeCSV(fieldValue.toString())}"');
         });
       } else if (value is List) {
         buffer.writeln('$category,count,${value.length}');
         for (int i = 0; i < value.length; i++) {
           if (value[i] is Map) {
             (value[i] as Map).forEach((field, fieldValue) {
-              buffer.writeln('$category[$i],$field,"${_escapeCSV(fieldValue.toString())}"');
+              buffer.writeln(
+                  '$category[$i],$field,"${_escapeCSV(fieldValue.toString())}"');
             });
           }
         }

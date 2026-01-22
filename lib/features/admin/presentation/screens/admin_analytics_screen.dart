@@ -9,14 +9,16 @@ class AdminAnalyticsScreen extends ConsumerStatefulWidget {
   const AdminAnalyticsScreen({super.key});
 
   @override
-  ConsumerState<AdminAnalyticsScreen> createState() => _AdminAnalyticsScreenState();
+  ConsumerState<AdminAnalyticsScreen> createState() =>
+      _AdminAnalyticsScreenState();
 }
 
 class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(adminAnalyticsProvider.notifier).fetchAnalytics());
+    Future.microtask(
+        () => ref.read(adminAnalyticsProvider.notifier).fetchAnalytics());
   }
 
   @override
@@ -29,14 +31,17 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () => ref.read(adminAnalyticsProvider.notifier).fetchAnalytics(),
+            onPressed: () =>
+                ref.read(adminAnalyticsProvider.notifier).fetchAnalytics(),
           ),
         ],
       ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.error != null
-              ? Center(child: Text('Error: ${state.error}', style: const TextStyle(color: AppColors.danger)))
+              ? Center(
+                  child: Text('Error: ${state.error}',
+                      style: const TextStyle(color: AppColors.danger)))
               : SingleChildScrollView(
                   padding: const EdgeInsets.all(AppDimensions.md),
                   child: Column(
@@ -66,7 +71,8 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen> {
                           Expanded(
                             child: _StatCard(
                               title: 'Load Conversions',
-                              value: '${state.conversionRate.toStringAsFixed(1)}%',
+                              value:
+                                  '${state.conversionRate.toStringAsFixed(1)}%',
                               icon: Icons.swap_horiz,
                               color: Colors.green,
                             ),
@@ -78,7 +84,10 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen> {
                       // Charts Section
                       Text(
                         'User Growth (Last 7 Days)',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: AppDimensions.md),
                       SizedBox(
@@ -93,7 +102,8 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen> {
                                 spots: state.userGrowthPoints
                                     .asMap()
                                     .entries
-                                    .map((e) => FlSpot(e.key.toDouble(), e.value.toDouble()))
+                                    .map((e) => FlSpot(
+                                        e.key.toDouble(), e.value.toDouble()))
                                     .toList(),
                                 isCurved: true,
                                 color: AppColors.primary,

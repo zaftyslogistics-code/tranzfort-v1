@@ -22,9 +22,8 @@ class SupabaseChatDataSource implements ChatDataSource {
       }
 
       final data = await query.order('last_message_at', ascending: false);
-      final chats = (data as List)
-          .map((json) => ChatModel.fromJson(json))
-          .toList();
+      final chats =
+          (data as List).map((json) => ChatModel.fromJson(json)).toList();
 
       Logger.info('✅ SUPABASE: Found ${chats.length} chats');
       return chats;
@@ -35,17 +34,21 @@ class SupabaseChatDataSource implements ChatDataSource {
 
   @override
   Stream<List<ChatModel>> watchChats({String? userId}) {
-    var query = _supabase.from('chats').stream(primaryKey: ['id']).order('last_message_at', ascending: false);
-    
+    var query = _supabase
+        .from('chats')
+        .stream(primaryKey: ['id']).order('last_message_at', ascending: false);
+
     if (userId != null) {
       // Client-side filtering for complex OR condition in streams
       // Supabase stream filtering is limited compared to select
       return query.map((rows) {
         final chats = rows.map((json) => ChatModel.fromJson(json)).toList();
-        return chats.where((c) => c.truckerId == userId || c.supplierId == userId).toList();
+        return chats
+            .where((c) => c.truckerId == userId || c.supplierId == userId)
+            .toList();
       });
     }
-    
+
     return query.map(
       (rows) => rows.map((json) => ChatModel.fromJson(json)).toList(),
     );
@@ -74,13 +77,12 @@ class SupabaseChatDataSource implements ChatDataSource {
     DateTime? before,
   }) async {
     try {
-      Logger.info('💬 SUPABASE: Getting messages for chat $chatId (limit: $limit, before: $before)');
-      
+      Logger.info(
+          '💬 SUPABASE: Getting messages for chat $chatId (limit: $limit, before: $before)');
+
       // Build base query with proper pagination
-      var queryBuilder = _supabase
-          .from('chat_messages')
-          .select('*')
-          .eq('chat_id', chatId);
+      var queryBuilder =
+          _supabase.from('chat_messages').select('*').eq('chat_id', chatId);
 
       // Add before filter if provided (for pagination)
       if (before != null) {
@@ -88,9 +90,8 @@ class SupabaseChatDataSource implements ChatDataSource {
       }
 
       // Execute query with ordering and limit
-      final response = await queryBuilder
-          .order('created_at', ascending: false)
-          .limit(limit);
+      final response =
+          await queryBuilder.order('created_at', ascending: false).limit(limit);
 
       final messages = (response as List)
           .map((json) => ChatMessageModel.fromJson(json))
@@ -113,9 +114,7 @@ class SupabaseChatDataSource implements ChatDataSource {
         .eq('chat_id', chatId)
         .order('created_at', ascending: true)
         .map(
-          (rows) => rows
-              .map((row) => ChatMessageModel.fromJson(row))
-              .toList(),
+          (rows) => rows.map((row) => ChatMessageModel.fromJson(row)).toList(),
         );
   }
 
@@ -128,7 +127,7 @@ class SupabaseChatDataSource implements ChatDataSource {
     try {
       // Sanitize message to prevent XSS and limit length
       final sanitizedMessage = InputValidator.sanitizeChatMessage(messageText);
-      
+
       // Check for malicious input
       if (!InputValidator.isSafeInput(sanitizedMessage)) {
         InputValidator.logSuspiciousInput(sanitizedMessage, 'chat_message');
@@ -165,7 +164,9 @@ class SupabaseChatDataSource implements ChatDataSource {
           .eq('chat_id', chatId)
           .neq('sender_id', userId);
 
-      await _supabase.from('chats').update({'unread_count': 0}).eq('id', chatId);
+      await _supabase
+          .from('chats')
+          .update({'unread_count': 0}).eq('id', chatId);
     } catch (e) {
       throw ServerException(e.toString());
     }

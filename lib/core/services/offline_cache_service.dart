@@ -63,7 +63,8 @@ class OfflineCacheService {
       await init();
     }
 
-    final current = List<Map<String, dynamic>>.from(getCachedList(key) ?? const []);
+    final current =
+        List<Map<String, dynamic>>.from(getCachedList(key) ?? const []);
     current.insert(0, item);
     await cacheList(key, current);
   }

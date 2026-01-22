@@ -154,7 +154,8 @@ class _LoadDetailTruckerScreenState
                     _DetailSection(
                       title: 'Route',
                       children: [
-                        _DetailRow(label: 'From', value: load.fromLocationDisplay),
+                        _DetailRow(
+                            label: 'From', value: load.fromLocationDisplay),
                         _DetailRow(label: 'To', value: load.toLocationDisplay),
                       ],
                     ),
@@ -162,7 +163,8 @@ class _LoadDetailTruckerScreenState
                       title: 'Load',
                       children: [
                         _DetailRow(label: 'Material', value: load.loadType),
-                        _DetailRow(label: 'Truck', value: load.truckTypeRequired),
+                        _DetailRow(
+                            label: 'Truck', value: load.truckTypeRequired),
                         if (load.weight != null)
                           _DetailRow(
                             label: 'Weight',
@@ -217,9 +219,7 @@ class _LoadDetailTruckerScreenState
                       ),
                     const SizedBox(height: AppDimensions.xl),
                     ElevatedButton.icon(
-                      onPressed: canContact
-                          ? () => context.go('/chats')
-                          : null,
+                      onPressed: canContact ? () => context.go('/chats') : null,
                       icon: const Icon(Icons.chat_bubble_outline),
                       label: const Text('Chat with Supplier'),
                     ),

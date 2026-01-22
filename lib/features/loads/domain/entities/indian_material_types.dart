@@ -51,7 +51,8 @@ class MaterialType extends Equatable {
       typicalWeightDensity: typicalWeightDensity ?? this.typicalWeightDensity,
       isPerishable: isPerishable ?? this.isPerishable,
       isHazardous: isHazardous ?? this.isHazardous,
-      requiresSpecialPermit: requiresSpecialPermit ?? this.requiresSpecialPermit,
+      requiresSpecialPermit:
+          requiresSpecialPermit ?? this.requiresSpecialPermit,
     );
   }
 
@@ -664,13 +665,13 @@ class MaterialType extends Equatable {
   static List<MaterialType> getMaterialsForBodyType(String bodyType) {
     final mapping = getMaterialBodyMapping();
     final compatibleMaterials = <String>[];
-    
+
     mapping.forEach((material, bodyTypes) {
       if (bodyTypes.contains(bodyType)) {
         compatibleMaterials.add(material);
       }
     });
-    
+
     return getIndianMaterialTypes()
         .where((material) => compatibleMaterials.contains(material.name))
         .toList();

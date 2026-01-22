@@ -64,13 +64,10 @@ class NotificationsDataSource {
 
   Future<void> markAsRead(String notificationId) async {
     try {
-      await _supabase
-          .from('notifications')
-          .update({
-            'is_read': true,
-            'read_at': DateTime.now().toIso8601String(),
-          })
-          .eq('id', notificationId);
+      await _supabase.from('notifications').update({
+        'is_read': true,
+        'read_at': DateTime.now().toIso8601String(),
+      }).eq('id', notificationId);
     } catch (e) {
       Logger.error('Failed to mark notification as read: $e');
       rethrow;
@@ -100,8 +97,7 @@ class NotificationsDataSource {
         .eq('user_id', userId)
         .order('created_at', ascending: false)
         .limit(50)
-        .map((rows) => rows
-            .map((row) => NotificationModel.fromJson(row))
-            .toList());
+        .map((rows) =>
+            rows.map((row) => NotificationModel.fromJson(row)).toList());
   }
 }

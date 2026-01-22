@@ -89,48 +89,47 @@ class _$ChatModelCopyWithImpl<$Res, $Val extends ChatModel>
   }) {
     return _then(
       _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            loadId: null == loadId
-                ? _value.loadId
-                : loadId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            truckerId: null == truckerId
-                ? _value.truckerId
-                : truckerId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            supplierId: null == supplierId
-                ? _value.supplierId
-                : supplierId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
-            lastMessage: freezed == lastMessage
-                ? _value.lastMessage
-                : lastMessage // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            lastMessageAt: freezed == lastMessageAt
-                ? _value.lastMessageAt
-                : lastMessageAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            unreadCount: null == unreadCount
-                ? _value.unreadCount
-                : unreadCount // ignore: cast_nullable_to_non_nullable
-                      as int,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            updatedAt: null == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                as String,
+        loadId: null == loadId
+            ? _value.loadId
+            : loadId // ignore: cast_nullable_to_non_nullable
+                as String,
+        truckerId: null == truckerId
+            ? _value.truckerId
+            : truckerId // ignore: cast_nullable_to_non_nullable
+                as String,
+        supplierId: null == supplierId
+            ? _value.supplierId
+            : supplierId // ignore: cast_nullable_to_non_nullable
+                as String,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                as String,
+        lastMessage: freezed == lastMessage
+            ? _value.lastMessage
+            : lastMessage // ignore: cast_nullable_to_non_nullable
+                as String?,
+        lastMessageAt: freezed == lastMessageAt
+            ? _value.lastMessageAt
+            : lastMessageAt // ignore: cast_nullable_to_non_nullable
+                as DateTime?,
+        unreadCount: null == unreadCount
+            ? _value.unreadCount
+            : unreadCount // ignore: cast_nullable_to_non_nullable
+                as int,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                as DateTime,
+      ) as $Val,
     );
   }
 }
@@ -188,43 +187,43 @@ class __$$ChatModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         loadId: null == loadId
             ? _value.loadId
             : loadId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         truckerId: null == truckerId
             ? _value.truckerId
             : truckerId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         supplierId: null == supplierId
             ? _value.supplierId
             : supplierId // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         status: null == status
             ? _value.status
             : status // ignore: cast_nullable_to_non_nullable
-                  as String,
+                as String,
         lastMessage: freezed == lastMessage
             ? _value.lastMessage
             : lastMessage // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                as String?,
         lastMessageAt: freezed == lastMessageAt
             ? _value.lastMessageAt
             : lastMessageAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
+                as DateTime?,
         unreadCount: null == unreadCount
             ? _value.unreadCount
             : unreadCount // ignore: cast_nullable_to_non_nullable
-                  as int,
+                as int,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
         updatedAt: null == updatedAt
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                as DateTime,
       ),
     );
   }
@@ -304,18 +303,18 @@ class _$ChatModelImpl implements _ChatModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    loadId,
-    truckerId,
-    supplierId,
-    status,
-    lastMessage,
-    lastMessageAt,
-    unreadCount,
-    createdAt,
-    updatedAt,
-  );
+        runtimeType,
+        id,
+        loadId,
+        truckerId,
+        supplierId,
+        status,
+        lastMessage,
+        lastMessageAt,
+        unreadCount,
+        createdAt,
+        updatedAt,
+      );
 
   /// Create a copy of ChatModel
   /// with the given fields replaced by the non-null parameter values.

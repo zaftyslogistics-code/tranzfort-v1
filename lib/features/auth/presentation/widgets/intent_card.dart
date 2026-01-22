@@ -45,41 +45,45 @@ class IntentCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-            Container(
-              padding: const EdgeInsets.all(AppDimensions.md),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: iconGradient,
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+              Container(
+                padding: const EdgeInsets.all(AppDimensions.md),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: iconGradient,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                  border: Border.all(color: AppColors.glassBorder),
                 ),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
-                border: Border.all(color: AppColors.glassBorder),
+                child: Icon(
+                  icon,
+                  size: 44,
+                  color: isSelected
+                      ? AppColors.darkOnSurface
+                      : AppColors.textPrimary,
+                ),
               ),
-              child: Icon(
-                icon,
-                size: 44,
-                color: isSelected ? AppColors.darkOnSurface : AppColors.textPrimary,
+              const SizedBox(height: AppDimensions.md),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.textPrimary,
+                    ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: AppDimensions.md),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isSelected ? AppColors.primary : AppColors.textPrimary,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.xs),
-            Text(
-              subtitle,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              const SizedBox(height: AppDimensions.xs),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ),

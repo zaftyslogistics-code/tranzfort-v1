@@ -47,9 +47,9 @@ class FleetStatsCard extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: AppDimensions.lg),
-          
+
           // Stats Grid
           Row(
             children: [
@@ -84,9 +84,9 @@ class FleetStatsCard extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: AppDimensions.md),
-          
+
           // Additional Stats
           Row(
             children: [

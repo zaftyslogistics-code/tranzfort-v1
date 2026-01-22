@@ -59,13 +59,13 @@ class RemoteConfigService {
   RemoteConfigService._internal();
 
   final SupabaseClient _client = Supabase.instance.client;
-  
+
   RemoteConfig? _cachedConfig;
   DateTime? _lastFetch;
-  
+
   // Cache duration - fetch new config every 5 minutes
   static const Duration _cacheDuration = Duration(minutes: 5);
-  
+
   // Default fallback config
   static final RemoteConfig _defaultConfig = RemoteConfig(
     enableAds: true,
@@ -81,8 +81,8 @@ class RemoteConfigService {
   /// Returns cached config if available and fresh, otherwise fetches from server
   Future<RemoteConfig> getConfig({bool forceRefresh = false}) async {
     // Return cached config if available and fresh
-    if (!forceRefresh && 
-        _cachedConfig != null && 
+    if (!forceRefresh &&
+        _cachedConfig != null &&
         _lastFetch != null &&
         DateTime.now().difference(_lastFetch!) < _cacheDuration) {
       return _cachedConfig!;
@@ -90,7 +90,7 @@ class RemoteConfigService {
 
     try {
       Logger.info('🔧 Fetching remote configuration...');
-      
+
       final response = await _client
           .from('system_config')
           .select('*')
@@ -107,16 +107,16 @@ class RemoteConfigService {
       final config = RemoteConfig.fromJson(response);
       _cachedConfig = config;
       _lastFetch = DateTime.now();
-      
+
       Logger.info('✅ Remote configuration loaded successfully');
       Logger.info('   - Ads enabled: ${config.enableAds}');
       Logger.info('   - Min version: ${config.minAppVersion}');
       Logger.info('   - Maintenance: ${config.maintenanceMode}');
-      
+
       return config;
     } catch (e) {
       Logger.error('❌ Failed to fetch remote config', error: e);
-      
+
       // Return cached config if available, otherwise defaults
       if (_cachedConfig != null) {
         Logger.info('📦 Using cached remote configuration');
@@ -187,7 +187,7 @@ class RemoteConfigService {
   int _compareVersions(String v1, String v2) {
     final v1Parts = v1.split('.').map(int.parse).toList();
     final v2Parts = v2.split('.').map(int.parse).toList();
-    
+
     // Pad shorter version with zeros
     while (v1Parts.length < 3) {
       v1Parts.add(0);
@@ -195,12 +195,12 @@ class RemoteConfigService {
     while (v2Parts.length < 3) {
       v2Parts.add(0);
     }
-    
+
     for (int i = 0; i < 3; i++) {
       if (v1Parts[i] < v2Parts[i]) return -1;
       if (v1Parts[i] > v2Parts[i]) return 1;
     }
-    
+
     return 0;
   }
 

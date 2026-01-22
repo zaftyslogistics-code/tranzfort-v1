@@ -18,8 +18,7 @@ class IntentSelectionScreen extends ConsumerStatefulWidget {
       _IntentSelectionScreenState();
 }
 
-class _IntentSelectionScreenState
-    extends ConsumerState<IntentSelectionScreen> {
+class _IntentSelectionScreenState extends ConsumerState<IntentSelectionScreen> {
   String? _selectedIntent;
 
   Future<void> _selectIntent(String intent) async {
@@ -40,28 +39,31 @@ class _IntentSelectionScreenState
           .read(authNotifierProvider.notifier)
           .updateUserProfile(updates)
           .timeout(
-            const Duration(seconds: 10),
-            onTimeout: () {
-              Logger.error('❌ INTENT: Profile update timed out');
-              return false;
-            },
-          );
+        const Duration(seconds: 10),
+        onTimeout: () {
+          Logger.error('❌ INTENT: Profile update timed out');
+          return false;
+        },
+      );
 
       Logger.info('🎯 INTENT: Profile update result: $success');
 
       if (!success) {
-        Logger.error('❌ INTENT: Profile update failed, but proceeding with navigation');
+        Logger.error(
+            '❌ INTENT: Profile update failed, but proceeding with navigation');
         if (!mounted) return;
 
         messenger?.showSnackBar(
           const SnackBar(
-            content: Text('Profile update failed, but you can continue. Settings will be updated later.'),
+            content: Text(
+                'Profile update failed, but you can continue. Settings will be updated later.'),
             duration: Duration(seconds: 3),
           ),
         );
       }
 
-      Logger.info('✅ INTENT: Profile updated successfully, navigating to dashboard');
+      Logger.info(
+          '✅ INTENT: Profile updated successfully, navigating to dashboard');
 
       final updatedAuthState = ref.read(authNotifierProvider);
       Logger.info(
@@ -70,17 +72,19 @@ class _IntentSelectionScreenState
 
       if (!mounted) return;
 
-      final targetRoute = intent == 'supplier' ? 'supplier-dashboard' : 'trucker-feed';
-      final targetPath = intent == 'supplier' ? '/supplier-dashboard' : '/trucker-feed';
-      
+      final targetRoute =
+          intent == 'supplier' ? 'supplier-dashboard' : 'trucker-feed';
+      final targetPath =
+          intent == 'supplier' ? '/supplier-dashboard' : '/trucker-feed';
+
       Logger.info('🚚 INTENT: Navigating to $targetRoute');
-      
+
       try {
         router.goNamed(targetRoute);
         Logger.info('✅ INTENT: Navigation successful via goNamed');
       } catch (e) {
         Logger.error('❌ INTENT: goNamed failed: $e');
-        
+
         try {
           if (mounted) {
             router.go(targetPath);
@@ -88,7 +92,7 @@ class _IntentSelectionScreenState
           }
         } catch (e2) {
           Logger.error('❌ INTENT: go() also failed: $e2');
-          
+
           if (mounted) {
             messenger?.showSnackBar(
               SnackBar(
@@ -186,9 +190,10 @@ class _IntentSelectionScreenState
                         const SizedBox(height: AppDimensions.sm),
                         Text(
                           'What would you like to do?',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                       ],

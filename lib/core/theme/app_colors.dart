@@ -33,9 +33,12 @@ class AppColors {
   static const Color secondaryBackground = Color(0xFF1E2738);
 
   // Text Colors (WCAG AA compliant - 4.5:1 contrast ratio)
-  static const Color textPrimary = Color(0xFFFFFFFF); // White on dark backgrounds
-  static const Color textSecondary = Color(0xFFCCCCCC); // Improved from B0B0B0 for better contrast
-  static const Color textTertiary = Color(0xFF999999); // Improved from 808080 for better contrast
+  static const Color textPrimary =
+      Color(0xFFFFFFFF); // White on dark backgrounds
+  static const Color textSecondary =
+      Color(0xFFCCCCCC); // Improved from B0B0B0 for better contrast
+  static const Color textTertiary =
+      Color(0xFF999999); // Improved from 808080 for better contrast
 
   // Accent + Focus
   static const Color focusRing = Color(0xFF00B3B3);
@@ -85,7 +88,8 @@ class AppColors {
 
   // Glassmorphic Surfaces
   static const Color glassSurface = Color(0x1AFFFFFF); // Improved contrast
-  static const Color glassSurfaceStrong = Color(0x26FFFFFF); // Better visibility
+  static const Color glassSurfaceStrong =
+      Color(0x26FFFFFF); // Better visibility
   static const Color glassBorder = Color(0x1AFFFFFF);
   static const Color glassBorderStrong = Color(0x33FFFFFF);
   static const Color glassShadow = Color(0x66000000);

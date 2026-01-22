@@ -29,7 +29,7 @@ class ConditionalAdWidget extends ConsumerWidget {
           // Ads are disabled via remote config
           return const SizedBox.shrink();
         }
-        
+
         // Ads are enabled, show the native ad
         return NativeAdWidget(
           screenName: screenName,
@@ -38,8 +38,10 @@ class ConditionalAdWidget extends ConsumerWidget {
           impressionTracker: impressionTracker,
         );
       },
-      loading: () => const SizedBox.shrink(), // Don't show ads while loading config
-      error: (_, __) => const SizedBox.shrink(), // Don't show ads on config error
+      loading: () =>
+          const SizedBox.shrink(), // Don't show ads while loading config
+      error: (_, __) =>
+          const SizedBox.shrink(), // Don't show ads on config error
     );
   }
 }

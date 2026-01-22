@@ -26,7 +26,8 @@ class LoadsRepositoryImpl implements LoadsRepository {
   }
 
   @override
-  Future<Either<Failure, Load>> createLoad(Map<String, dynamic> loadData) async {
+  Future<Either<Failure, Load>> createLoad(
+      Map<String, dynamic> loadData) async {
     try {
       final loadModel = await _withFallback((ds) => ds.createLoad(loadData));
       return Right(_modelToEntity(loadModel));
@@ -105,12 +106,14 @@ class LoadsRepositoryImpl implements LoadsRepository {
   Future<Either<Failure, List<TruckType>>> getTruckTypes() async {
     try {
       final models = await _withFallback((ds) => ds.getTruckTypes());
-      return Right(models.map((m) => TruckType(
-        id: m.id,
-        name: m.name,
-        category: m.category,
-        displayOrder: m.displayOrder,
-      )).toList());
+      return Right(models
+          .map((m) => TruckType(
+                id: m.id,
+                name: m.name,
+                category: m.category,
+                displayOrder: m.displayOrder,
+              ))
+          .toList());
     } catch (e) {
       return Left(CacheFailure(e.toString()));
     }
@@ -120,12 +123,14 @@ class LoadsRepositoryImpl implements LoadsRepository {
   Future<Either<Failure, List<MaterialType>>> getMaterialTypes() async {
     try {
       final models = await _withFallback((ds) => ds.getMaterialTypes());
-      return Right(models.map((m) => MaterialType(
-        id: m.id,
-        name: m.name,
-        category: m.category,
-        displayOrder: m.displayOrder,
-      )).toList());
+      return Right(models
+          .map((m) => MaterialType(
+                id: m.id,
+                name: m.name,
+                category: m.category,
+                displayOrder: m.displayOrder,
+              ))
+          .toList());
     } catch (e) {
       return Left(CacheFailure(e.toString()));
     }
