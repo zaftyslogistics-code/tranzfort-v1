@@ -136,7 +136,7 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
         ],
       ),
       floatingActionButton: const AddTruckFloatingButton(),
-      bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
+      bottomNavigationBar: const AppBottomNavigation(),
       ),
     );
   }
