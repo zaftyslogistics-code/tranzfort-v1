@@ -7,6 +7,7 @@ import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/free_badge.dart';
+import '../../../../shared/widgets/loading_overlay.dart';
 import '../../domain/entities/truck.dart';
 import '../providers/fleet_provider.dart';
 import '../widgets/add_truck_floating_button.dart';
@@ -47,7 +48,10 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
   Widget build(BuildContext context) {
     final fleetState = ref.watch(fleetNotifierProvider);
 
-    return Scaffold(
+    return LoadingOverlay(
+      isLoading: fleetState.isLoading && fleetState.trucks.isNotEmpty,
+      message: 'Loading fleet...',
+      child: Scaffold(
       appBar: AppBar(
         title: const GradientText(
           'My Fleet',
@@ -132,7 +136,8 @@ class _FleetManagementScreenState extends ConsumerState<FleetManagementScreen>
         ],
       ),
       floatingActionButton: const AddTruckFloatingButton(),
-      bottomNavigationBar: const AppBottomNavigation(),
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
+      ),
     );
   }
 

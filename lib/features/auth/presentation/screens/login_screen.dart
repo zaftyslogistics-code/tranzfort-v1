@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/utils/rate_limiter.dart';
+import '../../../../core/utils/input_validator.dart';
 import '../../../../shared/widgets/cyan_glow_container.dart';
 import '../../../../shared/widgets/glassmorphic_button.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
@@ -19,6 +21,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _rateLimiter = RateLimiter();
   bool _acceptedTerms = false;
   String? _generalError;
 
@@ -30,15 +33,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login() async {
-    final email = _emailController.text.trim();
+    final email = InputValidator.sanitize(_emailController.text.trim());
     final password = _passwordController.text;
 
     setState(() {
       _generalError = null;
     });
 
-    if (email.isEmpty || !email.contains('@')) {
-      setState(() => _generalError = 'Enter a valid email address');
+    // Validate email
+    final emailError = InputValidator.validateEmail(email);
+    if (emailError != null) {
+      setState(() => _generalError = emailError);
+      return;
+    }
+
+    // Check for malicious input
+    if (!InputValidator.isSafeInput(email)) {
+      InputValidator.logSuspiciousInput(email, 'login_email');
+      setState(() => _generalError = 'Invalid input detected');
       return;
     }
 
@@ -52,6 +64,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
+    // Check rate limiting
+    final rateLimitError = _rateLimiter.checkLoginAllowed(email);
+    if (rateLimitError != null) {
+      setState(() => _generalError = rateLimitError);
+      return;
+    }
+
     final success = await ref
         .read(authNotifierProvider.notifier)
         .signInWithEmailPassword(email, password);
@@ -59,13 +78,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!mounted) return;
 
     if (!success) {
+      // Record failed attempt
+      _rateLimiter.recordFailedLogin(email);
+      
+      final remainingAttempts = _rateLimiter.getRemainingAttempts(email);
       final error = ref.read(authNotifierProvider).error;
+      
       setState(() {
-        _generalError = error ?? 'Login failed';
+        if (remainingAttempts > 0) {
+          _generalError = '${error ?? 'Login failed'}. $remainingAttempts attempts remaining.';
+        } else {
+          _generalError = error ?? 'Login failed';
+        }
       });
       return;
     }
 
+    // Record successful login
+    _rateLimiter.recordSuccessfulLogin(email);
     context.go('/splash');
   }
 
