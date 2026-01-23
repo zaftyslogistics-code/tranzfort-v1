@@ -49,49 +49,67 @@ class _AdminUserManagementScreenState
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(AppDimensions.md),
-        child: Column(
-          children: [
-            TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                labelText: 'Search (mobile/name)',
-                prefixIcon: Icon(Icons.search),
-              ),
-              onSubmitted: (value) {
-                ref
-                    .read(adminUsersNotifierProvider.notifier)
-                    .fetchUsers(query: value);
-              },
-            ),
-            const SizedBox(height: AppDimensions.md),
-            if (state.error != null)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(AppDimensions.md),
-                decoration: BoxDecoration(
-                  color: AppColors.danger.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
-                  border: Border.all(color: AppColors.danger),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.darkBackground,
+              AppColors.secondaryBackground,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppDimensions.md),
+          child: Column(
+            children: [
+              TextField(
+                controller: _searchController,
+                style: const TextStyle(color: AppColors.textPrimary),
+                decoration: const InputDecoration(
+                  labelText: 'Search (mobile/name)',
+                  prefixIcon: Icon(Icons.search),
                 ),
-                child: Text(
-                  state.error!,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: AppColors.danger),
-                ),
+                onSubmitted: (value) {
+                  ref
+                      .read(adminUsersNotifierProvider.notifier)
+                      .fetchUsers(query: value);
+                },
               ),
-            const SizedBox(height: AppDimensions.md),
-            Expanded(
-              child: state.isLoading && state.users.isEmpty
-                  ? const Center(child: CircularProgressIndicator())
-                  : state.users.isEmpty
-                      ? const Center(child: Text('No users found'))
-                      : _buildResponsiveUserList(context, state.users),
-            ),
-          ],
+              const SizedBox(height: AppDimensions.md),
+              if (state.error != null)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(AppDimensions.md),
+                  decoration: BoxDecoration(
+                    color: AppColors.danger.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                    border: Border.all(color: AppColors.danger),
+                  ),
+                  child: Text(
+                    state.error!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: AppColors.danger),
+                  ),
+                ),
+              const SizedBox(height: AppDimensions.md),
+              Expanded(
+                child: state.isLoading && state.users.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : state.users.isEmpty
+                        ? const Center(
+                            child: Text(
+                              'No users found',
+                              style: TextStyle(color: AppColors.textPrimary),
+                            ),
+                          )
+                        : _buildResponsiveUserList(context, state.users),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -116,6 +134,11 @@ class _AdminUserManagementScreenState
           child: DataTable(
             headingRowColor:
                 MaterialStateProperty.all(AppColors.secondaryBackground),
+            headingTextStyle: const TextStyle(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+            dataTextStyle: const TextStyle(color: AppColors.textPrimary),
             columns: const [
               DataColumn(label: Text('ID')),
               DataColumn(label: Text('Mobile')),

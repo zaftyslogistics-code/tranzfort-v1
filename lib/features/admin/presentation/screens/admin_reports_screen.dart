@@ -40,76 +40,97 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Filter Tabs
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.all(AppDimensions.md),
-            child: Row(
-              children: [
-                _FilterChip(
-                  label: 'All',
-                  isSelected: state.currentFilter == 'all',
-                  onSelected: () => ref
-                      .read(adminReportsProvider.notifier)
-                      .fetchReports(status: 'all'),
-                ),
-                const SizedBox(width: AppDimensions.sm),
-                _FilterChip(
-                  label: 'Pending',
-                  isSelected: state.currentFilter == 'pending',
-                  onSelected: () => ref
-                      .read(adminReportsProvider.notifier)
-                      .fetchReports(status: 'pending'),
-                ),
-                const SizedBox(width: AppDimensions.sm),
-                _FilterChip(
-                  label: 'Investigating',
-                  isSelected: state.currentFilter == 'investigating',
-                  onSelected: () => ref
-                      .read(adminReportsProvider.notifier)
-                      .fetchReports(status: 'investigating'),
-                ),
-                const SizedBox(width: AppDimensions.sm),
-                _FilterChip(
-                  label: 'Resolved',
-                  isSelected: state.currentFilter == 'resolved',
-                  onSelected: () => ref
-                      .read(adminReportsProvider.notifier)
-                      .fetchReports(status: 'resolved'),
-                ),
-                const SizedBox(width: AppDimensions.sm),
-                _FilterChip(
-                  label: 'Dismissed',
-                  isSelected: state.currentFilter == 'dismissed',
-                  onSelected: () => ref
-                      .read(adminReportsProvider.notifier)
-                      .fetchReports(status: 'dismissed'),
-                ),
-              ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.darkBackground,
+              AppColors.secondaryBackground,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Column(
+          children: [
+            // Filter Tabs
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.all(AppDimensions.md),
+              child: Row(
+                children: [
+                  _FilterChip(
+                    label: 'All',
+                    isSelected: state.currentFilter == 'all',
+                    onSelected: () => ref
+                        .read(adminReportsProvider.notifier)
+                        .fetchReports(status: 'all'),
+                  ),
+                  const SizedBox(width: AppDimensions.sm),
+                  _FilterChip(
+                    label: 'Pending',
+                    isSelected: state.currentFilter == 'pending',
+                    onSelected: () => ref
+                        .read(adminReportsProvider.notifier)
+                        .fetchReports(status: 'pending'),
+                  ),
+                  const SizedBox(width: AppDimensions.sm),
+                  _FilterChip(
+                    label: 'Investigating',
+                    isSelected: state.currentFilter == 'investigating',
+                    onSelected: () => ref
+                        .read(adminReportsProvider.notifier)
+                        .fetchReports(status: 'investigating'),
+                  ),
+                  const SizedBox(width: AppDimensions.sm),
+                  _FilterChip(
+                    label: 'Resolved',
+                    isSelected: state.currentFilter == 'resolved',
+                    onSelected: () => ref
+                        .read(adminReportsProvider.notifier)
+                        .fetchReports(status: 'resolved'),
+                  ),
+                  const SizedBox(width: AppDimensions.sm),
+                  _FilterChip(
+                    label: 'Dismissed',
+                    isSelected: state.currentFilter == 'dismissed',
+                    onSelected: () => ref
+                        .read(adminReportsProvider.notifier)
+                        .fetchReports(status: 'dismissed'),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // Reports List
-          Expanded(
-            child: state.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : state.error != null
-                    ? Center(
-                        child: Text('Error: ${state.error}',
-                            style: const TextStyle(color: AppColors.danger)))
-                    : state.reports.isEmpty
-                        ? const Center(child: Text('No reports found'))
-                        : ListView.builder(
-                            padding: const EdgeInsets.all(AppDimensions.md),
-                            itemCount: state.reports.length,
-                            itemBuilder: (context, index) {
-                              return _ReportCard(report: state.reports[index]);
-                            },
+            // Reports List
+            Expanded(
+              child: state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : state.error != null
+                      ? Center(
+                          child: Text(
+                            'Error: ${state.error}',
+                            style: const TextStyle(color: AppColors.danger),
                           ),
-          ),
-        ],
+                        )
+                      : state.reports.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'No reports found',
+                                style: TextStyle(color: AppColors.textPrimary),
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(AppDimensions.md),
+                              itemCount: state.reports.length,
+                              itemBuilder: (context, index) {
+                                return _ReportCard(
+                                    report: state.reports[index]);
+                              },
+                            ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -132,10 +153,11 @@ class _FilterChip extends StatelessWidget {
       label: Text(label),
       selected: isSelected,
       onSelected: (_) => onSelected(),
-      selectedColor: AppColors.primary.withValues(alpha: 0.2),
-      checkmarkColor: AppColors.primary,
+      backgroundColor: AppColors.glassSurfaceStrong,
+      selectedColor: AppColors.primary.withValues(alpha: 0.25),
+      checkmarkColor: AppColors.textPrimary,
       labelStyle: TextStyle(
-        color: isSelected ? AppColors.primary : AppColors.textSecondary,
+        color: isSelected ? AppColors.textPrimary : AppColors.textSecondary,
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),
     );
@@ -166,7 +188,7 @@ class _ReportCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       margin: const EdgeInsets.only(bottom: AppDimensions.md),
-      color: AppColors.glassSurface,
+      color: AppColors.glassSurfaceStrong,
       child: Padding(
         padding: const EdgeInsets.all(AppDimensions.md),
         child: Column(
@@ -203,18 +225,27 @@ class _ReportCard extends ConsumerWidget {
             const SizedBox(height: AppDimensions.sm),
             Text(
               'Reason: ${report.reason}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: AppColors.textPrimary,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               'Type: ${report.reportedEntityType} (ID: ${report.reportedEntityId.substring(0, 8)}...)',
-              style:
-                  const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+              style: const TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 12,
+              ),
             ),
             const SizedBox(height: AppDimensions.sm),
             if (report.description != null) ...[
               const Text('Description:',
-                  style: TextStyle(fontWeight: FontWeight.w500)),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textPrimary,
+                  )),
               Text(report.description!,
                   style: const TextStyle(color: AppColors.textSecondary)),
               const SizedBox(height: AppDimensions.md),
