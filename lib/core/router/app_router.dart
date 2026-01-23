@@ -70,15 +70,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         return (isOnLogin || isOnSignup || isOnAdminLogin) ? null : '/login';
       }
 
-      if (isAuthenticated && user != null) {
-        // Check for admin role first
-        if (authState.admin != null) {
-          if (!isOnAdmin) {
-            return '/admin/dashboard';
-          }
-          return null;
+      // Admin sessions always go to admin dashboard (even if user profile is missing)
+      if (isAuthenticated && authState.admin != null) {
+        if (!isOnAdmin) {
+          return '/admin/dashboard';
         }
+        return null;
+      }
 
+      if (isAuthenticated && user != null) {
         // Authenticated but NOT an admin: block /admin routes
         if (isOnAdmin) {
           if (user.isSupplierEnabled) return '/supplier-dashboard';
