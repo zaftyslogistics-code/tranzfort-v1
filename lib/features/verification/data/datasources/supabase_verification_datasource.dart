@@ -29,6 +29,27 @@ class SupabaseVerificationDataSource {
           'User session not found. Please log in to submit verification.');
     }
 
+    final normalizedRoleType = roleType.trim().toLowerCase();
+    final normalizedDocumentType = documentType.trim().toLowerCase();
+
+    final docTypeCode = normalizedDocumentType == 'aadhaar'
+        ? 1
+        : (normalizedDocumentType == 'pan'
+            ? 2
+            : (normalizedDocumentType == 'manual' ? 3 : 0));
+
+    Logger.info(
+      '🪪 SUPABASE: verification insert payload roleType=$normalizedRoleType docTypeCode=$docTypeCode',
+    );
+
+    if (normalizedRoleType != 'supplier' && normalizedRoleType != 'trucker') {
+      throw ServerException('Invalid role type. Please try again.');
+    }
+
+    if (docTypeCode == 0) {
+      throw ServerException('Invalid document type. Please try again.');
+    }
+
     try {
       Logger.info('🪪 SUPABASE: Creating verification request');
 
@@ -36,8 +57,8 @@ class SupabaseVerificationDataSource {
           .from('verification_requests')
           .insert({
             'user_id': user.id,
-            'role_type': roleType,
-            'document_type': documentType,
+            'role_type': normalizedRoleType,
+            'document_type': normalizedDocumentType,
             'document_number': documentNumber,
             'company_name': companyName,
             'vehicle_number': vehicleNumber,

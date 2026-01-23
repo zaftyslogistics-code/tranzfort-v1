@@ -91,16 +91,14 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
     }
 
     final loadData = {
-      'fromLocation': _fromLocationController.text,
-      'fromCity': _fromCityController.text,
-      'fromState':
-          _fromStateController.text.isEmpty ? null : _fromStateController.text,
+      'fromLocation': _fromLocationController.text.trim(),
+      'fromCity': _fromCityController.text.trim(),
+      'fromState': _fromStateController.text.trim(),
       'fromLat': _fromLat,
       'fromLng': _fromLng,
-      'toLocation': _toLocationController.text,
-      'toCity': _toCityController.text,
-      'toState':
-          _toStateController.text.isEmpty ? null : _toStateController.text,
+      'toLocation': _toLocationController.text.trim(),
+      'toCity': _toCityController.text.trim(),
+      'toState': _toStateController.text.trim(),
       'toLat': _toLat,
       'toLng': _toLng,
       'loadType': _selectedMaterial,

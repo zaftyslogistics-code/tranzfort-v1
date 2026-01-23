@@ -1,3 +1,3 @@
 [build]
   publish = "build/web"
-  command = "rm -rf flutter_sdk && git clone https://github.com/flutter/flutter.git --depth 1 -b stable flutter_sdk && export PATH=\"$PWD/flutter_sdk/bin:$PATH\" && flutter --version && flutter pub get && flutter build web --release && mkdir -p build/web/downloads && cp -f netlify-downloads/index.html build/web/downloads/index.html && cp -f netlify-downloads/transfort-v1.0.0.apk build/web/downloads/transfort-v1.0.0.apk"
+  command = "rm -rf flutter_sdk && git clone https://github.com/flutter/flutter.git --depth 1 -b ${FLUTTER_REF:-stable} flutter_sdk && export PATH=\"$PWD/flutter_sdk/bin:$PATH\" && flutter --version && flutter pub get && flutter build web --release && mkdir -p build/web/downloads && cp -f netlify-downloads/index.html build/web/downloads/index.html && cp -f netlify-downloads/transfort-v1.0.0.apk build/web/downloads/transfort-v1.0.0.apk"

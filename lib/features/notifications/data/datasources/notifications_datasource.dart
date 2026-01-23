@@ -49,13 +49,16 @@ class NotificationsDataSource {
 
   Future<int> getUnreadCount(String userId) async {
     try {
-      final response = await _supabase
-          .from('notifications')
-          .select()
-          .eq('user_id', userId)
-          .eq('is_read', false);
+      final response =
+          await _supabase.rpc('get_unread_notification_count', params: {
+        'p_user_id': userId,
+      });
 
-      return (response as List).length;
+      if (response is int) return response;
+
+      if (response is num) return response.toInt();
+
+      return int.tryParse(response.toString()) ?? 0;
     } catch (e) {
       Logger.error('Failed to get unread count: $e');
       return 0;

@@ -440,7 +440,7 @@ class HomeScreen extends ConsumerWidget {
                       if (isSupplier) ...[
                         GlassmorphicButton(
                           variant: GlassmorphicButtonVariant.primary,
-                          onPressed: () => context.go('/feed'),
+                          onPressed: () => context.go('/my-loads'),
                           child: const Text('View My Loads'),
                         ),
                         const SizedBox(height: AppDimensions.sm),
@@ -454,7 +454,7 @@ class HomeScreen extends ConsumerWidget {
                       if (isTrucker) ...[
                         GlassmorphicButton(
                           variant: GlassmorphicButtonVariant.primary,
-                          onPressed: () => context.go('/feed'),
+                          onPressed: () => context.go('/trucker-feed'),
                           child: const Text('Find Loads'),
                         ),
                         const SizedBox(height: AppDimensions.lg),

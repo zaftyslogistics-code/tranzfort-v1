@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/services/offline_cache_service.dart';
+import '../../../../core/utils/logger.dart';
 import '../../../../core/utils/retry.dart';
 import '../models/load_model.dart';
 import '../models/material_type_model.dart';
@@ -33,23 +34,61 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
         loadData['truckType'] ??
         loadData['truck_type'];
 
+    final supplierId = loadData['supplierId'] ?? loadData['supplier_id'];
+    final fromCity = loadData['fromCity'] ?? loadData['from_city'];
+    final toCity = loadData['toCity'] ?? loadData['to_city'];
+
+    final fromState = loadData['fromState'] ?? loadData['from_state'];
+    final toState = loadData['toState'] ?? loadData['to_state'];
+
+    final materialTypeStr = materialType is String ? materialType.trim() : '';
+    final truckTypeStr = truckType is String ? truckType.trim() : '';
+    final fromStateStr = fromState is String ? fromState.trim() : '';
+    final toStateStr = toState is String ? toState.trim() : '';
+    final supplierIdStr = supplierId is String ? supplierId.trim() : '';
+    final fromCityStr = fromCity is String ? fromCity.trim() : '';
+    final toCityStr = toCity is String ? toCity.trim() : '';
+
+    Logger.info(
+      '🧾 LOAD INSERT: material=${materialTypeStr.isEmpty ? 0 : 1} truck=${truckTypeStr.isEmpty ? 0 : 1} fromState=${fromStateStr.isEmpty ? 0 : 1} toState=${toStateStr.isEmpty ? 0 : 1}',
+    );
+
+    if (materialTypeStr.isEmpty || truckTypeStr.isEmpty) {
+      throw ServerException(
+          'Missing material type or truck type. Please re-check Step 1 selections.');
+    }
+
+    if (supplierIdStr.isEmpty) {
+      throw ServerException('Missing supplier session. Please log in again.');
+    }
+
+    if (fromCityStr.isEmpty || toCityStr.isEmpty) {
+      throw ServerException(
+          'Missing pickup/drop city. Please fill in both cities and try again.');
+    }
+
+    if (fromStateStr.isEmpty || toStateStr.isEmpty) {
+      throw ServerException(
+          'Missing pickup/drop state. Please fill in both states and try again.');
+    }
+
     return {
-      'supplier_id': loadData['supplierId'] ?? loadData['supplier_id'],
+      'supplier_id': supplierIdStr,
       'from_location': loadData['fromLocation'] ?? loadData['from_location'],
-      'from_city': loadData['fromCity'] ?? loadData['from_city'],
-      'from_state': loadData['fromState'] ?? loadData['from_state'],
+      'from_city': fromCityStr,
+      'from_state': fromStateStr,
       'from_lat': loadData['fromLat'] ?? loadData['from_lat'],
       'from_lng': loadData['fromLng'] ?? loadData['from_lng'],
       'to_location': loadData['toLocation'] ?? loadData['to_location'],
-      'to_city': loadData['toCity'] ?? loadData['to_city'],
-      'to_state': loadData['toState'] ?? loadData['to_state'],
+      'to_city': toCityStr,
+      'to_state': toStateStr,
       'to_lat': loadData['toLat'] ?? loadData['to_lat'],
       'to_lng': loadData['toLng'] ?? loadData['to_lng'],
       // Map to BOTH old and new columns to satisfy NOT NULL constraints
-      'material_type': materialType,
-      'truck_type': truckType,
-      'load_type': materialType,
-      'truck_type_required': truckType,
+      'material_type': materialTypeStr,
+      'truck_type': truckTypeStr,
+      'load_type': materialTypeStr,
+      'truck_type_required': truckTypeStr,
       'weight': loadData['weight'],
       'weight_in_tons': loadData['weight'], // Also populate old column
       'price': loadData['price'],

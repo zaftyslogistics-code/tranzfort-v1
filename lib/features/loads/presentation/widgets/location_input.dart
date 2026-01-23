@@ -110,7 +110,9 @@ class LocationInput extends StatelessWidget {
               child: LoadFormField(
                 label: 'State',
                 controller: stateController,
-                hint: 'Optional',
+                hint: 'State name',
+                validator: (value) =>
+                    Validators.validateRequired(value, 'state'),
               ),
             ),
           ],

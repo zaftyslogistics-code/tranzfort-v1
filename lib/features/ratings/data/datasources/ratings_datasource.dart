@@ -26,10 +26,43 @@ class RatingsDataSource {
 
   Future<Map<String, dynamic>> getUserRatingStats(String userId) async {
     try {
-      final response = await _supabase
-          .rpc('get_user_rating_stats', params: {'p_user_id': userId});
+      final averageResponse = await _supabase
+          .rpc('get_user_average_rating', params: {'p_user_id': userId});
 
-      return response as Map<String, dynamic>;
+      final averageRating = averageResponse is num
+          ? averageResponse.toDouble()
+          : (double.tryParse(averageResponse.toString()) ?? 0.0);
+
+      final rows = await _supabase
+          .from('ratings')
+          .select('rating')
+          .eq('rated_user_id', userId);
+
+      final list = (rows as List)
+          .cast<Map<String, dynamic>>()
+          .map((r) => (r['rating'] as num?)?.toInt())
+          .whereType<int>()
+          .toList(growable: false);
+
+      final breakdown = <String, int>{
+        '1': 0,
+        '2': 0,
+        '3': 0,
+        '4': 0,
+        '5': 0,
+      };
+
+      for (final rating in list) {
+        if (rating >= 1 && rating <= 5) {
+          breakdown['$rating'] = (breakdown['$rating'] ?? 0) + 1;
+        }
+      }
+
+      return {
+        'average_rating': averageRating,
+        'total_ratings': list.length,
+        'rating_breakdown': breakdown,
+      };
     } catch (e) {
       Logger.error('Failed to get rating stats: $e');
       return {
