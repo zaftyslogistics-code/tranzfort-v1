@@ -25,6 +25,13 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
   final _documentNumberController = TextEditingController();
   String _documentType = 'aadhaar';
 
+  String _toDbDocumentType(String display) {
+    final normalized = display.trim().toLowerCase();
+    if (normalized.startsWith('aadhaar')) return 'aadhaar';
+    if (normalized.startsWith('pan')) return 'pan';
+    return 'manual';
+  }
+
   XFile? _front;
   XFile? _back;
 
@@ -174,7 +181,7 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                       ),
                       items: _requiredDocuments.map((doc) {
                         return DropdownMenuItem(
-                          value: doc.toLowerCase().replaceAll(' ', '_'),
+                          value: _toDbDocumentType(doc),
                           child:
                               Text(doc, style: TextStyle(color: Colors.white)),
                         );
