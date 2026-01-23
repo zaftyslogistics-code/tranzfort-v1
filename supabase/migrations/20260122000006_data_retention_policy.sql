@@ -24,8 +24,12 @@ BEGIN
   -- Anonymize verification requests
   UPDATE public.verification_requests
   SET 
-    aadhaar_number = 'XXXX-XXXX-XXXX',
-    pan_number = 'XXXXXXXXXX',
+    document_number = NULL,
+    document_front_url = NULL,
+    document_back_url = NULL,
+    company_name = NULL,
+    vehicle_number = NULL,
+    rejection_reason = NULL,
     updated_at = NOW()
   WHERE user_id = user_id_to_anonymize;
 
