@@ -52,11 +52,24 @@ class _AdminEmailPasswordLoginScreenState
 
       if (!mounted) return;
 
-      // Trigger auth state check to update the provider
-      ref.read(authNotifierProvider.notifier).checkAuthStatus();
+      // Force auth refresh so admin profile is loaded even if auth was already checked.
+      await ref
+          .read(authNotifierProvider.notifier)
+          .checkAuthStatus(force: true);
 
-      // Navigate to splash to let auth state resolve
-      context.go('/splash');
+      if (!mounted) return;
+
+      final authState = ref.read(authNotifierProvider);
+      if (authState.admin == null) {
+        await Supabase.instance.client.auth.signOut();
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('This account is not an admin')),
+        );
+        return;
+      }
+
+      context.go('/admin/dashboard');
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

@@ -35,9 +35,7 @@ class SupabaseAdminDataSource implements AdminDataSource {
         .select('*')
         .order('created_at', ascending: false);
 
-    return (response as List)
-        .map((json) => AdminModel.fromJson(json))
-        .toList();
+    return (response as List).map((json) => AdminModel.fromJson(json)).toList();
   }
 
   @override

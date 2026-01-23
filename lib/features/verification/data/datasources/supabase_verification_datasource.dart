@@ -32,15 +32,19 @@ class SupabaseVerificationDataSource {
     try {
       Logger.info('🪪 SUPABASE: Creating verification request');
 
-      final inserted = await _supabase.from('verification_requests').insert({
-        'user_id': user.id,
-        'role_type': roleType,
-        'document_type': documentType,
-        'document_number': documentNumber,
-        'company_name': companyName,
-        'vehicle_number': vehicleNumber,
-        'status': 'pending',
-      }).select('*').single();
+      final inserted = await _supabase
+          .from('verification_requests')
+          .insert({
+            'user_id': user.id,
+            'role_type': roleType,
+            'document_type': documentType,
+            'document_number': documentNumber,
+            'company_name': companyName,
+            'vehicle_number': vehicleNumber,
+            'status': 'pending',
+          })
+          .select('*')
+          .single();
 
       final request = VerificationRequestModel.fromJson(inserted);
 
@@ -75,7 +79,8 @@ class SupabaseVerificationDataSource {
           contentType: front.mimeType,
         );
       } catch (e) {
-        throw ServerException('Failed to upload front document image. Please check your internet connection and try again.');
+        throw ServerException(
+            'Failed to upload front document image. Please check your internet connection and try again.');
       }
 
       Logger.info('🪪 SUPABASE: Uploading back document image');
@@ -86,10 +91,12 @@ class SupabaseVerificationDataSource {
           contentType: back.mimeType,
         );
       } catch (e) {
-        throw ServerException('Failed to upload back document image. Please check your internet connection and try again.');
+        throw ServerException(
+            'Failed to upload back document image. Please check your internet connection and try again.');
       }
 
-      Logger.info('🪪 SUPABASE: Updating verification request with document URLs');
+      Logger.info(
+          '🪪 SUPABASE: Updating verification request with document URLs');
       try {
         final updated = await _supabase
             .from('verification_requests')
@@ -101,17 +108,20 @@ class SupabaseVerificationDataSource {
             .select('*')
             .single();
 
-        Logger.info('✅ SUPABASE: Verification request submitted: ${request.id}');
+        Logger.info(
+            '✅ SUPABASE: Verification request submitted: ${request.id}');
         return VerificationRequestModel.fromJson(updated);
       } catch (e) {
-        throw ServerException('Failed to finalize verification request. Please try again.');
+        throw ServerException(
+            'Failed to finalize verification request. Please try again.');
       }
     } on ServerException {
       rethrow;
     } catch (e) {
       Logger.error('❌ SUPABASE: Failed to submit verification request',
           error: e);
-      throw ServerException('Failed to create verification request. Please try again.');
+      throw ServerException(
+          'Failed to create verification request. Please try again.');
     }
   }
 
@@ -131,7 +141,8 @@ class SupabaseVerificationDataSource {
           );
     } catch (e) {
       Logger.error('❌ SUPABASE: Storage upload failed for $path', error: e);
-      throw ServerException('Failed to upload document image. Please check your internet connection and try again.');
+      throw ServerException(
+          'Failed to upload document image. Please check your internet connection and try again.');
     }
   }
 

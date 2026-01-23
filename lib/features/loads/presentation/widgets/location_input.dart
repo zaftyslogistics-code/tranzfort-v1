@@ -40,7 +40,8 @@ class LocationInput extends StatelessWidget {
     );
 
     final places = NominatimPlacesService();
-    final suggestion = await places.reverse(lat: pos.latitude, lng: pos.longitude);
+    final suggestion =
+        await places.reverse(lat: pos.latitude, lng: pos.longitude);
 
     if (suggestion == null) {
       if (context.mounted) {

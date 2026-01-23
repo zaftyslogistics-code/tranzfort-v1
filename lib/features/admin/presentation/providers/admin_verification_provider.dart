@@ -70,7 +70,8 @@ class AdminVerificationNotifier extends StateNotifier<AdminVerificationState> {
         final adminId = _ref.read(authNotifierProvider).user?.id;
         if (adminId != null) {
           try {
-            final dataSource = SupabaseAdminDataSource(Supabase.instance.client);
+            final dataSource =
+                SupabaseAdminDataSource(Supabase.instance.client);
 
             String action;
             switch (status) {

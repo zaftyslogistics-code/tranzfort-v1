@@ -54,7 +54,9 @@ class _LoadDetailSupplierScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       ref.read(loadsNotifierProvider.notifier).fetchLoadById(widget.loadId);
-      ref.read(offersNotifierProvider.notifier).fetchOffersForLoad(widget.loadId);
+      ref
+          .read(offersNotifierProvider.notifier)
+          .fetchOffersForLoad(widget.loadId);
     });
   }
 
@@ -139,8 +141,7 @@ class _LoadDetailSupplierScreenState
     if (!mounted) return;
     if (updated == null) {
       final err = ref.read(offersNotifierProvider).error ?? 'Action failed';
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(err)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
       return;
     }
 
@@ -157,8 +158,7 @@ class _LoadDetailSupplierScreenState
     if (!mounted) return;
     if (updated == null) {
       final err = ref.read(offersNotifierProvider).error ?? 'Action failed';
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(err)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
       return;
     }
 
@@ -175,8 +175,7 @@ class _LoadDetailSupplierScreenState
     if (!mounted) return;
     if (offerUpdated == null) {
       final err = ref.read(offersNotifierProvider).error ?? 'Action failed';
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(err)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
       return;
     }
 
@@ -368,8 +367,7 @@ class _LoadDetailSupplierScreenState
                                 borderRadius: BorderRadius.circular(
                                     AppDimensions.radiusSm),
                                 border: Border.all(
-                                  color:
-                                      meta.$2.withAlpha((0.4 * 255).round()),
+                                  color: meta.$2.withAlpha((0.4 * 255).round()),
                                 ),
                               ),
                               child: Text(
@@ -526,8 +524,8 @@ class _LoadDetailSupplierScreenState
                           ...offersState.offers.map(
                             (offer) {
                               return Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: AppDimensions.md),
+                                padding: const EdgeInsets.only(
+                                    bottom: AppDimensions.md),
                                 child: GlassmorphicCard(
                                   padding:
                                       const EdgeInsets.all(AppDimensions.md),
@@ -570,8 +568,8 @@ class _LoadDetailSupplierScreenState
                                                 .textTheme
                                                 .bodyMedium
                                                 ?.copyWith(
-                                                    color:
-                                                        AppColors.textSecondary),
+                                                    color: AppColors
+                                                        .textSecondary),
                                           ),
                                         ),
                                       const SizedBox(height: AppDimensions.sm),
@@ -583,29 +581,34 @@ class _LoadDetailSupplierScreenState
                                                           'accepted' ||
                                                       load.status == 'booked'
                                                   ? null
-                                                  : () => _counterOffer(offer.id),
+                                                  : () =>
+                                                      _counterOffer(offer.id),
                                               child: const Text('Counter'),
                                             ),
                                           ),
-                                          const SizedBox(width: AppDimensions.sm),
+                                          const SizedBox(
+                                              width: AppDimensions.sm),
                                           Expanded(
                                             child: OutlinedButton(
                                               onPressed: offer.status ==
                                                           'accepted' ||
                                                       offer.status == 'rejected'
                                                   ? null
-                                                  : () => _rejectOffer(offer.id),
+                                                  : () =>
+                                                      _rejectOffer(offer.id),
                                               child: const Text('Reject'),
                                             ),
                                           ),
-                                          const SizedBox(width: AppDimensions.sm),
+                                          const SizedBox(
+                                              width: AppDimensions.sm),
                                           Expanded(
                                             child: ElevatedButton(
                                               onPressed: offer.status ==
                                                           'accepted' ||
                                                       load.status == 'booked'
                                                   ? null
-                                                  : () => _acceptOffer(offer.id),
+                                                  : () =>
+                                                      _acceptOffer(offer.id),
                                               child: const Text('Accept'),
                                             ),
                                           ),

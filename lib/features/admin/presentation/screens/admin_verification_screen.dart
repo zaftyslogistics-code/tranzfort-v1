@@ -29,7 +29,8 @@ class _AdminVerificationScreenState
 
   Future<void> _pickDateRange() async {
     final now = DateTime.now();
-    final initialStart = _dateRange?.start ?? now.subtract(const Duration(days: 7));
+    final initialStart =
+        _dateRange?.start ?? now.subtract(const Duration(days: 7));
     final initialEnd = _dateRange?.end ?? now;
 
     final picked = await showDateRangePicker(
@@ -97,8 +98,10 @@ class _AdminVerificationScreenState
                     decoration: const InputDecoration(labelText: 'Role'),
                     items: const [
                       DropdownMenuItem(value: 'all', child: Text('All')),
-                      DropdownMenuItem(value: 'supplier', child: Text('Supplier')),
-                      DropdownMenuItem(value: 'trucker', child: Text('Trucker')),
+                      DropdownMenuItem(
+                          value: 'supplier', child: Text('Supplier')),
+                      DropdownMenuItem(
+                          value: 'trucker', child: Text('Trucker')),
                     ],
                     onChanged: (value) {
                       if (value == null) return;
@@ -254,8 +257,8 @@ class _VerificationRequestCard extends ConsumerWidget {
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content:
-                      Text(success ? 'Marked as needs more info' : 'Action Failed'),
+                  content: Text(
+                      success ? 'Marked as needs more info' : 'Action Failed'),
                   backgroundColor: success ? Colors.blueGrey : Colors.red,
                 ),
               );
@@ -417,7 +420,8 @@ class _SignedImagePreviewState extends State<_SignedImagePreview> {
                               fit: BoxFit.contain,
                               errorBuilder: (context, error, stackTrace) {
                                 return const Center(
-                                  child: Icon(Icons.broken_image, color: Colors.white),
+                                  child: Icon(Icons.broken_image,
+                                      color: Colors.white),
                                 );
                               },
                             ),
@@ -455,8 +459,7 @@ class _SignedImagePreviewState extends State<_SignedImagePreview> {
             : (_url == null
                 ? const Center(child: Icon(Icons.broken_image))
                 : ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(AppDimensions.radiusSm),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
                     child: Image.network(
                       _url!,
                       fit: BoxFit.cover,

@@ -65,7 +65,8 @@ class DealsNotifier extends StateNotifier<DealsState> {
     );
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (deal) => state = state.copyWith(isLoading: false, deal: deal),
     );
   }
@@ -88,7 +89,8 @@ class DealsNotifier extends StateNotifier<DealsState> {
     );
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (deal) => state = state.copyWith(isLoading: false, deal: deal),
     );
   }
@@ -99,10 +101,12 @@ class DealsNotifier extends StateNotifier<DealsState> {
 
     state = state.copyWith(isLoading: true, error: null);
     final repo = _ref.read(dealsRepositoryProvider);
-    final result = await repo.updateRcShareStatus(dealId: deal.id, status: 'requested');
+    final result =
+        await repo.updateRcShareStatus(dealId: deal.id, status: 'requested');
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (updated) async {
         state = state.copyWith(isLoading: false, deal: updated);
         if (EnvConfig.enableAnalytics) {
@@ -135,10 +139,12 @@ class DealsNotifier extends StateNotifier<DealsState> {
 
     state = state.copyWith(isLoading: true, error: null);
     final repo = _ref.read(dealsRepositoryProvider);
-    final result = await repo.updateRcShareStatus(dealId: deal.id, status: 'approved');
+    final result =
+        await repo.updateRcShareStatus(dealId: deal.id, status: 'approved');
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (updated) async {
         state = state.copyWith(isLoading: false, deal: updated);
         if (EnvConfig.enableAnalytics) {
@@ -171,10 +177,12 @@ class DealsNotifier extends StateNotifier<DealsState> {
 
     state = state.copyWith(isLoading: true, error: null);
     final repo = _ref.read(dealsRepositoryProvider);
-    final result = await repo.updateRcShareStatus(dealId: deal.id, status: 'revoked');
+    final result =
+        await repo.updateRcShareStatus(dealId: deal.id, status: 'revoked');
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (updated) async {
         state = state.copyWith(isLoading: false, deal: updated);
         if (EnvConfig.enableAnalytics) {
@@ -210,7 +218,8 @@ class DealsNotifier extends StateNotifier<DealsState> {
 
       final rcPath = truckRow['rc_document_url'] as String?;
       if (rcPath == null || rcPath.isEmpty) {
-        state = state.copyWith(isLoading: false, error: 'RC document not uploaded');
+        state =
+            state.copyWith(isLoading: false, error: 'RC document not uploaded');
         return;
       }
 
@@ -222,7 +231,8 @@ class DealsNotifier extends StateNotifier<DealsState> {
       );
 
       urlResult.fold(
-        (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+        (failure) =>
+            state = state.copyWith(isLoading: false, error: failure.message),
         (url) => state = state.copyWith(isLoading: false, signedRcUrl: url),
       );
     } catch (e) {
@@ -232,6 +242,7 @@ class DealsNotifier extends StateNotifier<DealsState> {
   }
 }
 
-final dealsNotifierProvider = StateNotifierProvider<DealsNotifier, DealsState>((ref) {
+final dealsNotifierProvider =
+    StateNotifierProvider<DealsNotifier, DealsState>((ref) {
   return DealsNotifier(ref);
 });

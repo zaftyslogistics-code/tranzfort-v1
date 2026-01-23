@@ -84,8 +84,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 left: AppDimensions.lg,
                 right: AppDimensions.lg,
                 top: AppDimensions.lg,
-                bottom: MediaQuery.of(context).viewInsets.bottom +
-                    AppDimensions.lg,
+                bottom:
+                    MediaQuery.of(context).viewInsets.bottom + AppDimensions.lg,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -112,14 +112,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           ),
                         )
                         .toList(growable: false),
-                    onChanged: (val) => setModalState(() => selectedTruckId = val),
+                    onChanged: (val) =>
+                        setModalState(() => selectedTruckId = val),
                   ),
                   const SizedBox(height: AppDimensions.lg),
                   ElevatedButton(
                     onPressed: selectedTruckId == null
                         ? null
                         : () async {
-                            await ref.read(dealsNotifierProvider.notifier).ensureDeal(
+                            await ref
+                                .read(dealsNotifierProvider.notifier)
+                                .ensureDeal(
                                   loadId: chat.loadId,
                                   supplierId: chat.supplierId,
                                   truckerId: chat.truckerId,
@@ -278,7 +281,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           .eq('id', dealsState.deal!.truckId!)
                           .single(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const SizedBox(
                             height: 22,
                             child: Center(
@@ -322,7 +326,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
-                                        ?.copyWith(color: AppColors.textSecondary),
+                                        ?.copyWith(
+                                            color: AppColors.textSecondary),
                                   ),
                                 ],
                               ),
@@ -364,8 +369,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               ),
                             ),
                             IconButton(
-                              onPressed:
-                                  dealsState.isLoading ? null : _loadDealForChat,
+                              onPressed: dealsState.isLoading
+                                  ? null
+                                  : _loadDealForChat,
                               icon: const Icon(Icons.refresh, size: 18),
                             ),
                           ],
@@ -421,7 +427,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   if (isSupplier)
                                     OutlinedButton.icon(
                                       onPressed: dealsState.isLoading ||
-                                              deal.rcShareStatus == 'approved' ||
+                                              deal.rcShareStatus ==
+                                                  'approved' ||
                                               deal.rcShareStatus == 'requested'
                                           ? null
                                           : () async {
@@ -430,7 +437,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                                       .notifier)
                                                   .requestRc();
                                             },
-                                      icon: const Icon(Icons.lock_open_outlined),
+                                      icon:
+                                          const Icon(Icons.lock_open_outlined),
                                       label: const Text('Request RC'),
                                     ),
                                   if (isTrucker)
@@ -489,13 +497,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                               final url = ref
                                                   .read(dealsNotifierProvider)
                                                   .signedRcUrl;
-                                              if (!context.mounted || url == null) {
+                                              if (!context.mounted ||
+                                                  url == null) {
                                                 return;
                                               }
 
                                               showDialog(
                                                 context: context,
-                                                builder: (context) => AlertDialog(
+                                                builder: (context) =>
+                                                    AlertDialog(
                                                   title:
                                                       const Text('RC Document'),
                                                   content: SizedBox(
@@ -508,15 +518,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                                           error, stackTrace) {
                                                         return const Center(
                                                             child: Text(
-                                                                'Failed to load RC')); 
+                                                                'Failed to load RC'));
                                                       },
                                                     ),
                                                   ),
                                                   actions: [
                                                     TextButton(
                                                       onPressed: () =>
-                                                          Navigator.pop(context),
-                                                      child: const Text('Close'),
+                                                          Navigator.pop(
+                                                              context),
+                                                      child:
+                                                          const Text('Close'),
                                                     ),
                                                   ],
                                                 ),

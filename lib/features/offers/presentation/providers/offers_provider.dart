@@ -69,7 +69,8 @@ class OffersNotifier extends StateNotifier<OffersState> {
     final result = await useCase(loadId);
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, error: failure.message),
+      (failure) =>
+          state = state.copyWith(isLoading: false, error: failure.message),
       (offers) => state = state.copyWith(isLoading: false, offers: offers),
     );
   }
@@ -100,7 +101,8 @@ class OffersNotifier extends StateNotifier<OffersState> {
         return null;
       },
       (offer) {
-        state = state.copyWith(isLoading: false, offers: [offer, ...state.offers]);
+        state =
+            state.copyWith(isLoading: false, offers: [offer, ...state.offers]);
         return offer;
       },
     );
@@ -131,6 +133,7 @@ class OffersNotifier extends StateNotifier<OffersState> {
   }
 }
 
-final offersNotifierProvider = StateNotifierProvider<OffersNotifier, OffersState>((ref) {
+final offersNotifierProvider =
+    StateNotifierProvider<OffersNotifier, OffersState>((ref) {
   return OffersNotifier(ref);
 });

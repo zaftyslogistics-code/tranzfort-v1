@@ -81,6 +81,8 @@ class AuthState {
   final bool isAuthenticated;
   final bool hasCheckedAuth;
 
+  static const Object _unset = Object();
+
   AuthState({
     this.user,
     this.admin,
@@ -92,7 +94,7 @@ class AuthState {
 
   AuthState copyWith({
     domain.User? user,
-    domain.Admin? admin,
+    Object? admin = _unset,
     bool? isLoading,
     String? error,
     bool? isAuthenticated,
@@ -100,7 +102,7 @@ class AuthState {
   }) {
     return AuthState(
       user: user ?? this.user,
-      admin: admin ?? this.admin,
+      admin: identical(admin, _unset) ? this.admin : admin as domain.Admin?,
       isLoading: isLoading ?? this.isLoading,
       error: error,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
@@ -147,9 +149,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     _sessionTimer = null;
   }
 
-  Future<void> checkAuthStatus() async {
-    if (state.hasCheckedAuth) return;
-    state = state.copyWith(isLoading: true, error: null);
+  Future<void> checkAuthStatus({bool force = false}) async {
+    if (!force && state.hasCheckedAuth) return;
+    if (state.isLoading) return;
+    state = state.copyWith(isLoading: true, error: null, admin: null);
 
     final result = await getCurrentUserUseCase();
 
@@ -159,6 +162,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = state.copyWith(
           isLoading: false,
           isAuthenticated: false,
+          user: null,
+          admin: null,
           error: failure.message,
           hasCheckedAuth: true,
         );
@@ -173,6 +178,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
               _startSessionTimer(); // Start session timer for regular user
               state = state.copyWith(
                 user: user,
+                admin: null,
                 isLoading: false,
                 isAuthenticated: true,
                 hasCheckedAuth: true,
@@ -194,6 +200,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
           state = state.copyWith(
             isLoading: false,
             isAuthenticated: false,
+            user: null,
+            admin: null,
             hasCheckedAuth: true,
           );
         }

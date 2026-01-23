@@ -20,7 +20,9 @@ class _ManageAdminsScreenState extends ConsumerState<ManageAdminsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final currentAdminId = ref.read(authNotifierProvider).user?.id;
       if (currentAdminId != null) {
-        ref.read(manageAdminsNotifierProvider(currentAdminId).notifier).fetchAdmins();
+        ref
+            .read(manageAdminsNotifierProvider(currentAdminId).notifier)
+            .fetchAdmins();
       }
     });
   }
@@ -113,7 +115,9 @@ class _ManageAdminsScreenState extends ConsumerState<ManageAdminsScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      success ? 'Admin created successfully' : 'Failed to create admin',
+                      success
+                          ? 'Admin created successfully'
+                          : 'Failed to create admin',
                     ),
                   ),
                 );
@@ -178,7 +182,9 @@ class _ManageAdminsScreenState extends ConsumerState<ManageAdminsScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      success ? 'Role updated successfully' : 'Failed to update role',
+                      success
+                          ? 'Role updated successfully'
+                          : 'Failed to update role',
                     ),
                   ),
                 );
@@ -197,7 +203,8 @@ class _ManageAdminsScreenState extends ConsumerState<ManageAdminsScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.darkSurface,
         title: const Text('Delete Admin'),
-        content: Text('Are you sure you want to revoke admin access for $fullName?'),
+        content:
+            Text('Are you sure you want to revoke admin access for $fullName?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -218,7 +225,9 @@ class _ManageAdminsScreenState extends ConsumerState<ManageAdminsScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      success ? 'Admin deleted successfully' : 'Failed to delete admin',
+                      success
+                          ? 'Admin deleted successfully'
+                          : 'Failed to delete admin',
                     ),
                   ),
                 );

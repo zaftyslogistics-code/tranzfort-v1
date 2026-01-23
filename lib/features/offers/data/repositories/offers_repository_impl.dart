@@ -37,7 +37,8 @@ class OffersRepositoryImpl implements OffersRepository {
   }
 
   @override
-  Future<Either<Failure, List<LoadOffer>>> listOffersForLoad(String loadId) async {
+  Future<Either<Failure, List<LoadOffer>>> listOffersForLoad(
+      String loadId) async {
     try {
       final offers = await _dataSource.listOffersForLoad(loadId);
       return Right(offers);

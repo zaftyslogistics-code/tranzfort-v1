@@ -95,9 +95,8 @@ class ManageAdminsNotifier extends StateNotifier<ManageAdminsState> {
         newData: {'role': newRole},
       );
 
-      final updatedAdmins = state.admins
-          .map((a) => a.id == adminId ? updatedAdmin : a)
-          .toList();
+      final updatedAdmins =
+          state.admins.map((a) => a.id == adminId ? updatedAdmin : a).toList();
       state = state.copyWith(isLoading: false, admins: updatedAdmins);
       return true;
     } catch (e) {
@@ -120,8 +119,7 @@ class ManageAdminsNotifier extends StateNotifier<ManageAdminsState> {
         oldData: {'role': oldAdmin.role, 'full_name': oldAdmin.fullName},
       );
 
-      final updatedAdmins =
-          state.admins.where((a) => a.id != adminId).toList();
+      final updatedAdmins = state.admins.where((a) => a.id != adminId).toList();
       state = state.copyWith(isLoading: false, admins: updatedAdmins);
       return true;
     } catch (e) {
@@ -131,8 +129,8 @@ class ManageAdminsNotifier extends StateNotifier<ManageAdminsState> {
   }
 }
 
-final manageAdminsNotifierProvider =
-    StateNotifierProvider.family<ManageAdminsNotifier, ManageAdminsState, String>(
+final manageAdminsNotifierProvider = StateNotifierProvider.family<
+    ManageAdminsNotifier, ManageAdminsState, String>(
   (ref, currentAdminId) {
     final client = Supabase.instance.client;
     final dataSource = SupabaseAdminDataSource(client);

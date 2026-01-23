@@ -43,11 +43,12 @@ class _LoadDetailTruckerScreenState
 
     if (user == null || load == null) return;
 
-    final chatId = await ref.read(chatNotifierProvider.notifier).getOrCreateChatId(
-          loadId: load.id,
-          supplierId: load.supplierId,
-          truckerId: user.id,
-        );
+    final chatId =
+        await ref.read(chatNotifierProvider.notifier).getOrCreateChatId(
+              loadId: load.id,
+              supplierId: load.supplierId,
+              truckerId: user.id,
+            );
 
     if (!mounted) return;
 
@@ -85,8 +86,8 @@ class _LoadDetailTruckerScreenState
                 left: AppDimensions.lg,
                 right: AppDimensions.lg,
                 top: AppDimensions.lg,
-                bottom: MediaQuery.of(context).viewInsets.bottom +
-                    AppDimensions.lg,
+                bottom:
+                    MediaQuery.of(context).viewInsets.bottom + AppDimensions.lg,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -168,19 +169,17 @@ class _LoadDetailTruckerScreenState
                                       truckerId: user.id,
                                       truckId: selectedTruckId,
                                       price: price,
-                                      message: messageController.text
-                                              .trim()
-                                              .isEmpty
-                                          ? null
-                                          : messageController.text.trim(),
+                                      message:
+                                          messageController.text.trim().isEmpty
+                                              ? null
+                                              : messageController.text.trim(),
                                     );
 
                                 if (offer == null) {
                                   if (!context.mounted) return;
-                                  final err = ref
-                                          .read(offersNotifierProvider)
-                                          .error ??
-                                      'Failed to create offer';
+                                  final err =
+                                      ref.read(offersNotifierProvider).error ??
+                                          'Failed to create offer';
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(err)),
                                   );
@@ -203,7 +202,8 @@ class _LoadDetailTruckerScreenState
                             ? const SizedBox(
                                 height: 18,
                                 width: 18,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
                               )
                             : const Text('Submit Offer'),
                       );
@@ -393,8 +393,7 @@ class _LoadDetailTruckerScreenState
                                 borderRadius: BorderRadius.circular(
                                     AppDimensions.radiusSm),
                                 border: Border.all(
-                                  color:
-                                      meta.$2.withAlpha((0.4 * 255).round()),
+                                  color: meta.$2.withAlpha((0.4 * 255).round()),
                                 ),
                               ),
                               child: Text(
