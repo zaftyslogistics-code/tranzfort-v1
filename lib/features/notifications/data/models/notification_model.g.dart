@@ -7,8 +7,7 @@ part of 'notification_model.dart';
 // **************************************************************************
 
 _$NotificationModelImpl _$$NotificationModelImplFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$NotificationModelImpl(
       id: json['id'] as String,
       userId: json['userId'] as String,
@@ -25,8 +24,7 @@ _$NotificationModelImpl _$$NotificationModelImplFromJson(
     );
 
 Map<String, dynamic> _$$NotificationModelImplToJson(
-  _$NotificationModelImpl instance,
-) =>
+        _$NotificationModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,

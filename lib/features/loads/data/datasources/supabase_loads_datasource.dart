@@ -38,9 +38,13 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       'from_location': loadData['fromLocation'] ?? loadData['from_location'],
       'from_city': loadData['fromCity'] ?? loadData['from_city'],
       'from_state': loadData['fromState'] ?? loadData['from_state'],
+      'from_lat': loadData['fromLat'] ?? loadData['from_lat'],
+      'from_lng': loadData['fromLng'] ?? loadData['from_lng'],
       'to_location': loadData['toLocation'] ?? loadData['to_location'],
       'to_city': loadData['toCity'] ?? loadData['to_city'],
       'to_state': loadData['toState'] ?? loadData['to_state'],
+      'to_lat': loadData['toLat'] ?? loadData['to_lat'],
+      'to_lng': loadData['toLng'] ?? loadData['to_lng'],
       // Map to BOTH old and new columns to satisfy NOT NULL constraints
       'material_type': materialType,
       'truck_type': truckType,
@@ -75,9 +79,13 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       'from_location',
       'from_city',
       'from_state',
+      'from_lat',
+      'from_lng',
       'to_location',
       'to_city',
       'to_state',
+      'to_lat',
+      'to_lng',
       'load_type',
       'truck_type_required',
       'weight',
@@ -102,6 +110,10 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
         'from_city': updates['fromCity'] ?? updates['from_city'],
       if (updates.containsKey('fromState') || updates.containsKey('from_state'))
         'from_state': updates['fromState'] ?? updates['from_state'],
+      if (updates.containsKey('fromLat') || updates.containsKey('from_lat'))
+        'from_lat': updates['fromLat'] ?? updates['from_lat'],
+      if (updates.containsKey('fromLng') || updates.containsKey('from_lng'))
+        'from_lng': updates['fromLng'] ?? updates['from_lng'],
       if (updates.containsKey('toLocation') ||
           updates.containsKey('to_location'))
         'to_location': updates['toLocation'] ?? updates['to_location'],
@@ -109,6 +121,10 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
         'to_city': updates['toCity'] ?? updates['to_city'],
       if (updates.containsKey('toState') || updates.containsKey('to_state'))
         'to_state': updates['toState'] ?? updates['to_state'],
+      if (updates.containsKey('toLat') || updates.containsKey('to_lat'))
+        'to_lat': updates['toLat'] ?? updates['to_lat'],
+      if (updates.containsKey('toLng') || updates.containsKey('to_lng'))
+        'to_lng': updates['toLng'] ?? updates['to_lng'],
       if (updates.containsKey('loadType') || updates.containsKey('load_type'))
         'load_type': updates['loadType'] ?? updates['load_type'],
       if (updates.containsKey('truckTypeRequired') ||

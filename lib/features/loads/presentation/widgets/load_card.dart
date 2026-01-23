@@ -19,6 +19,8 @@ class LoadCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final statusMeta = _statusMeta(load);
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.md,
@@ -88,25 +90,24 @@ class LoadCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (showStatus && load.isExpired)
+                  if (showStatus)
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppDimensions.sm,
                         vertical: AppDimensions.xxs,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.danger.withAlpha((0.2 * 255).round()),
+                        color: statusMeta.$2.withAlpha((0.2 * 255).round()),
                         borderRadius:
                             BorderRadius.circular(AppDimensions.radiusSm),
                         border: Border.all(
-                          color:
-                              AppColors.danger.withAlpha((0.4 * 255).round()),
+                          color: statusMeta.$2.withAlpha((0.4 * 255).round()),
                         ),
                       ),
                       child: Text(
-                        'Expired',
+                        statusMeta.$1,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: AppColors.danger,
+                              color: statusMeta.$2,
                               fontWeight: FontWeight.w600,
                             ),
                       ),
@@ -164,6 +165,23 @@ class LoadCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  (String, Color) _statusMeta(Load load) {
+    if (load.isExpired) return ('Expired', AppColors.danger);
+
+    switch (load.status) {
+      case 'negotiation':
+        return ('Negotiation', Colors.orange);
+      case 'booked':
+        return ('Booked', Colors.blue);
+      case 'completed':
+        return ('Completed', AppColors.success);
+      case 'active':
+        return ('Active', AppColors.primary);
+      default:
+        return (load.status, AppColors.textSecondary);
+    }
   }
 }
 

@@ -6,9 +6,13 @@ class Load extends Equatable {
   final String fromLocation;
   final String fromCity;
   final String? fromState;
+  final double? fromLat;
+  final double? fromLng;
   final String toLocation;
   final String toCity;
   final String? toState;
+  final double? toLat;
+  final double? toLng;
   final String loadType;
   final String truckTypeRequired;
   final double? weight;
@@ -31,9 +35,13 @@ class Load extends Equatable {
     required this.fromLocation,
     required this.fromCity,
     this.fromState,
+    this.fromLat,
+    this.fromLng,
     required this.toLocation,
     required this.toCity,
     this.toState,
+    this.toLat,
+    this.toLng,
     required this.loadType,
     required this.truckTypeRequired,
     this.weight,
@@ -63,15 +71,26 @@ class Load extends Equatable {
       toState != null ? '$toCity, $toState' : toCity;
 
   factory Load.fromJson(Map<String, dynamic> json) {
+    double? asDouble(dynamic v) {
+      if (v == null) return null;
+      if (v is num) return v.toDouble();
+      if (v is String) return double.tryParse(v);
+      return null;
+    }
+
     return Load(
       id: json['id'] as String,
       supplierId: json['supplier_id'] as String,
       fromLocation: json['from_location'] as String,
       fromCity: json['from_city'] as String,
       fromState: json['from_state'] as String?,
+      fromLat: asDouble(json['from_lat']),
+      fromLng: asDouble(json['from_lng']),
       toLocation: json['to_location'] as String,
       toCity: json['to_city'] as String,
       toState: json['to_state'] as String?,
+      toLat: asDouble(json['to_lat']),
+      toLng: asDouble(json['to_lng']),
       loadType: json['load_type'] as String,
       truckTypeRequired: json['truck_type_required'] as String,
       weight: json['weight'] as double?,
@@ -99,9 +118,13 @@ class Load extends Equatable {
       'from_location': fromLocation,
       'from_city': fromCity,
       'from_state': fromState,
+      'from_lat': fromLat,
+      'from_lng': fromLng,
       'to_location': toLocation,
       'to_city': toCity,
       'to_state': toState,
+      'to_lat': toLat,
+      'to_lng': toLng,
       'load_type': loadType,
       'truck_type_required': truckTypeRequired,
       'weight': weight,
@@ -127,9 +150,13 @@ class Load extends Equatable {
         fromLocation,
         fromCity,
         fromState,
+        fromLat,
+        fromLng,
         toLocation,
         toCity,
         toState,
+        toLat,
+        toLng,
         loadType,
         truckTypeRequired,
         weight,

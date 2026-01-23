@@ -62,7 +62,7 @@ class VerificationRepositoryImpl implements VerificationRepository {
       final request = await _dataSource.updateVerificationStatus(
         requestId: requestId,
         status: status,
-        adminNotes: rejectionReason, // Note: using adminNotes parameter name
+        rejectionReason: rejectionReason,
       );
       return Right(request);
     } on ServerException catch (e) {

@@ -7,8 +7,7 @@ part of 'material_type_model.dart';
 // **************************************************************************
 
 _$MaterialTypeModelImpl _$$MaterialTypeModelImplFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$MaterialTypeModelImpl(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
@@ -17,8 +16,7 @@ _$MaterialTypeModelImpl _$$MaterialTypeModelImplFromJson(
     );
 
 Map<String, dynamic> _$$MaterialTypeModelImplToJson(
-  _$MaterialTypeModelImpl instance,
-) =>
+        _$MaterialTypeModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

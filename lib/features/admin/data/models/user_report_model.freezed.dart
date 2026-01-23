@@ -12,8 +12,7 @@ part of 'user_report_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 UserReportModel _$UserReportModelFromJson(Map<String, dynamic> json) {
   return _UserReportModel.fromJson(json);
@@ -55,24 +54,22 @@ mixin _$UserReportModel {
 /// @nodoc
 abstract class $UserReportModelCopyWith<$Res> {
   factory $UserReportModelCopyWith(
-    UserReportModel value,
-    $Res Function(UserReportModel) then,
-  ) = _$UserReportModelCopyWithImpl<$Res, UserReportModel>;
+          UserReportModel value, $Res Function(UserReportModel) then) =
+      _$UserReportModelCopyWithImpl<$Res, UserReportModel>;
   @useResult
-  $Res call({
-    String id,
-    @JsonKey(name: 'reporter_id') String reporterId,
-    @JsonKey(name: 'reported_entity_type') String reportedEntityType,
-    @JsonKey(name: 'reported_entity_id') String reportedEntityId,
-    String reason,
-    String? description,
-    String status,
-    @JsonKey(name: 'admin_notes') String? adminNotes,
-    @JsonKey(name: 'resolved_by') String? resolvedBy,
-    @JsonKey(name: 'resolved_at') DateTime? resolvedAt,
-    @JsonKey(name: 'created_at') DateTime createdAt,
-    @JsonKey(name: 'updated_at') DateTime updatedAt,
-  });
+  $Res call(
+      {String id,
+      @JsonKey(name: 'reporter_id') String reporterId,
+      @JsonKey(name: 'reported_entity_type') String reportedEntityType,
+      @JsonKey(name: 'reported_entity_id') String reportedEntityId,
+      String reason,
+      String? description,
+      String status,
+      @JsonKey(name: 'admin_notes') String? adminNotes,
+      @JsonKey(name: 'resolved_by') String? resolvedBy,
+      @JsonKey(name: 'resolved_at') DateTime? resolvedAt,
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -103,84 +100,80 @@ class _$UserReportModelCopyWithImpl<$Res, $Val extends UserReportModel>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(
-      _value.copyWith(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as String,
-        reporterId: null == reporterId
-            ? _value.reporterId
-            : reporterId // ignore: cast_nullable_to_non_nullable
-                as String,
-        reportedEntityType: null == reportedEntityType
-            ? _value.reportedEntityType
-            : reportedEntityType // ignore: cast_nullable_to_non_nullable
-                as String,
-        reportedEntityId: null == reportedEntityId
-            ? _value.reportedEntityId
-            : reportedEntityId // ignore: cast_nullable_to_non_nullable
-                as String,
-        reason: null == reason
-            ? _value.reason
-            : reason // ignore: cast_nullable_to_non_nullable
-                as String,
-        description: freezed == description
-            ? _value.description
-            : description // ignore: cast_nullable_to_non_nullable
-                as String?,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                as String,
-        adminNotes: freezed == adminNotes
-            ? _value.adminNotes
-            : adminNotes // ignore: cast_nullable_to_non_nullable
-                as String?,
-        resolvedBy: freezed == resolvedBy
-            ? _value.resolvedBy
-            : resolvedBy // ignore: cast_nullable_to_non_nullable
-                as String?,
-        resolvedAt: freezed == resolvedAt
-            ? _value.resolvedAt
-            : resolvedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime?,
-        createdAt: null == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-        updatedAt: null == updatedAt
-            ? _value.updatedAt
-            : updatedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-      ) as $Val,
-    );
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      reporterId: null == reporterId
+          ? _value.reporterId
+          : reporterId // ignore: cast_nullable_to_non_nullable
+              as String,
+      reportedEntityType: null == reportedEntityType
+          ? _value.reportedEntityType
+          : reportedEntityType // ignore: cast_nullable_to_non_nullable
+              as String,
+      reportedEntityId: null == reportedEntityId
+          ? _value.reportedEntityId
+          : reportedEntityId // ignore: cast_nullable_to_non_nullable
+              as String,
+      reason: null == reason
+          ? _value.reason
+          : reason // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      adminNotes: freezed == adminNotes
+          ? _value.adminNotes
+          : adminNotes // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resolvedBy: freezed == resolvedBy
+          ? _value.resolvedBy
+          : resolvedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resolvedAt: freezed == resolvedAt
+          ? _value.resolvedAt
+          : resolvedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$UserReportModelImplCopyWith<$Res>
     implements $UserReportModelCopyWith<$Res> {
-  factory _$$UserReportModelImplCopyWith(
-    _$UserReportModelImpl value,
-    $Res Function(_$UserReportModelImpl) then,
-  ) = __$$UserReportModelImplCopyWithImpl<$Res>;
+  factory _$$UserReportModelImplCopyWith(_$UserReportModelImpl value,
+          $Res Function(_$UserReportModelImpl) then) =
+      __$$UserReportModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String id,
-    @JsonKey(name: 'reporter_id') String reporterId,
-    @JsonKey(name: 'reported_entity_type') String reportedEntityType,
-    @JsonKey(name: 'reported_entity_id') String reportedEntityId,
-    String reason,
-    String? description,
-    String status,
-    @JsonKey(name: 'admin_notes') String? adminNotes,
-    @JsonKey(name: 'resolved_by') String? resolvedBy,
-    @JsonKey(name: 'resolved_at') DateTime? resolvedAt,
-    @JsonKey(name: 'created_at') DateTime createdAt,
-    @JsonKey(name: 'updated_at') DateTime updatedAt,
-  });
+  $Res call(
+      {String id,
+      @JsonKey(name: 'reporter_id') String reporterId,
+      @JsonKey(name: 'reported_entity_type') String reportedEntityType,
+      @JsonKey(name: 'reported_entity_id') String reportedEntityId,
+      String reason,
+      String? description,
+      String status,
+      @JsonKey(name: 'admin_notes') String? adminNotes,
+      @JsonKey(name: 'resolved_by') String? resolvedBy,
+      @JsonKey(name: 'resolved_at') DateTime? resolvedAt,
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -188,9 +181,8 @@ class __$$UserReportModelImplCopyWithImpl<$Res>
     extends _$UserReportModelCopyWithImpl<$Res, _$UserReportModelImpl>
     implements _$$UserReportModelImplCopyWith<$Res> {
   __$$UserReportModelImplCopyWithImpl(
-    _$UserReportModelImpl _value,
-    $Res Function(_$UserReportModelImpl) _then,
-  ) : super(_value, _then);
+      _$UserReportModelImpl _value, $Res Function(_$UserReportModelImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of UserReportModel
   /// with the given fields replaced by the non-null parameter values.
@@ -210,78 +202,75 @@ class __$$UserReportModelImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(
-      _$UserReportModelImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as String,
-        reporterId: null == reporterId
-            ? _value.reporterId
-            : reporterId // ignore: cast_nullable_to_non_nullable
-                as String,
-        reportedEntityType: null == reportedEntityType
-            ? _value.reportedEntityType
-            : reportedEntityType // ignore: cast_nullable_to_non_nullable
-                as String,
-        reportedEntityId: null == reportedEntityId
-            ? _value.reportedEntityId
-            : reportedEntityId // ignore: cast_nullable_to_non_nullable
-                as String,
-        reason: null == reason
-            ? _value.reason
-            : reason // ignore: cast_nullable_to_non_nullable
-                as String,
-        description: freezed == description
-            ? _value.description
-            : description // ignore: cast_nullable_to_non_nullable
-                as String?,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                as String,
-        adminNotes: freezed == adminNotes
-            ? _value.adminNotes
-            : adminNotes // ignore: cast_nullable_to_non_nullable
-                as String?,
-        resolvedBy: freezed == resolvedBy
-            ? _value.resolvedBy
-            : resolvedBy // ignore: cast_nullable_to_non_nullable
-                as String?,
-        resolvedAt: freezed == resolvedAt
-            ? _value.resolvedAt
-            : resolvedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime?,
-        createdAt: null == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-        updatedAt: null == updatedAt
-            ? _value.updatedAt
-            : updatedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-      ),
-    );
+    return _then(_$UserReportModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      reporterId: null == reporterId
+          ? _value.reporterId
+          : reporterId // ignore: cast_nullable_to_non_nullable
+              as String,
+      reportedEntityType: null == reportedEntityType
+          ? _value.reportedEntityType
+          : reportedEntityType // ignore: cast_nullable_to_non_nullable
+              as String,
+      reportedEntityId: null == reportedEntityId
+          ? _value.reportedEntityId
+          : reportedEntityId // ignore: cast_nullable_to_non_nullable
+              as String,
+      reason: null == reason
+          ? _value.reason
+          : reason // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      adminNotes: freezed == adminNotes
+          ? _value.adminNotes
+          : adminNotes // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resolvedBy: freezed == resolvedBy
+          ? _value.resolvedBy
+          : resolvedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resolvedAt: freezed == resolvedAt
+          ? _value.resolvedAt
+          : resolvedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$UserReportModelImpl implements _UserReportModel {
-  const _$UserReportModelImpl({
-    required this.id,
-    @JsonKey(name: 'reporter_id') required this.reporterId,
-    @JsonKey(name: 'reported_entity_type') required this.reportedEntityType,
-    @JsonKey(name: 'reported_entity_id') required this.reportedEntityId,
-    required this.reason,
-    this.description,
-    this.status = 'pending',
-    @JsonKey(name: 'admin_notes') this.adminNotes,
-    @JsonKey(name: 'resolved_by') this.resolvedBy,
-    @JsonKey(name: 'resolved_at') this.resolvedAt,
-    @JsonKey(name: 'created_at') required this.createdAt,
-    @JsonKey(name: 'updated_at') required this.updatedAt,
-  });
+  const _$UserReportModelImpl(
+      {required this.id,
+      @JsonKey(name: 'reporter_id') required this.reporterId,
+      @JsonKey(name: 'reported_entity_type') required this.reportedEntityType,
+      @JsonKey(name: 'reported_entity_id') required this.reportedEntityId,
+      required this.reason,
+      this.description,
+      this.status = 'pending',
+      @JsonKey(name: 'admin_notes') this.adminNotes,
+      @JsonKey(name: 'resolved_by') this.resolvedBy,
+      @JsonKey(name: 'resolved_at') this.resolvedAt,
+      @JsonKey(name: 'created_at') required this.createdAt,
+      @JsonKey(name: 'updated_at') required this.updatedAt});
 
   factory _$UserReportModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserReportModelImplFromJson(json);
@@ -356,20 +345,19 @@ class _$UserReportModelImpl implements _UserReportModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-        runtimeType,
-        id,
-        reporterId,
-        reportedEntityType,
-        reportedEntityId,
-        reason,
-        description,
-        status,
-        adminNotes,
-        resolvedBy,
-        resolvedAt,
-        createdAt,
-        updatedAt,
-      );
+      runtimeType,
+      id,
+      reporterId,
+      reportedEntityType,
+      reportedEntityId,
+      reason,
+      description,
+      status,
+      adminNotes,
+      resolvedBy,
+      resolvedAt,
+      createdAt,
+      updatedAt);
 
   /// Create a copy of UserReportModel
   /// with the given fields replaced by the non-null parameter values.
@@ -378,32 +366,33 @@ class _$UserReportModelImpl implements _UserReportModel {
   @pragma('vm:prefer-inline')
   _$$UserReportModelImplCopyWith<_$UserReportModelImpl> get copyWith =>
       __$$UserReportModelImplCopyWithImpl<_$UserReportModelImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserReportModelImplToJson(this);
+    return _$$UserReportModelImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _UserReportModel implements UserReportModel {
-  const factory _UserReportModel({
-    required final String id,
-    @JsonKey(name: 'reporter_id') required final String reporterId,
-    @JsonKey(name: 'reported_entity_type')
-    required final String reportedEntityType,
-    @JsonKey(name: 'reported_entity_id') required final String reportedEntityId,
-    required final String reason,
-    final String? description,
-    final String status,
-    @JsonKey(name: 'admin_notes') final String? adminNotes,
-    @JsonKey(name: 'resolved_by') final String? resolvedBy,
-    @JsonKey(name: 'resolved_at') final DateTime? resolvedAt,
-    @JsonKey(name: 'created_at') required final DateTime createdAt,
-    @JsonKey(name: 'updated_at') required final DateTime updatedAt,
-  }) = _$UserReportModelImpl;
+  const factory _UserReportModel(
+          {required final String id,
+          @JsonKey(name: 'reporter_id') required final String reporterId,
+          @JsonKey(name: 'reported_entity_type')
+          required final String reportedEntityType,
+          @JsonKey(name: 'reported_entity_id')
+          required final String reportedEntityId,
+          required final String reason,
+          final String? description,
+          final String status,
+          @JsonKey(name: 'admin_notes') final String? adminNotes,
+          @JsonKey(name: 'resolved_by') final String? resolvedBy,
+          @JsonKey(name: 'resolved_at') final DateTime? resolvedAt,
+          @JsonKey(name: 'created_at') required final DateTime createdAt,
+          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
+      _$UserReportModelImpl;
 
   factory _UserReportModel.fromJson(Map<String, dynamic> json) =
       _$UserReportModelImpl.fromJson;

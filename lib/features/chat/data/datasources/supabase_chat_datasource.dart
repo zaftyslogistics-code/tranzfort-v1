@@ -1,7 +1,10 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:math';
 import '../../../../core/utils/logger.dart';
 import '../../../../core/utils/input_validator.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/config/env_config.dart';
+import '../../../../core/services/analytics_service.dart';
 import '../models/chat_model.dart';
 import '../models/chat_message_model.dart';
 import 'chat_datasource.dart';
@@ -65,6 +68,69 @@ class SupabaseChatDataSource implements ChatDataSource {
 
       if (data == null) return null;
       return ChatModel.fromJson(data);
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<String> getOrCreateChatId({
+    required String loadId,
+    required String supplierId,
+    required String truckerId,
+  }) async {
+    try {
+      final existing = await _supabase
+          .from('chats')
+          .select('id')
+          .eq('load_id', loadId)
+          .eq('supplier_id', supplierId)
+          .eq('trucker_id', truckerId)
+          .maybeSingle();
+
+      if (existing != null && existing['id'] != null) {
+        return existing['id'] as String;
+      }
+
+      try {
+        final inserted = await _supabase
+            .from('chats')
+            .insert({
+              'load_id': loadId,
+              'supplier_id': supplierId,
+              'trucker_id': truckerId,
+              'status': 'active',
+            })
+            .select('id')
+            .single();
+
+        if (EnvConfig.enableAnalytics) {
+          await AnalyticsService().trackBusinessEvent(
+            'chat_created',
+            properties: {
+              'load_id': loadId,
+            },
+          );
+        }
+
+        return inserted['id'] as String;
+      } on PostgrestException catch (e) {
+        // If a concurrent request created the chat after our initial check,
+        // the unique index will throw. Re-fetch and return the existing id.
+        if (e.code == '23505') {
+          final retryExisting = await _supabase
+              .from('chats')
+              .select('id')
+              .eq('load_id', loadId)
+              .eq('supplier_id', supplierId)
+              .eq('trucker_id', truckerId)
+              .single();
+
+          return retryExisting['id'] as String;
+        }
+
+        throw ServerException(e.toString());
+      }
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -146,6 +212,23 @@ class SupabaseChatDataSource implements ChatDataSource {
           })
           .select('*')
           .single();
+
+      // Best-effort notification to the other chat participant.
+      try {
+        final preview = sanitizedMessage.substring(
+          0,
+          min(80, sanitizedMessage.length),
+        );
+        await _supabase.rpc(
+          'notify_chat_message',
+          params: {
+            'p_chat_id': chatId,
+            'p_message_preview': preview,
+          },
+        );
+      } catch (e) {
+        Logger.warning('Failed to send chat notification: $e');
+      }
 
       Logger.info('✅ SUPABASE: Message sent successfully');
       return ChatMessageModel.fromJson(inserted);

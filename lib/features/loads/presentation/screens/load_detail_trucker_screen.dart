@@ -12,6 +12,12 @@ import '../widgets/empty_loads_state.dart';
 import '../widgets/bookmark_button.dart';
 import '../widgets/share_button.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../chat/presentation/providers/chat_provider.dart';
+import '../../../fleet/presentation/providers/fleet_provider.dart';
+import '../../../offers/presentation/providers/offers_provider.dart';
+import '../../../../core/config/env_config.dart';
+import '../../../../core/services/analytics_service.dart';
+import '../../domain/entities/load.dart';
 
 class LoadDetailTruckerScreen extends ConsumerStatefulWidget {
   final String loadId;
@@ -30,6 +36,221 @@ class _LoadDetailTruckerScreenState
     extends ConsumerState<LoadDetailTruckerScreen> {
   bool _viewCountUpdated = false;
   bool _isBookmarked = false;
+
+  Future<void> _openChatForLoad() async {
+    final user = ref.read(authNotifierProvider).user;
+    final load = ref.read(loadsNotifierProvider).selectedLoad;
+
+    if (user == null || load == null) return;
+
+    final chatId = await ref.read(chatNotifierProvider.notifier).getOrCreateChatId(
+          loadId: load.id,
+          supplierId: load.supplierId,
+          truckerId: user.id,
+        );
+
+    if (!mounted) return;
+
+    if (chatId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to open chat')),
+      );
+      return;
+    }
+
+    context.push('/chat', extra: chatId);
+  }
+
+  Future<void> _showMakeOfferSheet() async {
+    final user = ref.read(authNotifierProvider).user;
+    final load = ref.read(loadsNotifierProvider).selectedLoad;
+    if (user == null || load == null) return;
+
+    final fleetState = ref.read(fleetNotifierProvider);
+    final trucks = fleetState.trucks;
+
+    final priceController = TextEditingController();
+    final messageController = TextEditingController();
+    String? selectedTruckId;
+
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.glassSurfaceStrong,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: AppDimensions.lg,
+                right: AppDimensions.lg,
+                top: AppDimensions.lg,
+                bottom: MediaQuery.of(context).viewInsets.bottom +
+                    AppDimensions.lg,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Make Offer',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: AppDimensions.md),
+                  TextField(
+                    controller: priceController,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      labelText: 'Price (optional)',
+                      hintText: 'Enter your offer amount',
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.sm),
+                  TextField(
+                    controller: messageController,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      labelText: 'Message (optional)',
+                      hintText: 'Add any notes for the supplier',
+                    ),
+                  ),
+                  if (trucks.isNotEmpty) ...[
+                    const SizedBox(height: AppDimensions.sm),
+                    DropdownButtonFormField<String>(
+                      value: selectedTruckId,
+                      decoration: const InputDecoration(
+                        labelText: 'Select Truck (optional)',
+                      ),
+                      items: trucks
+                          .map(
+                            (t) => DropdownMenuItem(
+                              value: t.id,
+                              child: Text('${t.truckNumber} • ${t.truckType}'),
+                            ),
+                          )
+                          .toList(growable: false),
+                      onChanged: (val) =>
+                          setModalState(() => selectedTruckId = val),
+                    ),
+                  ],
+                  const SizedBox(height: AppDimensions.lg),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final offersState = ref.watch(offersNotifierProvider);
+                      return ElevatedButton(
+                        onPressed: offersState.isLoading
+                            ? null
+                            : () async {
+                                final rawPrice = priceController.text.trim();
+                                final price = rawPrice.isEmpty
+                                    ? null
+                                    : double.tryParse(
+                                        rawPrice.replaceAll(',', ''),
+                                      );
+
+                                if (rawPrice.isNotEmpty && price == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Invalid price')),
+                                  );
+                                  return;
+                                }
+
+                                final offer = await ref
+                                    .read(offersNotifierProvider.notifier)
+                                    .createOffer(
+                                      loadId: load.id,
+                                      supplierId: load.supplierId,
+                                      truckerId: user.id,
+                                      truckId: selectedTruckId,
+                                      price: price,
+                                      message: messageController.text
+                                              .trim()
+                                              .isEmpty
+                                          ? null
+                                          : messageController.text.trim(),
+                                    );
+
+                                if (offer == null) {
+                                  if (!context.mounted) return;
+                                  final err = ref
+                                          .read(offersNotifierProvider)
+                                          .error ??
+                                      'Failed to create offer';
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(err)),
+                                  );
+                                  return;
+                                }
+
+                                if (EnvConfig.enableAnalytics) {
+                                  await AnalyticsService().trackBusinessEvent(
+                                    'offer_created',
+                                    properties: {
+                                      'load_id': load.id,
+                                    },
+                                  );
+                                }
+
+                                if (!context.mounted) return;
+                                Navigator.pop(context, true);
+                              },
+                        child: offersState.isLoading
+                            ? const SizedBox(
+                                height: 18,
+                                width: 18,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Text('Submit Offer'),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    priceController.dispose();
+    messageController.dispose();
+
+    if (!mounted) return;
+    if (result == true) {
+      final latestLoad = ref.read(loadsNotifierProvider).selectedLoad;
+      if (latestLoad != null && latestLoad.status == 'active') {
+        await ref
+            .read(loadsNotifierProvider.notifier)
+            .updateLoad(latestLoad.id, {'status': 'negotiation'});
+      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Offer submitted')),
+      );
+    }
+  }
+
+  (String, Color) _statusMeta(Load load) {
+    if (load.isExpired) return ('Expired', AppColors.danger);
+
+    switch (load.status) {
+      case 'negotiation':
+        return ('Negotiation', Colors.orange);
+      case 'booked':
+        return ('Booked', Colors.blue);
+      case 'completed':
+        return ('Completed', AppColors.success);
+      case 'active':
+        return ('Active', AppColors.primary);
+      default:
+        return (load.status, AppColors.textSecondary);
+    }
+  }
 
   @override
   void initState() {
@@ -60,6 +281,11 @@ class _LoadDetailTruckerScreenState
     final load = loadsState.selectedLoad;
     final user = ref.watch(authNotifierProvider).user;
     final canContact = user?.isTruckerVerified ?? false;
+    final canOffer = canContact &&
+        load != null &&
+        !load.isExpired &&
+        load.status != 'booked' &&
+        load.status != 'completed';
 
     if (loadsState.isLoading) {
       return const Scaffold(
@@ -143,13 +369,75 @@ class _LoadDetailTruckerScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    GradientText(
-                      'Load Details',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GradientText(
+                            'Load Details',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Builder(
+                          builder: (context) {
+                            final meta = _statusMeta(load);
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.sm,
+                                vertical: AppDimensions.xxs,
+                              ),
+                              decoration: BoxDecoration(
+                                color: meta.$2.withAlpha((0.2 * 255).round()),
+                                borderRadius: BorderRadius.circular(
+                                    AppDimensions.radiusSm),
+                                border: Border.all(
+                                  color:
+                                      meta.$2.withAlpha((0.4 * 255).round()),
+                                ),
+                              ),
+                              child: Text(
+                                meta.$1,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall
+                                    ?.copyWith(
+                                      color: meta.$2,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
+                    if (load.status == 'negotiation') ...[
+                      const SizedBox(height: AppDimensions.sm),
+                      GlassmorphicCard(
+                        padding: const EdgeInsets.all(AppDimensions.md),
+                        child: Text(
+                          'Negotiation in progress. Prices and terms may be changing.',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: AppColors.textSecondary),
+                        ),
+                      ),
+                    ],
+                    if (load.status == 'booked') ...[
+                      const SizedBox(height: AppDimensions.sm),
+                      GlassmorphicCard(
+                        padding: const EdgeInsets.all(AppDimensions.md),
+                        child: Text(
+                          'This load is already booked. New offers are disabled.',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: AppColors.textSecondary),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: AppDimensions.lg),
                     _DetailSection(
                       title: 'Route',
@@ -218,8 +506,18 @@ class _LoadDetailTruckerScreenState
                         ],
                       ),
                     const SizedBox(height: AppDimensions.xl),
+                    OutlinedButton.icon(
+                      onPressed: canOffer ? _showMakeOfferSheet : null,
+                      icon: const Icon(Icons.local_offer_outlined),
+                      label: Text(
+                        load.status == 'booked'
+                            ? 'Offers Closed'
+                            : 'Make Offer',
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.sm),
                     ElevatedButton.icon(
-                      onPressed: canContact ? () => context.go('/chats') : null,
+                      onPressed: canContact ? _openChatForLoad : null,
                       icon: const Icon(Icons.chat_bubble_outline),
                       label: const Text('Chat with Supplier'),
                     ),

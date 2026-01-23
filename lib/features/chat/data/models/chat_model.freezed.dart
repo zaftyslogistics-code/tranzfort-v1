@@ -12,8 +12,7 @@ part of 'chat_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 ChatModel _$ChatModelFromJson(Map<String, dynamic> json) {
   return _ChatModel.fromJson(json);
@@ -47,18 +46,17 @@ abstract class $ChatModelCopyWith<$Res> {
   factory $ChatModelCopyWith(ChatModel value, $Res Function(ChatModel) then) =
       _$ChatModelCopyWithImpl<$Res, ChatModel>;
   @useResult
-  $Res call({
-    String id,
-    String loadId,
-    String truckerId,
-    String supplierId,
-    String status,
-    String? lastMessage,
-    DateTime? lastMessageAt,
-    int unreadCount,
-    DateTime createdAt,
-    DateTime updatedAt,
-  });
+  $Res call(
+      {String id,
+      String loadId,
+      String truckerId,
+      String supplierId,
+      String status,
+      String? lastMessage,
+      DateTime? lastMessageAt,
+      int unreadCount,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -87,50 +85,48 @@ class _$ChatModelCopyWithImpl<$Res, $Val extends ChatModel>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(
-      _value.copyWith(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as String,
-        loadId: null == loadId
-            ? _value.loadId
-            : loadId // ignore: cast_nullable_to_non_nullable
-                as String,
-        truckerId: null == truckerId
-            ? _value.truckerId
-            : truckerId // ignore: cast_nullable_to_non_nullable
-                as String,
-        supplierId: null == supplierId
-            ? _value.supplierId
-            : supplierId // ignore: cast_nullable_to_non_nullable
-                as String,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                as String,
-        lastMessage: freezed == lastMessage
-            ? _value.lastMessage
-            : lastMessage // ignore: cast_nullable_to_non_nullable
-                as String?,
-        lastMessageAt: freezed == lastMessageAt
-            ? _value.lastMessageAt
-            : lastMessageAt // ignore: cast_nullable_to_non_nullable
-                as DateTime?,
-        unreadCount: null == unreadCount
-            ? _value.unreadCount
-            : unreadCount // ignore: cast_nullable_to_non_nullable
-                as int,
-        createdAt: null == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-        updatedAt: null == updatedAt
-            ? _value.updatedAt
-            : updatedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-      ) as $Val,
-    );
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      loadId: null == loadId
+          ? _value.loadId
+          : loadId // ignore: cast_nullable_to_non_nullable
+              as String,
+      truckerId: null == truckerId
+          ? _value.truckerId
+          : truckerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      supplierId: null == supplierId
+          ? _value.supplierId
+          : supplierId // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      lastMessage: freezed == lastMessage
+          ? _value.lastMessage
+          : lastMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastMessageAt: freezed == lastMessageAt
+          ? _value.lastMessageAt
+          : lastMessageAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      unreadCount: null == unreadCount
+          ? _value.unreadCount
+          : unreadCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ) as $Val);
   }
 }
 
@@ -138,23 +134,21 @@ class _$ChatModelCopyWithImpl<$Res, $Val extends ChatModel>
 abstract class _$$ChatModelImplCopyWith<$Res>
     implements $ChatModelCopyWith<$Res> {
   factory _$$ChatModelImplCopyWith(
-    _$ChatModelImpl value,
-    $Res Function(_$ChatModelImpl) then,
-  ) = __$$ChatModelImplCopyWithImpl<$Res>;
+          _$ChatModelImpl value, $Res Function(_$ChatModelImpl) then) =
+      __$$ChatModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String id,
-    String loadId,
-    String truckerId,
-    String supplierId,
-    String status,
-    String? lastMessage,
-    DateTime? lastMessageAt,
-    int unreadCount,
-    DateTime createdAt,
-    DateTime updatedAt,
-  });
+  $Res call(
+      {String id,
+      String loadId,
+      String truckerId,
+      String supplierId,
+      String status,
+      String? lastMessage,
+      DateTime? lastMessageAt,
+      int unreadCount,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -162,9 +156,8 @@ class __$$ChatModelImplCopyWithImpl<$Res>
     extends _$ChatModelCopyWithImpl<$Res, _$ChatModelImpl>
     implements _$$ChatModelImplCopyWith<$Res> {
   __$$ChatModelImplCopyWithImpl(
-    _$ChatModelImpl _value,
-    $Res Function(_$ChatModelImpl) _then,
-  ) : super(_value, _then);
+      _$ChatModelImpl _value, $Res Function(_$ChatModelImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of ChatModel
   /// with the given fields replaced by the non-null parameter values.
@@ -182,68 +175,65 @@ class __$$ChatModelImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(
-      _$ChatModelImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as String,
-        loadId: null == loadId
-            ? _value.loadId
-            : loadId // ignore: cast_nullable_to_non_nullable
-                as String,
-        truckerId: null == truckerId
-            ? _value.truckerId
-            : truckerId // ignore: cast_nullable_to_non_nullable
-                as String,
-        supplierId: null == supplierId
-            ? _value.supplierId
-            : supplierId // ignore: cast_nullable_to_non_nullable
-                as String,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                as String,
-        lastMessage: freezed == lastMessage
-            ? _value.lastMessage
-            : lastMessage // ignore: cast_nullable_to_non_nullable
-                as String?,
-        lastMessageAt: freezed == lastMessageAt
-            ? _value.lastMessageAt
-            : lastMessageAt // ignore: cast_nullable_to_non_nullable
-                as DateTime?,
-        unreadCount: null == unreadCount
-            ? _value.unreadCount
-            : unreadCount // ignore: cast_nullable_to_non_nullable
-                as int,
-        createdAt: null == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-        updatedAt: null == updatedAt
-            ? _value.updatedAt
-            : updatedAt // ignore: cast_nullable_to_non_nullable
-                as DateTime,
-      ),
-    );
+    return _then(_$ChatModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      loadId: null == loadId
+          ? _value.loadId
+          : loadId // ignore: cast_nullable_to_non_nullable
+              as String,
+      truckerId: null == truckerId
+          ? _value.truckerId
+          : truckerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      supplierId: null == supplierId
+          ? _value.supplierId
+          : supplierId // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      lastMessage: freezed == lastMessage
+          ? _value.lastMessage
+          : lastMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastMessageAt: freezed == lastMessageAt
+          ? _value.lastMessageAt
+          : lastMessageAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      unreadCount: null == unreadCount
+          ? _value.unreadCount
+          : unreadCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ChatModelImpl implements _ChatModel {
-  const _$ChatModelImpl({
-    required this.id,
-    required this.loadId,
-    required this.truckerId,
-    required this.supplierId,
-    this.status = 'active',
-    this.lastMessage,
-    this.lastMessageAt,
-    this.unreadCount = 0,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+  const _$ChatModelImpl(
+      {required this.id,
+      required this.loadId,
+      required this.truckerId,
+      required this.supplierId,
+      this.status = 'active',
+      this.lastMessage,
+      this.lastMessageAt,
+      this.unreadCount = 0,
+      required this.createdAt,
+      required this.updatedAt});
 
   factory _$ChatModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatModelImplFromJson(json);
@@ -303,18 +293,17 @@ class _$ChatModelImpl implements _ChatModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-        runtimeType,
-        id,
-        loadId,
-        truckerId,
-        supplierId,
-        status,
-        lastMessage,
-        lastMessageAt,
-        unreadCount,
-        createdAt,
-        updatedAt,
-      );
+      runtimeType,
+      id,
+      loadId,
+      truckerId,
+      supplierId,
+      status,
+      lastMessage,
+      lastMessageAt,
+      unreadCount,
+      createdAt,
+      updatedAt);
 
   /// Create a copy of ChatModel
   /// with the given fields replaced by the non-null parameter values.
@@ -326,23 +315,24 @@ class _$ChatModelImpl implements _ChatModel {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ChatModelImplToJson(this);
+    return _$$ChatModelImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _ChatModel implements ChatModel {
-  const factory _ChatModel({
-    required final String id,
-    required final String loadId,
-    required final String truckerId,
-    required final String supplierId,
-    final String status,
-    final String? lastMessage,
-    final DateTime? lastMessageAt,
-    final int unreadCount,
-    required final DateTime createdAt,
-    required final DateTime updatedAt,
-  }) = _$ChatModelImpl;
+  const factory _ChatModel(
+      {required final String id,
+      required final String loadId,
+      required final String truckerId,
+      required final String supplierId,
+      final String status,
+      final String? lastMessage,
+      final DateTime? lastMessageAt,
+      final int unreadCount,
+      required final DateTime createdAt,
+      required final DateTime updatedAt}) = _$ChatModelImpl;
 
   factory _ChatModel.fromJson(Map<String, dynamic> json) =
       _$ChatModelImpl.fromJson;

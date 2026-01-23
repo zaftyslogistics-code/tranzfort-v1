@@ -40,6 +40,11 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
   final _toStateController = TextEditingController();
   final _weightController = TextEditingController();
 
+  double? _fromLat;
+  double? _fromLng;
+  double? _toLat;
+  double? _toLng;
+
   String? _selectedMaterial;
   String? _selectedTruckType;
   bool get _isEdit => widget.existingLoad != null;
@@ -90,10 +95,14 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
       'fromCity': _fromCityController.text,
       'fromState':
           _fromStateController.text.isEmpty ? null : _fromStateController.text,
+      'fromLat': _fromLat,
+      'fromLng': _fromLng,
       'toLocation': _toLocationController.text,
       'toCity': _toCityController.text,
       'toState':
           _toStateController.text.isEmpty ? null : _toStateController.text,
+      'toLat': _toLat,
+      'toLng': _toLng,
       'loadType': _selectedMaterial,
       'truckTypeRequired': _selectedTruckType,
       'weight': double.tryParse(_weightController.text),
@@ -173,6 +182,10 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                           locationController: _fromLocationController,
                           cityController: _fromCityController,
                           stateController: _fromStateController,
+                          onCoordinates: (lat, lng) {
+                            _fromLat = lat;
+                            _fromLng = lng;
+                          },
                         ),
                         const SizedBox(height: AppDimensions.xl),
                         LocationInput(
@@ -180,6 +193,10 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                           locationController: _toLocationController,
                           cityController: _toCityController,
                           stateController: _toStateController,
+                          onCoordinates: (lat, lng) {
+                            _toLat = lat;
+                            _toLng = lng;
+                          },
                         ),
                         const SizedBox(height: AppDimensions.xl),
                         Text(

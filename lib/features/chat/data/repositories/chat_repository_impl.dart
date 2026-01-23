@@ -40,6 +40,26 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
+  Future<Either<Failure, String>> getOrCreateChatId({
+    required String loadId,
+    required String supplierId,
+    required String truckerId,
+  }) async {
+    try {
+      final chatId = await dataSource.getOrCreateChatId(
+        loadId: loadId,
+        supplierId: supplierId,
+        truckerId: truckerId,
+      );
+      return Right(chatId);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<ChatMessage>>> getMessages(String chatId) async {
     try {
       final models = await dataSource.getMessages(chatId);

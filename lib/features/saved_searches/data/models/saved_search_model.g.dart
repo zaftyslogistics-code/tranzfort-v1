@@ -7,8 +7,7 @@ part of 'saved_search_model.dart';
 // **************************************************************************
 
 _$SavedSearchModelImpl _$$SavedSearchModelImplFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$SavedSearchModelImpl(
       id: json['id'] as String,
       userId: json['userId'] as String,
@@ -26,8 +25,7 @@ _$SavedSearchModelImpl _$$SavedSearchModelImplFromJson(
     );
 
 Map<String, dynamic> _$$SavedSearchModelImplToJson(
-  _$SavedSearchModelImpl instance,
-) =>
+        _$SavedSearchModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,

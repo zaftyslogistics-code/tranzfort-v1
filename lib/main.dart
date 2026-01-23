@@ -10,6 +10,7 @@ import 'core/theme/app_colors.dart';
 import 'core/utils/logger.dart';
 import 'core/router/app_router.dart';
 import 'core/services/ad_service.dart';
+import 'core/services/analytics_service.dart';
 import 'core/services/offline_cache_service.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 
@@ -75,6 +76,13 @@ void main() async {
     Logger.info('Supabase initialized');
 
     await OfflineCacheService().init();
+
+    // Initialize analytics (if enabled)
+    if (EnvConfig.enableAnalytics) {
+      await AnalyticsService().initialize(
+        userId: Supabase.instance.client.auth.currentUser?.id,
+      );
+    }
 
     // Initialize AdMob
     await AdService().initialize();

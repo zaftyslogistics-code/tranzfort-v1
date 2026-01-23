@@ -104,6 +104,14 @@ class AdminDashboardScreen extends ConsumerWidget {
           },
         ),
         _SidebarItem(
+          icon: Icons.admin_panel_settings,
+          label: 'Manage Admins',
+          onTap: () {
+            Navigator.of(context).pop();
+            context.push('/admin/manage-admins');
+          },
+        ),
+        _SidebarItem(
           icon: Icons.settings,
           label: 'System Config',
           onTap: () {

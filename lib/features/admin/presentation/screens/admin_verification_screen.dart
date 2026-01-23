@@ -16,6 +16,9 @@ class AdminVerificationScreen extends ConsumerStatefulWidget {
 
 class _AdminVerificationScreenState
     extends ConsumerState<AdminVerificationScreen> {
+  String _roleFilter = 'all';
+  DateTimeRange? _dateRange;
+
   @override
   void initState() {
     super.initState();
@@ -24,26 +27,119 @@ class _AdminVerificationScreenState
         .fetchPendingRequests());
   }
 
+  Future<void> _pickDateRange() async {
+    final now = DateTime.now();
+    final initialStart = _dateRange?.start ?? now.subtract(const Duration(days: 7));
+    final initialEnd = _dateRange?.end ?? now;
+
+    final picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(now.year - 2),
+      lastDate: now,
+      initialDateRange: DateTimeRange(start: initialStart, end: initialEnd),
+    );
+
+    if (!mounted) return;
+    setState(() => _dateRange = picked);
+  }
+
+  List<VerificationRequestModel> _applyFilters(
+    List<VerificationRequestModel> requests,
+  ) {
+    Iterable<VerificationRequestModel> filtered = requests;
+
+    if (_roleFilter != 'all') {
+      filtered = filtered.where((r) => r.roleType == _roleFilter);
+    }
+
+    final range = _dateRange;
+    if (range != null) {
+      filtered = filtered.where((r) {
+        final created = r.createdAt;
+        return !created.isBefore(range.start) && !created.isAfter(range.end);
+      });
+    }
+
+    return filtered.toList(growable: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(adminVerificationNotifierProvider);
+    final filtered = _applyFilters(state.pendingRequests);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('KYC Verifications'),
+        actions: [
+          IconButton(
+            tooltip: 'Filter by date range',
+            onPressed: _pickDateRange,
+            icon: const Icon(Icons.date_range),
+          ),
+          if (_dateRange != null)
+            IconButton(
+              tooltip: 'Clear date filter',
+              onPressed: () => setState(() => _dateRange = null),
+              icon: const Icon(Icons.clear),
+            ),
+        ],
       ),
-      body: state.isLoading && state.pendingRequests.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : state.pendingRequests.isEmpty
-              ? const Center(child: Text('No pending verification requests'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(AppDimensions.md),
-                  itemCount: state.pendingRequests.length,
-                  itemBuilder: (context, index) {
-                    final request = state.pendingRequests[index];
-                    return _VerificationRequestCard(request: request);
-                  },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(AppDimensions.md),
+            child: Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _roleFilter,
+                    decoration: const InputDecoration(labelText: 'Role'),
+                    items: const [
+                      DropdownMenuItem(value: 'all', child: Text('All')),
+                      DropdownMenuItem(value: 'supplier', child: Text('Supplier')),
+                      DropdownMenuItem(value: 'trucker', child: Text('Trucker')),
+                    ],
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setState(() => _roleFilter = value);
+                    },
+                  ),
                 ),
+                const SizedBox(width: AppDimensions.md),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _pickDateRange,
+                    icon: const Icon(Icons.filter_alt),
+                    label: Text(
+                      _dateRange == null
+                          ? 'Any date'
+                          : '${_dateRange!.start.month}/${_dateRange!.start.day} - ${_dateRange!.end.month}/${_dateRange!.end.day}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: state.isLoading && state.pendingRequests.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : filtered.isEmpty
+                    ? const Center(
+                        child: Text('No pending verification requests'),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(AppDimensions.md),
+                        itemCount: filtered.length,
+                        itemBuilder: (context, index) {
+                          final request = filtered[index];
+                          return _VerificationRequestCard(request: request);
+                        },
+                      ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -104,6 +200,10 @@ class _VerificationRequestCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
+                  onPressed: () => _showNeedsMoreInfoDialog(context, ref),
+                  child: const Text('Needs info'),
+                ),
+                TextButton(
                   onPressed: () => _showRejectDialog(context, ref),
                   child:
                       const Text('Reject', style: TextStyle(color: Colors.red)),
@@ -119,6 +219,50 @@ class _VerificationRequestCard extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showNeedsMoreInfoDialog(BuildContext context, WidgetRef ref) {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Needs More Info'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            labelText: 'Note to user',
+            hintText: 'e.g. Please upload a clearer photo of the document',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final note = controller.text.trim();
+              if (note.isEmpty) return;
+
+              Navigator.pop(context);
+              final success = await ref
+                  .read(adminVerificationNotifierProvider.notifier)
+                  .updateStatus(request.id, 'needs_more_info', reason: note);
+
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content:
+                      Text(success ? 'Marked as needs more info' : 'Action Failed'),
+                  backgroundColor: success ? Colors.blueGrey : Colors.red,
+                ),
+              );
+            },
+            child: const Text('Send'),
+          ),
+        ],
       ),
     );
   }
@@ -252,33 +396,76 @@ class _SignedImagePreviewState extends State<_SignedImagePreview> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 100,
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.glassBorder),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+    return InkWell(
+      onTap: _url == null
+          ? null
+          : () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    backgroundColor: Colors.black,
+                    insetPadding: const EdgeInsets.all(AppDimensions.md),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: InteractiveViewer(
+                            minScale: 1,
+                            maxScale: 5,
+                            child: Image.network(
+                              _url!,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                  child: Icon(Icons.broken_image, color: Colors.white),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: IconButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            icon: const Icon(Icons.close, color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+      child: Container(
+        width: 150,
+        height: 100,
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.glassBorder),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+        ),
+        child: _isLoading
+            ? const Center(
+                child: SizedBox(
+                  height: 18,
+                  width: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              )
+            : (_url == null
+                ? const Center(child: Icon(Icons.broken_image))
+                : ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(AppDimensions.radiusSm),
+                    child: Image.network(
+                      _url!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(child: Icon(Icons.broken_image));
+                      },
+                    ),
+                  )),
       ),
-      child: _isLoading
-          ? const Center(
-              child: SizedBox(
-                height: 18,
-                width: 18,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            )
-          : (_url == null
-              ? const Center(child: Icon(Icons.broken_image))
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
-                  child: Image.network(
-                    _url!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Center(child: Icon(Icons.broken_image));
-                    },
-                  ),
-                )),
     );
   }
 }

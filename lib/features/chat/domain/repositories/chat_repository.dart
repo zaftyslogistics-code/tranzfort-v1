@@ -7,6 +7,11 @@ abstract class ChatRepository {
   Future<Either<Failure, List<Chat>>> getChats({String? userId});
   Stream<List<Chat>> watchChats({String? userId});
   Future<Either<Failure, Chat?>> getChatById(String chatId);
+  Future<Either<Failure, String>> getOrCreateChatId({
+    required String loadId,
+    required String supplierId,
+    required String truckerId,
+  });
   Future<Either<Failure, List<ChatMessage>>> getMessages(String chatId);
   Stream<List<ChatMessage>> watchMessages(String chatId);
   Future<Either<Failure, ChatMessage>> sendMessage(

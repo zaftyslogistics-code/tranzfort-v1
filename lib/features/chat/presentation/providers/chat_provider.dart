@@ -149,6 +149,23 @@ class ChatNotifier extends StateNotifier<ChatState> {
   Future<void> markAsRead(String chatId, String userId) async {
     await markAsReadUseCase(chatId, userId);
   }
+
+  Future<String?> getOrCreateChatId({
+    required String loadId,
+    required String supplierId,
+    required String truckerId,
+  }) async {
+    final result = await _ref.read(chatRepositoryProvider).getOrCreateChatId(
+          loadId: loadId,
+          supplierId: supplierId,
+          truckerId: truckerId,
+        );
+
+    return result.fold(
+      (_) => null,
+      (chatId) => chatId,
+    );
+  }
 }
 
 final chatNotifierProvider =

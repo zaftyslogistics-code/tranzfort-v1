@@ -32,19 +32,15 @@ class SupabaseVerificationDataSource {
     try {
       Logger.info('🪪 SUPABASE: Creating verification request');
 
-      final inserted = await _supabase
-          .from('verification_requests')
-          .insert({
-            'user_id': user.id,
-            'role_type': roleType,
-            'document_type': documentType,
-            'document_number': documentNumber,
-            'company_name': companyName,
-            'vehicle_number': vehicleNumber,
-            'status': 'pending',
-          })
-          .select('*')
-          .single();
+      final inserted = await _supabase.from('verification_requests').insert({
+        'user_id': user.id,
+        'role_type': roleType,
+        'document_type': documentType,
+        'document_number': documentNumber,
+        'company_name': companyName,
+        'vehicle_number': vehicleNumber,
+        'status': 'pending',
+      }).select('*').single();
 
       final request = VerificationRequestModel.fromJson(inserted);
 
@@ -53,6 +49,7 @@ class SupabaseVerificationDataSource {
       final backPath = '${user.id}/$roleType/${request.id}/back_${back.name}';
 
       // Compress images
+      Logger.info('🪪 SUPABASE: Compressing images');
       final File frontFile = File(front.path);
       final File backFile = File(back.path);
 
@@ -70,25 +67,51 @@ class SupabaseVerificationDataSource {
           ? await compressedBack.readAsBytes()
           : await back.readAsBytes();
 
-      await _upload(frontPath, Uint8List.fromList(frontBytes),
-          contentType: front.mimeType);
-      await _upload(backPath, Uint8List.fromList(backBytes),
-          contentType: back.mimeType);
+      Logger.info('🪪 SUPABASE: Uploading front document image');
+      try {
+        await _upload(
+          frontPath,
+          Uint8List.fromList(frontBytes),
+          contentType: front.mimeType,
+        );
+      } catch (e) {
+        throw ServerException('Failed to upload front document image. Please check your internet connection and try again.');
+      }
 
-      final updated = await _supabase
-          .from('verification_requests')
-          .update({
-            'document_front_url': frontPath,
-            'document_back_url': backPath,
-          })
-          .eq('id', request.id)
-          .select('*')
-          .single();
+      Logger.info('🪪 SUPABASE: Uploading back document image');
+      try {
+        await _upload(
+          backPath,
+          Uint8List.fromList(backBytes),
+          contentType: back.mimeType,
+        );
+      } catch (e) {
+        throw ServerException('Failed to upload back document image. Please check your internet connection and try again.');
+      }
 
-      Logger.info('✅ SUPABASE: Verification request submitted: ${request.id}');
-      return VerificationRequestModel.fromJson(updated);
+      Logger.info('🪪 SUPABASE: Updating verification request with document URLs');
+      try {
+        final updated = await _supabase
+            .from('verification_requests')
+            .update({
+              'document_front_url': frontPath,
+              'document_back_url': backPath,
+            })
+            .eq('id', request.id)
+            .select('*')
+            .single();
+
+        Logger.info('✅ SUPABASE: Verification request submitted: ${request.id}');
+        return VerificationRequestModel.fromJson(updated);
+      } catch (e) {
+        throw ServerException('Failed to finalize verification request. Please try again.');
+      }
+    } on ServerException {
+      rethrow;
     } catch (e) {
-      throw ServerException(e.toString());
+      Logger.error('❌ SUPABASE: Failed to submit verification request',
+          error: e);
+      throw ServerException('Failed to create verification request. Please try again.');
     }
   }
 
@@ -97,14 +120,19 @@ class SupabaseVerificationDataSource {
     Uint8List bytes, {
     String? contentType,
   }) async {
-    await _supabase.storage.from(_bucketId).uploadBinary(
-          path,
-          bytes,
-          fileOptions: FileOptions(
-            contentType: contentType,
-            upsert: true,
-          ),
-        );
+    try {
+      await _supabase.storage.from(_bucketId).uploadBinary(
+            path,
+            bytes,
+            fileOptions: FileOptions(
+              contentType: contentType,
+              upsert: true, // Allow re-upload if file exists
+            ),
+          );
+    } catch (e) {
+      Logger.error('❌ SUPABASE: Storage upload failed for $path', error: e);
+      throw ServerException('Failed to upload document image. Please check your internet connection and try again.');
+    }
   }
 
   Future<List<VerificationRequestModel>>

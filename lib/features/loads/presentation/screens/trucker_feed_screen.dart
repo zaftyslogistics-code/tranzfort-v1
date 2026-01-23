@@ -208,6 +208,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
                                 final load = filteredLoads[index];
                                 return LoadCard(
                                   load: load,
+                                  showStatus: true,
                                   onTap: () => context.push(
                                     '/load-detail-trucker',
                                     extra: load.id,

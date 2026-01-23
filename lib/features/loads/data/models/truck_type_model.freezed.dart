@@ -12,8 +12,7 @@ part of 'truck_type_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 TruckTypeModel _$TruckTypeModelFromJson(Map<String, dynamic> json) {
   return _TruckTypeModel.fromJson(json);
@@ -39,9 +38,8 @@ mixin _$TruckTypeModel {
 /// @nodoc
 abstract class $TruckTypeModelCopyWith<$Res> {
   factory $TruckTypeModelCopyWith(
-    TruckTypeModel value,
-    $Res Function(TruckTypeModel) then,
-  ) = _$TruckTypeModelCopyWithImpl<$Res, TruckTypeModel>;
+          TruckTypeModel value, $Res Function(TruckTypeModel) then) =
+      _$TruckTypeModelCopyWithImpl<$Res, TruckTypeModel>;
   @useResult
   $Res call({int id, String name, String? category, int displayOrder});
 }
@@ -66,36 +64,33 @@ class _$TruckTypeModelCopyWithImpl<$Res, $Val extends TruckTypeModel>
     Object? category = freezed,
     Object? displayOrder = null,
   }) {
-    return _then(
-      _value.copyWith(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as int,
-        name: null == name
-            ? _value.name
-            : name // ignore: cast_nullable_to_non_nullable
-                as String,
-        category: freezed == category
-            ? _value.category
-            : category // ignore: cast_nullable_to_non_nullable
-                as String?,
-        displayOrder: null == displayOrder
-            ? _value.displayOrder
-            : displayOrder // ignore: cast_nullable_to_non_nullable
-                as int,
-      ) as $Val,
-    );
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String?,
+      displayOrder: null == displayOrder
+          ? _value.displayOrder
+          : displayOrder // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$TruckTypeModelImplCopyWith<$Res>
     implements $TruckTypeModelCopyWith<$Res> {
-  factory _$$TruckTypeModelImplCopyWith(
-    _$TruckTypeModelImpl value,
-    $Res Function(_$TruckTypeModelImpl) then,
-  ) = __$$TruckTypeModelImplCopyWithImpl<$Res>;
+  factory _$$TruckTypeModelImplCopyWith(_$TruckTypeModelImpl value,
+          $Res Function(_$TruckTypeModelImpl) then) =
+      __$$TruckTypeModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String name, String? category, int displayOrder});
@@ -106,9 +101,8 @@ class __$$TruckTypeModelImplCopyWithImpl<$Res>
     extends _$TruckTypeModelCopyWithImpl<$Res, _$TruckTypeModelImpl>
     implements _$$TruckTypeModelImplCopyWith<$Res> {
   __$$TruckTypeModelImplCopyWithImpl(
-    _$TruckTypeModelImpl _value,
-    $Res Function(_$TruckTypeModelImpl) _then,
-  ) : super(_value, _then);
+      _$TruckTypeModelImpl _value, $Res Function(_$TruckTypeModelImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of TruckTypeModel
   /// with the given fields replaced by the non-null parameter values.
@@ -120,38 +114,35 @@ class __$$TruckTypeModelImplCopyWithImpl<$Res>
     Object? category = freezed,
     Object? displayOrder = null,
   }) {
-    return _then(
-      _$TruckTypeModelImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                as int,
-        name: null == name
-            ? _value.name
-            : name // ignore: cast_nullable_to_non_nullable
-                as String,
-        category: freezed == category
-            ? _value.category
-            : category // ignore: cast_nullable_to_non_nullable
-                as String?,
-        displayOrder: null == displayOrder
-            ? _value.displayOrder
-            : displayOrder // ignore: cast_nullable_to_non_nullable
-                as int,
-      ),
-    );
+    return _then(_$TruckTypeModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String?,
+      displayOrder: null == displayOrder
+          ? _value.displayOrder
+          : displayOrder // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$TruckTypeModelImpl implements _TruckTypeModel {
-  const _$TruckTypeModelImpl({
-    required this.id,
-    required this.name,
-    this.category,
-    this.displayOrder = 0,
-  });
+  const _$TruckTypeModelImpl(
+      {required this.id,
+      required this.name,
+      this.category,
+      this.displayOrder = 0});
 
   factory _$TruckTypeModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$TruckTypeModelImplFromJson(json);
@@ -196,23 +187,22 @@ class _$TruckTypeModelImpl implements _TruckTypeModel {
   @pragma('vm:prefer-inline')
   _$$TruckTypeModelImplCopyWith<_$TruckTypeModelImpl> get copyWith =>
       __$$TruckTypeModelImplCopyWithImpl<_$TruckTypeModelImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TruckTypeModelImplToJson(this);
+    return _$$TruckTypeModelImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _TruckTypeModel implements TruckTypeModel {
-  const factory _TruckTypeModel({
-    required final int id,
-    required final String name,
-    final String? category,
-    final int displayOrder,
-  }) = _$TruckTypeModelImpl;
+  const factory _TruckTypeModel(
+      {required final int id,
+      required final String name,
+      final String? category,
+      final int displayOrder}) = _$TruckTypeModelImpl;
 
   factory _TruckTypeModel.fromJson(Map<String, dynamic> json) =
       _$TruckTypeModelImpl.fromJson;

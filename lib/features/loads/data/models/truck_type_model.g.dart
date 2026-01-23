@@ -15,8 +15,7 @@ _$TruckTypeModelImpl _$$TruckTypeModelImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$TruckTypeModelImplToJson(
-  _$TruckTypeModelImpl instance,
-) =>
+        _$TruckTypeModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

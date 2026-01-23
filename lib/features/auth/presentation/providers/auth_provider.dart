@@ -15,6 +15,7 @@ import '../../domain/usecases/get_current_user.dart';
 import '../../domain/usecases/sign_out.dart';
 import '../../domain/usecases/update_profile.dart';
 import '../../../../core/services/biometric_service.dart';
+import '../../../../core/services/analytics_service.dart';
 import '../../../../core/utils/logger.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
@@ -164,6 +165,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       },
       (user) async {
         if (user != null) {
+          AnalyticsService().setUserId(user.id);
           // If user exists, check for admin profile
           final adminResult = await getAdminProfileUseCase(user.id);
           adminResult.fold(
@@ -208,6 +210,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return false;
       },
       (user) async {
+        AnalyticsService().setUserId(user.id);
         final adminResult = await getAdminProfileUseCase(user.id);
         adminResult.fold(
           (_) {
@@ -244,6 +247,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return false;
       },
       (user) async {
+        AnalyticsService().setUserId(user.id);
         final adminResult = await getAdminProfileUseCase(user.id);
         adminResult.fold(
           (_) {
@@ -305,6 +309,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     await biometricService.disableBiometric(); // Disable biometric on logout
     state = state.copyWith(isLoading: true);
     await signOutUseCase();
+    AnalyticsService().clearUser();
     state = AuthState(hasCheckedAuth: true);
   }
 

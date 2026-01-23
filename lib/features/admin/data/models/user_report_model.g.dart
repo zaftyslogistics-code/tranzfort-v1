@@ -7,8 +7,7 @@ part of 'user_report_model.dart';
 // **************************************************************************
 
 _$UserReportModelImpl _$$UserReportModelImplFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     _$UserReportModelImpl(
       id: json['id'] as String,
       reporterId: json['reporter_id'] as String,
@@ -27,8 +26,7 @@ _$UserReportModelImpl _$$UserReportModelImplFromJson(
     );
 
 Map<String, dynamic> _$$UserReportModelImplToJson(
-  _$UserReportModelImpl instance,
-) =>
+        _$UserReportModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'reporter_id': instance.reporterId,
