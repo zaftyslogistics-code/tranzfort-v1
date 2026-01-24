@@ -214,56 +214,50 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                                 : [
                                     const material.MaterialType(
                                         id: 1,
-                                        name: 'Agriculture - Grains',
+                                        name: 'Agriculture',
                                         category: 'Agriculture',
                                         displayOrder: 1),
                                     const material.MaterialType(
                                         id: 2,
-                                        name: 'Agriculture - Vegetables',
-                                        category: 'Agriculture',
+                                        name:
+                                            'Construction / Building Materials',
+                                        category: 'Construction',
                                         displayOrder: 2),
                                     const material.MaterialType(
                                         id: 3,
-                                        name: 'FMCG',
+                                        name: 'FMCG / Consumer Goods',
                                         category: 'FMCG',
                                         displayOrder: 3),
                                     const material.MaterialType(
                                         id: 4,
-                                        name: 'Building Materials',
-                                        category: 'Building Materials',
+                                        name: 'Industrial / Machinery',
+                                        category: 'Industrial',
                                         displayOrder: 4),
                                     const material.MaterialType(
                                         id: 5,
-                                        name: 'Textiles',
-                                        category: 'Textiles',
-                                        displayOrder: 5),
-                                    const material.MaterialType(
-                                        id: 6,
-                                        name: 'Electronics',
-                                        category: 'Electronics',
-                                        displayOrder: 6),
-                                    const material.MaterialType(
-                                        id: 7,
-                                        name: 'Machinery',
-                                        category: 'Machinery',
-                                        displayOrder: 7),
-                                    const material.MaterialType(
-                                        id: 8,
-                                        name: 'Chemicals',
-                                        category: 'Chemicals',
-                                        displayOrder: 8),
-                                    const material.MaterialType(
-                                        id: 9,
-                                        name: 'Furniture',
-                                        category: 'Furniture',
-                                        displayOrder: 9),
-                                    const material.MaterialType(
-                                        id: 10,
                                         name: 'Other',
                                         category: 'Other',
-                                        displayOrder: 10),
+                                        displayOrder: 5),
                                   ];
-                            final selectedMaterial = materialList
+
+                            final effectiveMaterialList =
+                                materialList.toList(growable: true);
+                            if (_selectedMaterial != null &&
+                                _selectedMaterial!.isNotEmpty &&
+                                !effectiveMaterialList
+                                    .any((t) => t.name == _selectedMaterial)) {
+                              effectiveMaterialList.insert(
+                                0,
+                                material.MaterialType(
+                                  id: 0,
+                                  name: _selectedMaterial!,
+                                  category: 'Legacy',
+                                  displayOrder: 0,
+                                ),
+                              );
+                            }
+
+                            final selectedMaterial = effectiveMaterialList
                                     .any((t) => t.name == _selectedMaterial)
                                 ? _selectedMaterial
                                 : null;
@@ -275,7 +269,7 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                                   .textTheme
                                   .bodyLarge
                                   ?.copyWith(color: AppColors.textPrimary),
-                              items: materialList
+                              items: effectiveMaterialList
                                   .map<DropdownMenuItem<String>>(
                                     (type) => DropdownMenuItem(
                                       value: type.name,
@@ -305,56 +299,48 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                             final materialList = [
                               const material.MaterialType(
                                   id: 1,
-                                  name: 'Agriculture - Grains',
+                                  name: 'Agriculture',
                                   category: 'Agriculture',
                                   displayOrder: 1),
                               const material.MaterialType(
                                   id: 2,
-                                  name: 'Agriculture - Vegetables',
-                                  category: 'Agriculture',
+                                  name: 'Construction / Building Materials',
+                                  category: 'Construction',
                                   displayOrder: 2),
                               const material.MaterialType(
                                   id: 3,
-                                  name: 'FMCG',
+                                  name: 'FMCG / Consumer Goods',
                                   category: 'FMCG',
                                   displayOrder: 3),
                               const material.MaterialType(
                                   id: 4,
-                                  name: 'Building Materials',
-                                  category: 'Building Materials',
+                                  name: 'Industrial / Machinery',
+                                  category: 'Industrial',
                                   displayOrder: 4),
                               const material.MaterialType(
                                   id: 5,
-                                  name: 'Textiles',
-                                  category: 'Textiles',
-                                  displayOrder: 5),
-                              const material.MaterialType(
-                                  id: 6,
-                                  name: 'Electronics',
-                                  category: 'Electronics',
-                                  displayOrder: 6),
-                              const material.MaterialType(
-                                  id: 7,
-                                  name: 'Machinery',
-                                  category: 'Machinery',
-                                  displayOrder: 7),
-                              const material.MaterialType(
-                                  id: 8,
-                                  name: 'Chemicals',
-                                  category: 'Chemicals',
-                                  displayOrder: 8),
-                              const material.MaterialType(
-                                  id: 9,
-                                  name: 'Furniture',
-                                  category: 'Furniture',
-                                  displayOrder: 9),
-                              const material.MaterialType(
-                                  id: 10,
                                   name: 'Other',
                                   category: 'Other',
-                                  displayOrder: 10),
+                                  displayOrder: 5),
                             ];
-                            final selectedMaterial = materialList
+
+                            final effectiveMaterialList =
+                                materialList.toList(growable: true);
+                            if (_selectedMaterial != null &&
+                                _selectedMaterial!.isNotEmpty &&
+                                !effectiveMaterialList
+                                    .any((t) => t.name == _selectedMaterial)) {
+                              effectiveMaterialList.insert(
+                                0,
+                                material.MaterialType(
+                                  id: 0,
+                                  name: _selectedMaterial!,
+                                  category: 'Legacy',
+                                  displayOrder: 0,
+                                ),
+                              );
+                            }
+                            final selectedMaterial = effectiveMaterialList
                                     .any((t) => t.name == _selectedMaterial)
                                 ? _selectedMaterial
                                 : null;
@@ -367,7 +353,7 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                                   .textTheme
                                   .bodyLarge
                                   ?.copyWith(color: AppColors.textPrimary),
-                              items: materialList
+                              items: effectiveMaterialList
                                   .map<DropdownMenuItem<String>>(
                                     (type) => DropdownMenuItem(
                                       value: type.name,
@@ -409,45 +395,43 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                                 : [
                                     domain.TruckType(
                                         id: 1,
-                                        name: 'Small Truck (4-6 Tyres)',
-                                        category: 'Small',
+                                        name: 'Open Body',
+                                        category: 'Body Type',
                                         displayOrder: 1),
                                     domain.TruckType(
                                         id: 2,
-                                        name: 'Medium Truck (10-12 Tyres)',
-                                        category: 'Medium',
+                                        name: 'Flat Body',
+                                        category: 'Body Type',
                                         displayOrder: 2),
                                     domain.TruckType(
                                         id: 3,
-                                        name: 'Heavy Truck (14-16 Tyres)',
-                                        category: 'Heavy',
+                                        name: 'Bulker',
+                                        category: 'Body Type',
                                         displayOrder: 3),
                                     domain.TruckType(
                                         id: 4,
-                                        name: 'Super Heavy (18+ Tyres)',
-                                        category: 'Super Heavy',
+                                        name: 'Container',
+                                        category: 'Body Type',
                                         displayOrder: 4),
-                                    domain.TruckType(
-                                        id: 5,
-                                        name: 'Container Truck',
-                                        category: 'Container',
-                                        displayOrder: 5),
-                                    domain.TruckType(
-                                        id: 6,
-                                        name: 'Flatbed Truck',
-                                        category: 'Flatbed',
-                                        displayOrder: 6),
-                                    domain.TruckType(
-                                        id: 7,
-                                        name: 'Tanker Truck',
-                                        category: 'Tanker',
-                                        displayOrder: 7),
-                                    domain.TruckType(
-                                        id: 8,
-                                        name: 'Specialized Truck',
-                                        category: 'Specialized',
-                                        displayOrder: 8),
                                   ];
+
+                            final effectiveTruckList =
+                                truckList.toList(growable: true);
+                            if (_selectedTruckType != null &&
+                                _selectedTruckType!.isNotEmpty &&
+                                !effectiveTruckList
+                                    .any((t) => t.name == _selectedTruckType)) {
+                              effectiveTruckList.insert(
+                                0,
+                                domain.TruckType(
+                                  id: 0,
+                                  name: _selectedTruckType!,
+                                  category: 'Legacy',
+                                  displayOrder: 0,
+                                ),
+                              );
+                            }
+
                             final selectedTruckType = truckList
                                     .any((t) => t.name == _selectedTruckType)
                                 ? _selectedTruckType
@@ -460,7 +444,7 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
                                   .textTheme
                                   .bodyLarge
                                   ?.copyWith(color: AppColors.textPrimary),
-                              items: truckList
+                              items: effectiveTruckList
                                   .map<DropdownMenuItem<String>>(
                                     (type) => DropdownMenuItem(
                                       value: type.name,

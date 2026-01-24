@@ -157,17 +157,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Center(
                     child: Column(
                       children: [
-                        const CyanGlowContainer(
-                          padding: EdgeInsets.all(AppDimensions.sm),
-                          borderRadius: AppDimensions.radiusFull,
-                          backgroundColor: AppColors.glassSurfaceStrong,
-                          borderColor: AppColors.glassBorderStrong,
-                          child: Image(
-                            image: AssetImage('transport-logo-v1.png'),
-                            width: 180,
-                            height: 56,
-                            fit: BoxFit.contain,
-                          ),
+                        const Image(
+                          image: AssetImage('Lv-1-trans.png'),
+                          width: 720,
+                          height: 224,
+                          fit: BoxFit.contain,
                         ),
                         const SizedBox(height: AppDimensions.sm),
                         Text(

@@ -92,7 +92,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "transport-logo-v1 icon.png"
+  image_path: "Lv-1-icon.png"
   adaptive_icon_background: "#000000"
   remove_alpha_ios: true
 
@@ -108,5 +108,4 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/env/
-    - logo full.png
-    - transport-logo-v1.png
+    - Lv-1-trans.png

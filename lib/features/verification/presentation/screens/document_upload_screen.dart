@@ -164,10 +164,10 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
-                          ?.copyWith(color: Colors.white),
+                          ?.copyWith(color: AppColors.textPrimary),
                       decoration: InputDecoration(
                         labelText: 'Document Type',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(color: AppColors.textPrimary),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: AppColors.glassBorder),
                         ),
@@ -182,8 +182,8 @@ class _DocumentUploadScreenState extends ConsumerState<DocumentUploadScreen> {
                       items: _requiredDocuments.map((doc) {
                         return DropdownMenuItem(
                           value: _toDbDocumentType(doc),
-                          child:
-                              Text(doc, style: TextStyle(color: Colors.white)),
+                          child: Text(doc,
+                              style: TextStyle(color: AppColors.textPrimary)),
                         );
                       }).toList(),
                       onChanged: (v) {

@@ -51,6 +51,12 @@ class AppBottomNavigation extends ConsumerWidget {
                   onTap: () => context.go('/supplier-dashboard'),
                 ),
                 _NavItem(
+                  icon: Icons.chat_outlined,
+                  label: 'Chat',
+                  isSelected: location == '/chat-list',
+                  onTap: () => context.go('/chat-list'),
+                ),
+                _NavItem(
                   icon: Icons.add_box_outlined,
                   label: 'Post Load',
                   isSelected: location == '/post-load-step1',
@@ -84,8 +90,8 @@ class AppBottomNavigation extends ConsumerWidget {
                 _NavItem(
                   icon: Icons.person_outline,
                   label: 'Profile',
-                  isSelected: location == '/verification',
-                  onTap: () => context.go('/verification'),
+                  isSelected: location == '/profile',
+                  onTap: () => context.go('/profile'),
                 ),
               ],
               _NavItem(

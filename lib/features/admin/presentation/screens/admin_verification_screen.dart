@@ -208,14 +208,17 @@ class _VerificationRequestCard extends ConsumerWidget {
                 ),
                 TextButton(
                   onPressed: () => _showRejectDialog(context, ref),
-                  child:
-                      const Text('Reject', style: TextStyle(color: Colors.red)),
+                  child: const Text(
+                    'Reject',
+                    style: TextStyle(color: AppColors.danger),
+                  ),
                 ),
                 const SizedBox(width: AppDimensions.md),
                 ElevatedButton(
                   onPressed: () => _approveRequest(context, ref),
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                  ),
                   child: const Text('Approve'),
                 ),
               ],
@@ -259,7 +262,7 @@ class _VerificationRequestCard extends ConsumerWidget {
                 SnackBar(
                   content: Text(
                       success ? 'Marked as needs more info' : 'Action Failed'),
-                  backgroundColor: success ? Colors.blueGrey : Colors.red,
+                  backgroundColor: success ? AppColors.info : AppColors.danger,
                 ),
               );
             },
@@ -279,7 +282,7 @@ class _VerificationRequestCard extends ConsumerWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(success ? 'Request Approved' : 'Action Failed'),
-          backgroundColor: success ? Colors.green : Colors.red,
+          backgroundColor: success ? AppColors.success : AppColors.danger,
         ),
       );
     }
@@ -318,7 +321,8 @@ class _VerificationRequestCard extends ConsumerWidget {
                   SnackBar(
                     content:
                         Text(success ? 'Request Rejected' : 'Action Failed'),
-                    backgroundColor: success ? Colors.orange : Colors.red,
+                    backgroundColor:
+                        success ? AppColors.warning : AppColors.danger,
                   ),
                 );
               }
@@ -407,7 +411,7 @@ class _SignedImagePreviewState extends State<_SignedImagePreview> {
                 context: context,
                 builder: (context) {
                   return Dialog(
-                    backgroundColor: Colors.black,
+                    backgroundColor: AppColors.darkSurface,
                     insetPadding: const EdgeInsets.all(AppDimensions.md),
                     child: Stack(
                       children: [
@@ -421,7 +425,7 @@ class _SignedImagePreviewState extends State<_SignedImagePreview> {
                               errorBuilder: (context, error, stackTrace) {
                                 return const Center(
                                   child: Icon(Icons.broken_image,
-                                      color: Colors.white),
+                                      color: AppColors.textPrimary),
                                 );
                               },
                             ),
@@ -432,7 +436,8 @@ class _SignedImagePreviewState extends State<_SignedImagePreview> {
                           right: 8,
                           child: IconButton(
                             onPressed: () => Navigator.of(context).pop(),
-                            icon: const Icon(Icons.close, color: Colors.white),
+                            icon: const Icon(Icons.close,
+                                color: AppColors.textPrimary),
                           ),
                         ),
                       ],

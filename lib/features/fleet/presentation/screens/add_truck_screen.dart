@@ -29,6 +29,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
 
   TruckSpecification? _selectedSpecification;
   String? _selectedTruckType;
+  String? _selectedCapacityBucket;
   DateTime? _rcExpiryDate;
   DateTime? _insuranceExpiryDate;
   XFile? _rcDocument;
@@ -41,18 +42,46 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
     super.initState();
     if (widget.truck != null) {
       _populateFields(widget.truck!);
+    } else {
+      _selectedCapacityBucket = _capacityBuckets.keys.first;
+      _capacityController.text =
+          (_capacityBuckets[_selectedCapacityBucket] ?? 0).toString();
     }
   }
 
   void _populateFields(Truck truck) {
     _truckNumberController.text = truck.truckNumber;
     _capacityController.text = truck.capacity.toString();
+    _selectedCapacityBucket = _bucketForCapacity(truck.capacity);
     // TODO: Find matching specification based on truck.truckType
     // For now, we'll set a default specification
     _selectedSpecification =
         TruckSpecification.getSmartIndianTruckSpecifications().first;
     _rcExpiryDate = truck.rcExpiryDate;
     _insuranceExpiryDate = truck.insuranceExpiryDate;
+  }
+
+  static const Map<String, double> _capacityBuckets = {
+    '0–2 ton': 2,
+    '0–9 ton': 9,
+    '18 ton': 18,
+    '24 ton': 24,
+    '34 ton': 34,
+    '35 ton': 35,
+    '42 ton': 42,
+  };
+
+  String _bucketForCapacity(double capacity) {
+    String best = _capacityBuckets.keys.first;
+    double bestDiff = double.infinity;
+    for (final entry in _capacityBuckets.entries) {
+      final diff = (entry.value - capacity).abs();
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        best = entry.key;
+      }
+    }
+    return best;
   }
 
   @override
@@ -123,7 +152,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                           ? 'Update your truck information below'
                           : 'Fill in the details to add a new truck to your fleet',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                           ),
                     ),
                   ],
@@ -145,7 +174,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                         'Truck Number',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
                       ),
@@ -154,7 +183,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                         controller: _truckNumberController,
                         decoration: InputDecoration(
                           labelText: 'e.g., MH-12-AB-1234',
-                          labelStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: AppColors.textPrimary),
                           border: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: AppColors.glassBorder),
@@ -164,7 +193,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                                 BorderSide(color: AppColors.glassBorder),
                           ),
                         ),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.textPrimary),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter truck number';
@@ -192,53 +221,55 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                         onTruckTypeSelected: (String truckType) {
                           setState(() {
                             _selectedTruckType = truckType;
-                            // Auto-fill capacity based on truck type
-                            if (truckType.contains('6 Tyres')) {
-                              _capacityController.text = '10';
-                            } else if (truckType.contains('10 Tyres')) {
-                              _capacityController.text = '15';
-                            } else if (truckType.contains('14 Tyres')) {
-                              _capacityController.text = '20';
-                            } else if (truckType.contains('8 Tyres')) {
-                              _capacityController.text = '8';
-                            }
                           });
                         },
                       ),
                       const SizedBox(height: AppDimensions.lg),
 
-                      // Capacity (Auto-filled from specification)
+                      // Capacity Bucket
                       Text(
                         'Capacity (tons)',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
                       ),
                       const SizedBox(height: AppDimensions.sm),
-                      TextFormField(
-                        controller: _capacityController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Auto-filled from truck type',
-                          labelStyle: TextStyle(color: AppColors.textSecondary),
-                          border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: AppColors.glassBorder),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: AppColors.glassBorder),
-                          ),
-                        ),
-                        style: TextStyle(color: Colors.white),
+                      DropdownButtonFormField<String>(
+                        value: _selectedCapacityBucket,
+                        dropdownColor: AppColors.darkSurface,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: AppColors.textPrimary),
+                        items: _capacityBuckets.keys
+                            .map(
+                              (label) => DropdownMenuItem(
+                                value: label,
+                                child: Text(
+                                  label,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(color: AppColors.textPrimary),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          if (value == null) return;
+                          setState(() {
+                            _selectedCapacityBucket = value;
+                            _capacityController.text =
+                                (_capacityBuckets[value] ?? 0).toString();
+                          });
+                        },
+                        decoration:
+                            const InputDecoration(hintText: 'Select capacity'),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter capacity';
-                          }
-                          if (double.tryParse(value) == null) {
-                            return 'Please enter a valid number';
+                            return 'Please select capacity';
                           }
                           return null;
                         },
@@ -267,7 +298,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                                     .textTheme
                                     .bodySmall
                                     ?.copyWith(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -278,7 +309,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                                     .textTheme
                                     .bodySmall
                                     ?.copyWith(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                     ),
                               ),
                               Text(
@@ -287,7 +318,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                                     .textTheme
                                     .bodySmall
                                     ?.copyWith(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                     ),
                               ),
                             ],
@@ -299,7 +330,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                         'Documents',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
                       ),
@@ -339,8 +370,8 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                         width: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.textPrimary),
                         ),
                       )
                     : Text(isEditing ? 'Update Truck' : 'Add Truck'),
@@ -374,7 +405,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -409,7 +440,7 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
             label:
                 Text(document == null ? 'Upload Document' : 'Change Document'),
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.textPrimary,
               side: BorderSide(color: AppColors.truckPrimary),
             ),
           ),
@@ -426,7 +457,8 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.calendar_today, color: Colors.white, size: 16),
+                  Icon(Icons.calendar_today,
+                      color: AppColors.textPrimary, size: 16),
                   const SizedBox(width: AppDimensions.sm),
                   Text(
                     expiryDate != null
@@ -434,12 +466,13 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
                         : 'Select Expiry Date',
                     style: TextStyle(
                       color: expiryDate != null
-                          ? Colors.white
+                          ? AppColors.textPrimary
                           : AppColors.textSecondary,
                     ),
                   ),
                   const Spacer(),
-                  Icon(Icons.arrow_drop_down, color: Colors.white, size: 16),
+                  Icon(Icons.arrow_drop_down,
+                      color: AppColors.textPrimary, size: 16),
                 ],
               ),
             ),
@@ -556,11 +589,11 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
         backgroundColor: AppColors.glassSurfaceStrong,
         title: Text(
           'Delete Truck',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: AppColors.textPrimary),
         ),
         content: Text(
           'Are you sure you want to delete ${widget.truck!.truckNumber}? This action cannot be undone.',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: AppColors.textPrimary),
         ),
         actions: [
           TextButton(

@@ -34,6 +34,7 @@ import '../../features/verification/presentation/screens/verification_center_scr
 import '../../features/saved_searches/presentation/screens/saved_searches_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/settings_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/ratings/presentation/screens/ratings_screen.dart';
 import '../../shared/widgets/glassmorphic_button.dart';
 import '../../shared/widgets/glassmorphic_card.dart';
@@ -135,6 +136,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/intent-selection',
         builder: (context, state) => const IntentSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
         path: '/supplier-dashboard',
@@ -258,6 +263,26 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/verification',
         builder: (context, state) => const VerificationCenterScreen(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/privacy',
+        builder: (context, state) => const PlaceholderScreen(
+          title: 'Privacy',
+          message: 'Privacy settings are not available yet.',
+          icon: Icons.privacy_tip_outlined,
+        ),
+      ),
+      GoRoute(
+        path: '/help',
+        builder: (context, state) => const PlaceholderScreen(
+          title: 'Help & Support',
+          message: 'Help & support is not available yet.',
+          icon: Icons.help_outline,
+        ),
       ),
       GoRoute(
         path: '/settings',

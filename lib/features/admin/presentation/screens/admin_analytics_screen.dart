@@ -64,7 +64,7 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen> {
                               title: 'New Loads Today',
                               value: state.newLoadsToday.toString(),
                               icon: Icons.local_shipping,
-                              color: Colors.orange,
+                              color: AppColors.warning,
                             ),
                           ),
                           const SizedBox(width: AppDimensions.md),
@@ -74,7 +74,7 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen> {
                               value:
                                   '${state.conversionRate.toStringAsFixed(1)}%',
                               icon: Icons.swap_horiz,
-                              color: Colors.green,
+                              color: AppColors.success,
                             ),
                           ),
                         ],

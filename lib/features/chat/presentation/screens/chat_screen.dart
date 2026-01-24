@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -561,13 +562,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   },
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
-                  error: (_, __) => Center(
-                    child: Text(
-                      'Failed to load messages',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: AppColors.textSecondary),
+                  error: (error, _) => Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppDimensions.md),
+                      child: Text(
+                        'Failed to load messages'
+                        '${kDebugMode ? "\n\n$error" : ""}',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: AppColors.textSecondary),
+                      ),
                     ),
                   ),
                 ),

@@ -71,44 +71,28 @@ class SettingsScreen extends ConsumerWidget {
                       icon: Icons.person_outline,
                       title: 'Profile',
                       subtitle: 'Update your profile information',
-                      onTap: () => context.go('/verification'),
+                      onTap: () => context.go('/profile'),
                     ),
                     const Divider(color: AppColors.glassBorder),
                     _SettingsItem(
                       icon: Icons.notifications_outlined,
                       title: 'Notifications',
                       subtitle: 'Manage notification preferences',
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content:
-                                  Text('Notification settings coming soon')),
-                        );
-                      },
+                      onTap: () => context.go('/notifications'),
                     ),
                     const Divider(color: AppColors.glassBorder),
                     _SettingsItem(
                       icon: Icons.privacy_tip_outlined,
                       title: 'Privacy',
                       subtitle: 'Privacy and security settings',
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Privacy settings coming soon')),
-                        );
-                      },
+                      onTap: () => context.go('/privacy'),
                     ),
                     const Divider(color: AppColors.glassBorder),
                     _SettingsItem(
                       icon: Icons.help_outline,
                       title: 'Help & Support',
                       subtitle: 'Get help and contact support',
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Help & support coming soon')),
-                        );
-                      },
+                      onTap: () => context.go('/help'),
                     ),
                     const Divider(color: AppColors.glassBorder),
                     _SettingsItem(

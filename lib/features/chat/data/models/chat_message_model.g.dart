@@ -10,20 +10,20 @@ _$ChatMessageModelImpl _$$ChatMessageModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ChatMessageModelImpl(
       id: json['id'] as String,
-      chatId: json['chatId'] as String,
-      senderId: json['senderId'] as String,
-      messageText: json['messageText'] as String,
-      isRead: json['isRead'] as bool? ?? false,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      chatId: json['chat_id'] as String,
+      senderId: json['sender_id'] as String,
+      messageText: json['message_text'] as String,
+      isRead: json['is_read'] as bool? ?? false,
+      createdAt: DateTime.parse(json['created_at'] as String),
     );
 
 Map<String, dynamic> _$$ChatMessageModelImplToJson(
         _$ChatMessageModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'chatId': instance.chatId,
-      'senderId': instance.senderId,
-      'messageText': instance.messageText,
-      'isRead': instance.isRead,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'chat_id': instance.chatId,
+      'sender_id': instance.senderId,
+      'message_text': instance.messageText,
+      'is_read': instance.isRead,
+      'created_at': instance.createdAt.toIso8601String(),
     };

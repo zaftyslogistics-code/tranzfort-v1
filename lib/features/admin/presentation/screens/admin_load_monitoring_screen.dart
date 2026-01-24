@@ -79,7 +79,8 @@ class _AdminLoadMonitoringScreenState
                   DataCell(Text(Formatters.formatDate(load.createdAt))),
                   DataCell(
                     IconButton(
-                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                      icon: const Icon(Icons.delete_outline,
+                          color: AppColors.danger),
                       onPressed: () => _confirmDelete(context, load.id),
                     ),
                   ),
@@ -120,7 +121,8 @@ class _AdminLoadMonitoringScreenState
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  icon:
+                      const Icon(Icons.delete_outline, color: AppColors.danger),
                   onPressed: () => _confirmDelete(context, load.id),
                 ),
               ],
@@ -150,7 +152,7 @@ class _AdminLoadMonitoringScreenState
                   .read(adminMonitoringNotifierProvider.notifier)
                   .deleteLoad(loadId);
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
             child: const Text('Delete'),
           ),
         ],
@@ -169,16 +171,16 @@ class _StatusBadge extends StatelessWidget {
     Color color;
     switch (status.toLowerCase()) {
       case 'active':
-        color = Colors.green;
+        color = AppColors.success;
         break;
       case 'expired':
-        color = Colors.orange;
+        color = AppColors.warning;
         break;
       case 'deleted':
-        color = Colors.red;
+        color = AppColors.danger;
         break;
       default:
-        color = Colors.grey;
+        color = AppColors.textSecondary;
     }
 
     return Container(

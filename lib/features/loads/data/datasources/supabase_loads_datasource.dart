@@ -358,6 +358,7 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       final data = await _client
           .from('truck_types')
           .select('name')
+          .eq('is_active', true)
           .order('name') as List;
 
       final names = data
@@ -387,6 +388,7 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       final data = await _client
           .from('material_types')
           .select('name')
+          .eq('is_active', true)
           .order('name') as List;
 
       final names = data

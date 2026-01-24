@@ -170,7 +170,8 @@ class __$$ChatMessageModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$ChatMessageModelImpl implements _ChatMessageModel {
   const _$ChatMessageModelImpl(
       {required this.id,

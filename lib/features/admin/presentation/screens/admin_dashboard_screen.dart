@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../providers/admin_dashboard_metrics_provider.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
@@ -34,13 +35,13 @@ class AdminDashboardScreen extends ConsumerWidget {
                 Container(
                   width: isDesktop ? 250 : 200,
                   color: AppColors.secondaryBackground,
-                  child: _buildSidebarContent(context),
+                  child: _buildSidebarContent(context, isDrawer: false),
                 ),
                 // Main Content
-                Expanded(child: _buildMainContent(context, admin)),
+                Expanded(child: _buildMainContent(context, ref, admin)),
               ],
             )
-          : _buildMainContent(context, admin), // Mobile: full width
+          : _buildMainContent(context, ref, admin), // Mobile: full width
     );
   }
 
@@ -48,12 +49,12 @@ class AdminDashboardScreen extends ConsumerWidget {
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
       backgroundColor: AppColors.secondaryBackground,
-      child: _buildSidebarContent(context),
+      child: _buildSidebarContent(context, isDrawer: true),
     );
   }
 
   // Build sidebar content for both drawer and desktop sidebar
-  Widget _buildSidebarContent(BuildContext context) {
+  Widget _buildSidebarContent(BuildContext context, {required bool isDrawer}) {
     return Column(
       children: [
         const SizedBox(height: AppDimensions.xl),
@@ -61,13 +62,15 @@ class AdminDashboardScreen extends ConsumerWidget {
           icon: Icons.dashboard,
           label: 'Overview',
           isSelected: true,
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () {
+            if (isDrawer) Navigator.of(context).pop();
+          },
         ),
         _SidebarItem(
           icon: Icons.verified_user,
           label: 'KYC Verifications',
           onTap: () {
-            Navigator.of(context).pop();
+            if (isDrawer) Navigator.of(context).pop();
             context.push('/admin/verifications');
           },
         ),
@@ -75,7 +78,7 @@ class AdminDashboardScreen extends ConsumerWidget {
           icon: Icons.people,
           label: 'User Management',
           onTap: () {
-            Navigator.of(context).pop();
+            if (isDrawer) Navigator.of(context).pop();
             context.push('/admin/users');
           },
         ),
@@ -83,7 +86,7 @@ class AdminDashboardScreen extends ConsumerWidget {
           icon: Icons.report_problem,
           label: 'Reports & Moderation',
           onTap: () {
-            Navigator.of(context).pop();
+            if (isDrawer) Navigator.of(context).pop();
             context.push('/admin/reports');
           },
         ),
@@ -91,7 +94,7 @@ class AdminDashboardScreen extends ConsumerWidget {
           icon: Icons.analytics,
           label: 'Analytics',
           onTap: () {
-            Navigator.of(context).pop();
+            if (isDrawer) Navigator.of(context).pop();
             context.push('/admin/analytics');
           },
         ),
@@ -99,7 +102,7 @@ class AdminDashboardScreen extends ConsumerWidget {
           icon: Icons.local_shipping,
           label: 'Load Monitoring',
           onTap: () {
-            Navigator.of(context).pop();
+            if (isDrawer) Navigator.of(context).pop();
             context.push('/admin/loads');
           },
         ),
@@ -107,7 +110,7 @@ class AdminDashboardScreen extends ConsumerWidget {
           icon: Icons.admin_panel_settings,
           label: 'Manage Admins',
           onTap: () {
-            Navigator.of(context).pop();
+            if (isDrawer) Navigator.of(context).pop();
             context.push('/admin/manage-admins');
           },
         ),
@@ -115,7 +118,7 @@ class AdminDashboardScreen extends ConsumerWidget {
           icon: Icons.settings,
           label: 'System Config',
           onTap: () {
-            Navigator.of(context).pop();
+            if (isDrawer) Navigator.of(context).pop();
             context.push('/admin/config');
           },
         ),
@@ -124,9 +127,29 @@ class AdminDashboardScreen extends ConsumerWidget {
   }
 
   // Build main content area
-  Widget _buildMainContent(BuildContext context, dynamic admin) {
+  Widget _buildMainContent(BuildContext context, WidgetRef ref, dynamic admin) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth <= 768;
+
+    final metricsAsync = ref.watch(adminDashboardMetricsProvider);
+
+    final pendingKycText = metricsAsync.when(
+      data: (m) => m.pendingKyc.toString(),
+      loading: () => '—',
+      error: (_, __) => '—',
+    );
+
+    final activeLoadsText = metricsAsync.when(
+      data: (m) => m.activeLoads.toString(),
+      loading: () => '—',
+      error: (_, __) => '—',
+    );
+
+    final totalUsersText = metricsAsync.when(
+      data: (m) => m.totalUsers.toString(),
+      loading: () => '—',
+      error: (_, __) => '—',
+    );
 
     return Container(
       padding: EdgeInsets.all(isMobile ? AppDimensions.md : AppDimensions.xl),
@@ -149,23 +172,23 @@ class AdminDashboardScreen extends ConsumerWidget {
                     children: [
                       _StatCard(
                         title: 'Pending KYC',
-                        value: '12',
+                        value: pendingKycText,
                         icon: Icons.hourglass_empty,
-                        color: Colors.orange,
+                        color: AppColors.warning,
                       ),
                       const SizedBox(height: AppDimensions.md),
                       _StatCard(
                         title: 'Active Loads',
-                        value: '450',
+                        value: activeLoadsText,
                         icon: Icons.local_shipping,
                         color: AppColors.primary,
                       ),
                       const SizedBox(height: AppDimensions.md),
                       _StatCard(
                         title: 'Total Users',
-                        value: '1,250',
+                        value: totalUsersText,
                         icon: Icons.people,
-                        color: Colors.green,
+                        color: AppColors.success,
                       ),
                     ],
                   )
@@ -173,23 +196,23 @@ class AdminDashboardScreen extends ConsumerWidget {
                     children: [
                       _StatCard(
                         title: 'Pending KYC',
-                        value: '12',
+                        value: pendingKycText,
                         icon: Icons.hourglass_empty,
-                        color: Colors.orange,
+                        color: AppColors.warning,
                       ),
                       const SizedBox(width: AppDimensions.lg),
                       _StatCard(
                         title: 'Active Loads',
-                        value: '450',
+                        value: activeLoadsText,
                         icon: Icons.local_shipping,
                         color: AppColors.primary,
                       ),
                       const SizedBox(width: AppDimensions.lg),
                       _StatCard(
                         title: 'Total Users',
-                        value: '1,250',
+                        value: totalUsersText,
                         icon: Icons.people,
-                        color: Colors.green,
+                        color: AppColors.success,
                       ),
                     ],
                   ),

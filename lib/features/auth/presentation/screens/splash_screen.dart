@@ -47,17 +47,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const CyanGlowContainer(
-                  padding: EdgeInsets.all(AppDimensions.md),
-                  borderRadius: AppDimensions.radiusFull,
-                  backgroundColor: AppColors.glassSurfaceStrong,
-                  borderColor: AppColors.glassBorderStrong,
-                  child: Image(
-                    image: AssetImage('transport-logo-v1.png'),
-                    width: 180,
-                    height: 56,
-                    fit: BoxFit.contain,
-                  ),
+                const Image(
+                  image: AssetImage('Lv-1-trans.png'),
+                  width: 720,
+                  height: 224,
+                  fit: BoxFit.contain,
                 ),
                 const SizedBox(height: AppDimensions.md),
                 GradientText(

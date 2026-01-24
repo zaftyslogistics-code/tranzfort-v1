@@ -10,15 +10,35 @@ import '../../../../shared/widgets/free_badge.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import 'document_upload_screen.dart';
 
-class VerificationCenterScreen extends ConsumerWidget {
+class VerificationCenterScreen extends ConsumerStatefulWidget {
   const VerificationCenterScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<VerificationCenterScreen> createState() =>
+      _VerificationCenterScreenState();
+}
+
+class _VerificationCenterScreenState
+    extends ConsumerState<VerificationCenterScreen> {
+  String? _selectedRole;
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(authNotifierProvider).user;
+
+    final supplierEnabled = user?.isSupplierEnabled ?? false;
+    final truckerEnabled = user?.isTruckerEnabled ?? false;
 
     final supplierStatus = user?.supplierVerificationStatus ?? 'unverified';
     final truckerStatus = user?.truckerVerificationStatus ?? 'unverified';
+
+    final defaultRole = supplierEnabled && !truckerEnabled
+        ? 'supplier'
+        : (!supplierEnabled && truckerEnabled)
+            ? 'trucker'
+            : (supplierEnabled ? 'supplier' : 'trucker');
+
+    final activeRole = _selectedRole ?? defaultRole;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Verification Center')),
@@ -76,6 +96,58 @@ class VerificationCenterScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: AppDimensions.lg),
+              if (supplierEnabled && truckerEnabled)
+                GlassmorphicCard(
+                  backgroundColor: AppColors.glassSurfaceStrong,
+                  padding: const EdgeInsets.all(AppDimensions.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Select role to verify',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: AppDimensions.sm),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () =>
+                                  setState(() => _selectedRole = 'supplier'),
+                              child: Text(
+                                'Supplier',
+                                style: TextStyle(
+                                  color: activeRole == 'supplier'
+                                      ? AppColors.primary
+                                      : AppColors.textPrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: AppDimensions.sm),
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () =>
+                                  setState(() => _selectedRole = 'trucker'),
+                              child: Text(
+                                'Trucker',
+                                style: TextStyle(
+                                  color: activeRole == 'trucker'
+                                      ? AppColors.primary
+                                      : AppColors.textPrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              if (supplierEnabled && truckerEnabled)
+                const SizedBox(height: AppDimensions.lg),
               GlassmorphicCard(
                 backgroundColor: AppColors.glassSurfaceStrong,
                 padding: const EdgeInsets.all(AppDimensions.lg),
@@ -89,46 +161,45 @@ class VerificationCenterScreen extends ConsumerWidget {
                           ),
                     ),
                     const SizedBox(height: AppDimensions.md),
-                    _buildRoleRequirements(context, 'supplier'),
-                    const SizedBox(height: AppDimensions.md),
-                    _buildRoleRequirements(context, 'trucker'),
+                    _buildRoleRequirements(context, activeRole),
                   ],
                 ),
               ),
               const SizedBox(height: AppDimensions.lg),
-              _VerificationCard(
-                title: 'Verify as Supplier',
-                subtitle: 'Post unlimited loads - Completely FREE',
-                icon: Icons.business_outlined,
-                status: supplierStatus,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DocumentUploadScreen(
-                        roleType: 'supplier',
+              if (activeRole == 'supplier')
+                _VerificationCard(
+                  title: 'Verify as Supplier',
+                  subtitle: 'Post unlimited loads - Completely FREE',
+                  icon: Icons.business_outlined,
+                  status: supplierStatus,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DocumentUploadScreen(
+                          roleType: 'supplier',
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: AppDimensions.md),
-              _VerificationCard(
-                title: 'Verify as Trucker',
-                subtitle: 'Find unlimited loads - Completely FREE',
-                icon: Icons.local_shipping_outlined,
-                status: truckerStatus,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DocumentUploadScreen(
-                        roleType: 'trucker',
+                    );
+                  },
+                )
+              else
+                _VerificationCard(
+                  title: 'Verify as Trucker',
+                  subtitle: 'Find unlimited loads - Completely FREE',
+                  icon: Icons.local_shipping_outlined,
+                  status: truckerStatus,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DocumentUploadScreen(
+                          roleType: 'trucker',
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
               const SizedBox(height: AppDimensions.xl),
               OutlinedButton.icon(
                 onPressed: () => context.pop(),
@@ -156,7 +227,7 @@ class VerificationCenterScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.md),
       decoration: BoxDecoration(
-        color: AppColors.glassSurface,
+        color: AppColors.glassSurfaceStrong,
         borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
         border: Border.all(color: AppColors.glassBorder),
       ),
@@ -174,7 +245,7 @@ class VerificationCenterScreen extends ConsumerWidget {
               Text(
                 '${isSupplier ? 'Load Poster' : 'Load Finder'} Requirements',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -191,7 +262,7 @@ class VerificationCenterScreen extends ConsumerWidget {
                     Text(
                       doc,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                           ),
                     ),
                   ],
@@ -239,10 +310,20 @@ class _VerificationCard extends StatelessWidget {
     final color = _statusColor(status);
     final label = _statusLabel(status);
 
+    final isActionable = status == 'unverified' ||
+        status == 'rejected' ||
+        status == 'needs_more_info';
+
     return GlassmorphicCard(
       padding: const EdgeInsets.all(AppDimensions.lg),
       child: InkWell(
-        onTap: onTap,
+        onTap: isActionable
+            ? onTap
+            : () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Status: $label')),
+                );
+              },
         child: Row(
           children: [
             Icon(icon, size: 40, color: AppColors.primary),
@@ -270,7 +351,7 @@ class _VerificationCard extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
-                        ?.copyWith(color: Colors.white),
+                        ?.copyWith(color: AppColors.textPrimary),
                   ),
                   const SizedBox(height: AppDimensions.sm),
                   Container(
@@ -309,6 +390,8 @@ class _VerificationCard extends StatelessWidget {
         return AppColors.success;
       case 'pending':
         return AppColors.warning;
+      case 'needs_more_info':
+        return AppColors.warning;
       case 'rejected':
         return AppColors.danger;
       default:
@@ -321,7 +404,9 @@ class _VerificationCard extends StatelessWidget {
       case 'verified':
         return 'Verified';
       case 'pending':
-        return 'Pending';
+        return 'Submitted – Awaiting Approval';
+      case 'needs_more_info':
+        return 'Needs More Info';
       case 'rejected':
         return 'Rejected';
       default:

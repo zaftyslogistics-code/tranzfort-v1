@@ -26,37 +26,44 @@ class _SimpleTruckTypeSelectorState extends State<SimpleTruckTypeSelector> {
   void initState() {
     super.initState();
     _selectedType = widget.initialType;
+
+    if (_selectedType != null &&
+        _truckTypes.every((t) => t['name'] != _selectedType)) {
+      _truckTypes.insert(
+        0,
+        {
+          'name': _selectedType,
+          'category': 'Legacy',
+          'capacity': null,
+          'icon': Icons.local_shipping,
+        },
+      );
+    }
   }
 
   final List<Map<String, dynamic>> _truckTypes = [
     {
-      'name': 'Container Truck 6 Tyres',
-      'category': 'Small Trucks',
-      'capacity': 10.0,
+      'name': 'Open Body',
+      'category': 'Body Type',
+      'capacity': null,
       'icon': Icons.local_shipping,
     },
     {
-      'name': 'Container Truck 10 Tyres',
-      'category': 'Medium Trucks',
-      'capacity': 15.0,
+      'name': 'Flat Body',
+      'category': 'Body Type',
+      'capacity': null,
       'icon': Icons.local_shipping,
     },
     {
-      'name': 'Flatbed 14 Tyres',
-      'category': 'Medium Trucks',
-      'capacity': 20.0,
+      'name': 'Bulker',
+      'category': 'Body Type',
+      'capacity': null,
       'icon': Icons.local_shipping,
     },
     {
-      'name': 'Tanker 10 Tyres',
-      'category': 'Medium Trucks',
-      'capacity': 15.0,
-      'icon': Icons.local_shipping,
-    },
-    {
-      'name': 'Open Body 8 Tyres',
-      'category': 'Small Trucks',
-      'capacity': 8.0,
+      'name': 'Container',
+      'category': 'Body Type',
+      'capacity': null,
       'icon': Icons.local_shipping,
     },
   ];
@@ -114,7 +121,7 @@ class _SimpleTruckTypeSelectorState extends State<SimpleTruckTypeSelector> {
                                     ),
                               ),
                               Text(
-                                '${truck['category']} • ${truck['capacity']} tons capacity',
+                                '${truck['category']}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall
