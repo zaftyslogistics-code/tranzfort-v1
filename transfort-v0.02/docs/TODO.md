@@ -13,33 +13,33 @@
 **Goal:** Prepare codebase and infrastructure for v0.02 development
 
 #### 1.1 Project Setup
-- [ ] Create `feature/v0.02-redesign` branch from `main`
+- [x] Create `feature/v0.02-redesign` branch from `main`
 - [ ] Review and update all v0.02 documentation
 - [ ] Set up staging Supabase project
 - [ ] Configure CI/CD pipeline (GitHub Actions)
 - [ ] Set up test coverage reporting
 
 #### 1.2 Database Migration
-- [ ] Write migration scripts for new fields:
-  - [ ] `loads`: Add Super Load/Trucker fields
-  - [ ] `users`: Add bank details + approval flags
-  - [ ] `support_tickets`: Create new table
-  - [ ] `support_messages`: Create new table
+- [x] Write migration scripts for new fields:
+  - [x] `loads`: Add Super Load/Trucker fields
+  - [x] `users`: Add bank details + approval flags
+  - [x] `support_tickets`: Create new table
+  - [x] `support_messages`: Create new table
 - [ ] Test migrations on local Supabase
 - [ ] Deploy migrations to staging
-- [ ] Create RLS policies for new tables
+- [x] Create RLS policies for new tables
 - [ ] Test RLS policies with different roles
-- [ ] Create indexes for performance
+- [x] Create indexes for performance
 
 #### 1.3 Design System Update
-- [ ] Update `app_colors.dart` with flat color palette
-- [ ] Remove gradient/glass widgets from `shared/widgets/`
-- [ ] Create new flat card components
-- [ ] Update `app_theme.dart` with system theme support
-- [ ] Create bottom navigation component
+- [x] Update `app_colors.dart` with flat color palette
+- [ ] Remove gradient/glass widgets from `shared/widgets/` (deprecated instead)
+- [x] Create new flat card components
+- [x] Update `app_theme.dart` with system theme support
+- [ ] Update bottom navigation component (in progress)
 - [ ] Create profile header component (with ad placement)
-- [ ] Update button styles (flat, 48px height)
-- [ ] Update input field styles (flat, 48px height)
+- [x] Update button styles (flat, 48px height)
+- [x] Update input field styles (flat, 48px height)
 
 **Acceptance Criteria:**
 - ✅ Migrations run successfully on staging

@@ -1,5 +1,9 @@
 import 'dart:ui';
 
+// DEPRECATED: Use flat_button.dart instead
+// This file is kept for backward compatibility only
+// Will be removed in future versions
+@Deprecated('Use PrimaryButton, SecondaryButton, or TextButton from flat_button.dart instead')
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimensions.dart';

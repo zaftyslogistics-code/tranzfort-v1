@@ -34,11 +34,16 @@ class AppBottomNavigation extends ConsumerWidget {
     return SafeArea(
       top: false,
       child: Container(
+        height: 56,
         decoration: BoxDecoration(
-          color: AppColors.darkSurface,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.darkSurface
+              : AppColors.lightSurface,
           border: Border(
             top: BorderSide(
-              color: AppColors.glassBorder,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.darkBorder
+                  : AppColors.lightBorder,
               width: 1,
             ),
           ),

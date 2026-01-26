@@ -1,3 +1,7 @@
+// DEPRECATED: Gradients removed in v0.02 flat design
+// Use regular Text widget with solid colors instead
+// This file is kept for backward compatibility only
+@Deprecated('Use regular Text widget with solid colors instead')
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
