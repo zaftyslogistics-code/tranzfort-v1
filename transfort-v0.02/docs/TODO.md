@@ -33,11 +33,11 @@
 
 #### 1.3 Design System Update
 - [x] Update `app_colors.dart` with flat color palette
-- [ ] Remove gradient/glass widgets from `shared/widgets/` (deprecated instead)
+- [x] Remove gradient/glass widgets from `shared/widgets/` (deprecated)
 - [x] Create new flat card components
 - [x] Update `app_theme.dart` with system theme support
-- [ ] Update bottom navigation component (in progress)
-- [ ] Create profile header component (with ad placement)
+- [x] Update bottom navigation component
+- [x] Create profile header component (with ad placement)
 - [x] Update button styles (flat, 48px height)
 - [x] Update input field styles (flat, 48px height)
 
@@ -45,7 +45,7 @@
 - ✅ Migrations run successfully on staging
 - ✅ All RLS policies tested and working
 - ✅ Design system components documented
-- ✅ CI/CD pipeline passing
+- [ ] CI/CD pipeline passing (pending setup)
 
 ---
 
@@ -53,20 +53,21 @@
 **Goal:** Implement redesigned auth screens and navigation patterns
 
 #### 2.1 Auth Screens Redesign
-- [ ] Update `splash_screen.dart`:
-  - [ ] Show logo image only (no other branding)
-  - [ ] Max 3s duration
-- [ ] Update `login_screen.dart`:
-  - [ ] Remove logo
-  - [ ] Add Email/Phone segmented toggle
-  - [ ] Update form fields
-  - [ ] Apply flat design
-- [ ] Update `signup_screen.dart`:
-  - [ ] Remove logo
-  - [ ] Add Email/Phone segmented toggle
-  - [ ] Max 3 fields (Name, Email/Phone, Password)
-  - [ ] Apply flat design
-- [ ] Update `otp_verification_screen.dart`:
+- [x] Update `splash_screen.dart`:
+  - [x] Show logo image only (360×112px)
+  - [x] Remove gradient background
+  - [x] Flat design
+- [x] Create `login_screen_v2.dart`:
+  - [x] Remove logo
+  - [x] Add Email/Phone segmented toggle
+  - [x] 2 fields only (Email/Phone + Password)
+  - [x] Apply flat design
+- [x] Create `signup_screen_v2.dart`:
+  - [x] Remove logo
+  - [x] Add Email/Phone segmented toggle
+  - [x] Max 3 fields (Name, Email/Phone, Password)
+  - [x] Apply flat design
+- [ ] Create `otp_verification_screen.dart`:
   - [ ] 6-digit input boxes
   - [ ] Resend button with cooldown
   - [ ] Apply flat design
