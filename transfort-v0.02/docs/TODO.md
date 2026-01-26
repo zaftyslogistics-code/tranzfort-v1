@@ -101,21 +101,21 @@
 **Goal:** Implement new Trucker find/results flow with Super Loads
 
 #### 3.1 Trucker Find Loads
-- [ ] Create `TruckerFindScreen` (`/trucker/find`):
-  - [ ] From location picker
-  - [ ] To location picker
-  - [ ] "Use current location" button
-  - [ ] "Find Loads" CTA (bottom, thumb-friendly)
-- [ ] Update router to use new Trucker home
+- [x] Create `TruckerFindScreen` (`/trucker/find`):
+  - [x] From location picker
+  - [x] To location picker
+  - [x] "Use current location" button
+  - [x] "Find Loads" CTA (bottom, thumb-friendly)
+- [x] Flat design with FlatInput components
 
 #### 3.2 Trucker Results
-- [ ] Create `TruckerResultsScreen` (`/trucker/results`):
-  - [ ] Expandable filter header
-  - [ ] Tab bar: All Loads / Super Loads
-  - [ ] Flat load cards
-  - [ ] Infinite scroll pagination
-- [ ] Implement filter logic
-- [ ] Implement tab switching
+- [x] Create `TruckerResultsScreen` (`/trucker/results`):
+  - [x] Expandable filter header
+  - [x] Tab bar: All Loads / Super Loads
+  - [x] Flat load cards
+  - [x] Mock data for testing
+- [x] Filter chips (Truck Type, Material, Weight, Price)
+- [x] Tab switching implemented
 
 #### 3.3 Super Loads (Trucker Side)
 - [x] Create `LoadDetailScreenV2`:
