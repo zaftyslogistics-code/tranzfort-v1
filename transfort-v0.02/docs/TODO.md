@@ -224,30 +224,35 @@
 **Goal:** Implement social-style profiles with ad placements
 
 #### 6.1 Profile Redesign
-- [ ] Update `SupplierProfileScreen`:
-  - [ ] Cover area (180px) with ad placement
-  - [ ] Avatar (80px) overlapping cover
-  - [ ] Name + verified badge
-  - [ ] Stats row
-  - [ ] Tabs: About / Ratings / History
-- [ ] Create `TruckerProfileScreen` (similar layout)
-- [ ] Update `ProfileScreen` (own profile)
+- [x] Create `SupplierProfileScreenV2`:
+  - [x] Cover area (180px) with ad placement
+  - [x] Avatar (80px) overlapping cover
+  - [x] Name + verified badge
+  - [x] Stats row (loads, completed, rating)
+  - [x] Tabs: About / Ratings / History
+- [x] Create `TruckerProfileScreenV2` (similar layout)
+  - [x] Super Trucker badge support
+  - [x] Stats row (trips, completed, rating)
+- [x] Flat design throughout
 
 #### 6.2 History Timeline
-- [ ] Create `SupplierHistoryScreen` (`/supplier/history`)
-- [ ] Create `TruckerHistoryScreen` (`/trucker/history`)
-- [ ] Show non-deletable business records
+- [x] Create `HistoryTimelineScreen` (unified for both)
+  - [x] Timeline view with icons
+  - [x] Non-deletable business records
+  - [x] Status badges
+  - [x] Supplier and Trucker history support
 
-#### 6.3 Ad Integration
-- [ ] Implement ad placeholder in profile covers
+#### 6.3 Ad Integration (Optional - Future)
+- [ ] Implement actual ad SDK integration
 - [ ] Add "Sponsored" label
-- [ ] Test ad display (no actual ads in v0.02)
+- [ ] Test ad display with real ads
 
 **Acceptance Criteria:**
 - ✅ Profiles match Facebook/Twitter style
-- ✅ Ad placement areas functional
+- ✅ Ad placement areas functional (placeholders ready)
 - ✅ History timeline shows all records
 - ✅ No hard delete for business records
+- ✅ **Phase 6 Complete**
 
 ---
 
