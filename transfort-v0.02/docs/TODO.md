@@ -73,21 +73,21 @@
   - [ ] Apply flat design
 
 #### 2.2 Bottom Navigation
-- [ ] Create `AppBottomNavigation` widget
-- [ ] User app nav items:
-  - [ ] Home (Supplier Dashboard / Trucker Find)
-  - [ ] Loads (My Loads / My Trips)
-  - [ ] Chat
-  - [ ] Notifications
-  - [ ] Profile
-- [ ] Update all main screens to use bottom nav
-- [ ] Remove hamburger menus
+- [x] `AppBottomNavigation` widget (already exists)
+- [x] User app nav items:
+  - [x] Home (Supplier Dashboard / Trucker Find)
+  - [x] Loads (My Loads / My Trips)
+  - [x] Chat
+  - [x] Profile
+- [x] Flat design colors applied
+- [x] 56px height (thumb-friendly)
 
 #### 2.3 Theme System
-- [ ] Implement system theme detection
-- [ ] Add theme toggle in Settings
-- [ ] Persist theme preference
-- [ ] Test Light/Dark/System modes
+- [x] Implement system theme detection
+- [x] Add theme toggle in Settings (ThemeSettingsScreen)
+- [x] Persist theme preference (SharedPreferences)
+- [x] Test Light/Dark/System modes
+- [x] Theme changes apply immediately (no restart)
 
 **Acceptance Criteria:**
 - ✅ Auth screens match new design specs
