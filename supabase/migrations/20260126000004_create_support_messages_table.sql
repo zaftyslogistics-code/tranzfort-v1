@@ -61,8 +61,8 @@ ON public.support_messages FOR SELECT
 TO authenticated
 USING (
     EXISTS (
-        SELECT 1 FROM public.admins
-        WHERE admins.user_id = auth.uid()
+        SELECT 1 FROM public.admin_profiles
+        WHERE admin_profiles.id = auth.uid()
     )
 );
 
@@ -73,19 +73,19 @@ TO authenticated
 WITH CHECK (
     sender_admin_id = auth.uid() AND
     EXISTS (
-        SELECT 1 FROM public.admins
-        WHERE admins.user_id = auth.uid()
+        SELECT 1 FROM public.admin_profiles
+        WHERE admin_profiles.id = auth.uid()
     )
 );
 
--- Admins can update messages (mark as read)
-CREATE POLICY "admins_update_messages"
+-- Admins can update all messages (e.g., mark as read)
+CREATE POLICY "admins_update_all_messages"
 ON public.support_messages FOR UPDATE
 TO authenticated
 USING (
     EXISTS (
-        SELECT 1 FROM public.admins
-        WHERE admins.user_id = auth.uid()
+        SELECT 1 FROM public.admin_profiles
+        WHERE admin_profiles.id = auth.uid()
     )
 );
 

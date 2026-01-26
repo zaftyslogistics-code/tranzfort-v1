@@ -46,19 +46,19 @@ ON public.support_tickets FOR SELECT
 TO authenticated
 USING (
     EXISTS (
-        SELECT 1 FROM public.admins
-        WHERE admins.user_id = auth.uid()
+        SELECT 1 FROM public.admin_profiles
+        WHERE admin_profiles.id = auth.uid()
     )
 );
 
 -- Admins can update all tickets
-CREATE POLICY "admins_update_tickets"
+CREATE POLICY "admins_update_all_tickets"
 ON public.support_tickets FOR UPDATE
 TO authenticated
 USING (
     EXISTS (
-        SELECT 1 FROM public.admins
-        WHERE admins.user_id = auth.uid()
+        SELECT 1 FROM public.admin_profiles
+        WHERE admin_profiles.id = auth.uid()
     )
 );
 
