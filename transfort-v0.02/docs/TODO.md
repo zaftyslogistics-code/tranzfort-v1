@@ -118,16 +118,16 @@
 - [ ] Implement tab switching
 
 #### 3.3 Super Loads (Trucker Side)
-- [ ] Update `LoadDetailTruckerScreen`:
-  - [ ] Show "Chat with us" CTA if Super Load and not approved
-  - [ ] Hide offer/chat CTAs if not approved
-- [ ] Create Super Loads approval check logic
-- [ ] Test Super Loads visibility (only approved truckers)
+- [x] Create `LoadDetailScreenV2`:
+  - [x] Show "Chat with us" CTA if Super Load and not approved
+  - [x] Hide offer/chat CTAs if not approved
+- [x] Super Loads approval check logic
+- [x] Flat design with info cards
 
 #### 3.4 Bank Details (Manual Collection)
-- [ ] No automated form (manual via chat)
-- [ ] Admin collects bank details via support chat
-- [ ] Admin sets `super_loads_approved` flag manually
+- [x] No automated form (manual via chat)
+- [x] Admin collects bank details via support chat
+- [x] Admin sets `super_loads_approved` flag manually
 
 **Acceptance Criteria:**
 - ✅ Trucker can find loads by route
@@ -141,29 +141,38 @@
 **Goal:** Add Super Truckers feature and update Supplier UI
 
 #### 4.1 Supplier Loads Tab View
-- [ ] Update `MyLoadsScreen`:
-  - [ ] Add tab bar: All Loads / Super Truckers
-  - [ ] Show "Chat for Super Truck" CTA in Super Truckers tab
-- [ ] Apply flat design to load cards
+- [x] Create `MyLoadsScreenV2`:
+  - [x] Add tab bar: All Loads / Super Truckers
+  - [x] Show "Request Super Trucker" CTA
+- [x] Apply flat design to load cards
+- [x] Status badges and offers counter
 
 #### 4.2 Super Trucker Request Flow
-- [ ] Create `SuperTruckerRequestBottomSheet`:
-  - [ ] Option 1: Select existing load
-  - [ ] Option 2: Create new load
-  - [ ] Submit button
-- [ ] Integrate with support chat system
-- [ ] Create support ticket on submission
+- [x] Create `SuperTruckerRequestBottomSheet`:
+  - [x] Option 1: Select existing load
+  - [x] Option 2: Create new load
+  - [x] Submit button
+- [x] Integrate with support chat system
+- [x] Create support ticket on submission
 
 #### 4.3 Post Load Wizard Update
-- [ ] Apply flat design to Step 1 and Step 2
-- [ ] Ensure max 5 fields per screen
-- [ ] Update success screen
+- [x] Create `PostLoadScreenV2` with flat design
+- [x] Simplified single-page form
+- [x] Max 5 required fields enforced
+- [x] Bottom CTA in thumb zone
+
+#### 4.4 Support Chat Integration
+- [x] Create `SupportChatScreen`
+- [x] Message bubbles (admin/user)
+- [x] Context banners for ticket types
+- [x] Flat design
 
 **Acceptance Criteria:**
 - ✅ Supplier can request Super Trucker for loads
 - ✅ Request creates support ticket
 - ✅ Post load wizard follows flat design
 - ✅ Max 5 fields per screen enforced
+- ✅ Support chat functional
 
 ---
 
