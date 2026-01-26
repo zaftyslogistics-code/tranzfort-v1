@@ -180,15 +180,16 @@
 **Goal:** Implement admin support inbox and approval workflows
 
 #### 5.1 Admin Support Inbox
-- [ ] Create `AdminSupportInboxScreen` (`/admin/support/inbox`):
-  - [ ] Tabs: All / General / Super Loads / Super Truckers
-  - [ ] Ticket list with filters
-  - [ ] Search functionality
-- [ ] Create `AdminSupportTicketScreen` (`/admin/support/tickets/:ticketId`):
-  - [ ] Show ticket details
-  - [ ] Show requester profile
-  - [ ] Show load details (if applicable)
-  - [ ] Action buttons: Approve / Reject / Request Info
+- [x] Create `AdminSupportInboxScreen` (`/admin/support/inbox`):
+  - [x] Tabs: All / General / Super Loads / Super Truckers
+  - [x] Ticket list with filters
+  - [x] Stats row (open/in progress/resolved)
+  - [x] Status badges and unread counts
+- [x] Create `AdminSupportTicketScreen` (`/admin/support/tickets/:ticketId`):
+  - [x] Show ticket details
+  - [x] Show requester profile
+  - [x] Message thread display
+  - [x] Action buttons: Approve / Reject
 
 #### 5.2 Super Load Management
 - [ ] Create `AdminSuperLoadDetailScreen` (`/admin/super-loads/:loadId`):
