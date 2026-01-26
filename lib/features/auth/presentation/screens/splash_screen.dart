@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
-import '../../../../shared/widgets/gradient_text.dart';
 import '../providers/auth_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -26,55 +25,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.darkBackground,
-                    AppColors.secondaryBackground,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.darkBackground
+          : AppColors.lightBackground,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Logo only (360x112px per v0.02 spec)
+            const Image(
+              image: AssetImage('Lv-1-trans.png'),
+              width: 360,
+              height: 112,
+              fit: BoxFit.contain,
             ),
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Image(
-                  image: AssetImage('Lv-1-trans.png'),
-                  width: 720,
-                  height: 224,
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(height: AppDimensions.md),
-                GradientText(
-                  AppConfig.appName,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const SizedBox(height: AppDimensions.sm),
-                Text(
-                  AppConfig.appTagline,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppDimensions.xl),
-                const CircularProgressIndicator(
-                  color: AppColors.primary,
-                ),
-              ],
+            const SizedBox(height: 48),
+            const CircularProgressIndicator(
+              color: AppColors.primary,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
