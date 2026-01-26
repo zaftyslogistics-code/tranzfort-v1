@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
+import '../../../../shared/widgets/admin/admin_app_bar.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/manage_admins_provider.dart';
 
@@ -257,12 +258,15 @@ class _ManageAdminsScreenState extends ConsumerState<ManageAdminsScreen> {
     final state = ref.watch(manageAdminsNotifierProvider(currentAdminId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Manage Admins'),
+      appBar: AdminAppBar(
+        title: 'Manage Admins',
+        subtitle: 'Create and manage admin users',
+        showLogo: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: _showCreateAdminDialog,
+            color: AppColors.textPrimary,
           ),
         ],
       ),

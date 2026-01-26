@@ -1,0 +1,20 @@
+%% Super Loads End-to-End Flow (v0.02)
+flowchart TD
+  A[Admin: Super Loads List] -->|Create| B[Create Wizard Step 1]
+  B --> C[Create Wizard Step 2]
+  C -->|Create success| D[Admin: Super Load Detail]
+
+  D --> E[Responses (Offers)]
+  D --> F[Chats]
+
+  G[Trucker: Feed] --> H[Trucker: Load Detail]
+  H -->|Make Offer| I[Offer Created]
+  H -->|Chat| J[Chat Thread]
+  I --> E
+  J --> F
+
+  E -->|Accept Offer| K[Load Status: Booked]
+  E -->|Counter/Reject| E
+  K --> L[Deal Created/Updated]
+  L --> M[RC Flow: Request/Approve/Revoke]
+  M --> N[Close Load: Completed]

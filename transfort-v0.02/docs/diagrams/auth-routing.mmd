@@ -1,0 +1,9 @@
+%% Auth + Routing
+flowchart LR
+  Splash -->|No session| Login
+  Splash -->|Session + role=Supplier| SupplierHome
+  Splash -->|Session + role=Trucker| TruckerHome
+  Splash -->|Session + isAdmin=true| AdminHome
+  AdminHome --> AdminRoutes
+  SupplierHome --> UserRoutes
+  TruckerHome --> UserRoutes

@@ -90,27 +90,42 @@ class LoadCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (showStatus)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.sm,
-                        vertical: AppDimensions.xxs,
-                      ),
-                      decoration: BoxDecoration(
-                        color: statusMeta.$2.withAlpha((0.2 * 255).round()),
-                        borderRadius:
-                            BorderRadius.circular(AppDimensions.radiusSm),
-                        border: Border.all(
-                          color: statusMeta.$2.withAlpha((0.4 * 255).round()),
-                        ),
-                      ),
-                      child: Text(
-                        statusMeta.$1,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: statusMeta.$2,
-                              fontWeight: FontWeight.w600,
+                  if (load.isSuperLoad || showStatus)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (load.isSuperLoad) ...[
+                          const _SuperLoadBadge(),
+                          const SizedBox(width: AppDimensions.xs),
+                        ],
+                        if (showStatus)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppDimensions.sm,
+                              vertical: AppDimensions.xxs,
                             ),
-                      ),
+                            decoration: BoxDecoration(
+                              color:
+                                  statusMeta.$2.withAlpha((0.2 * 255).round()),
+                              borderRadius:
+                                  BorderRadius.circular(AppDimensions.radiusSm),
+                              border: Border.all(
+                                color: statusMeta.$2
+                                    .withAlpha((0.4 * 255).round()),
+                              ),
+                            ),
+                            child: Text(
+                              statusMeta.$1,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    color: statusMeta.$2,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ),
+                      ],
                     ),
                 ],
               ),
@@ -182,6 +197,49 @@ class LoadCard extends StatelessWidget {
       default:
         return (load.status, AppColors.textSecondary);
     }
+  }
+}
+
+class _SuperLoadBadge extends StatelessWidget {
+  const _SuperLoadBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.sm,
+        vertical: AppDimensions.xxs,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFFFFD54F),
+            Color(0xFFFFA000),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+        border: Border.all(
+          color: const Color(0xFFFFD54F),
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x33FFD54F),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Text(
+        'SUPER LOAD',
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Colors.black,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.4,
+            ),
+      ),
+    );
   }
 }
 

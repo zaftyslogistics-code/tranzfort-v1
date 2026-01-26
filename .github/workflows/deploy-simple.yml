@@ -53,10 +53,10 @@ jobs:
         run: flutter pub get
 
       - name: Build App Bundle
-        run: flutter build appbundle --release --no-tree-shake-icons
+        run: flutter build appbundle --release --no-tree-shake-icons --flavor user -t lib/main_user.dart
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release-bundle
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/bundle/userRelease/app-user-release.aab

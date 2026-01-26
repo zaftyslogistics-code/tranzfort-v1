@@ -7,6 +7,10 @@ import '../../../../core/utils/formatters.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/app_bottom_navigation.dart';
+import '../../../../shared/widgets/price_display.dart';
+import '../../../../shared/widgets/supplier_mini_card.dart';
+import '../../../../shared/widgets/load_status_badge.dart';
+import '../../../profile/presentation/providers/supplier_profile_provider.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/empty_loads_state.dart';
 import '../widgets/bookmark_button.dart';
@@ -300,6 +304,17 @@ class _LoadDetailTruckerScreenState
       );
     }
 
+    final supplierAsync = ref.watch(supplierProfileProvider(load.supplierId));
+
+    final priceData = PriceData(
+      priceType: PriceType.fromString(load.priceType),
+      ratePerTon: load.ratePerTon,
+      fixedPrice: load.price,
+      weightTons: load.weight,
+      advanceRequired: load.advanceRequired,
+      advancePercent: load.advancePercent,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Load Details'),
@@ -383,29 +398,40 @@ class _LoadDetailTruckerScreenState
                         Builder(
                           builder: (context) {
                             final meta = _statusMeta(load);
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppDimensions.sm,
-                                vertical: AppDimensions.xxs,
-                              ),
-                              decoration: BoxDecoration(
-                                color: meta.$2.withAlpha((0.2 * 255).round()),
-                                borderRadius: BorderRadius.circular(
-                                    AppDimensions.radiusSm),
-                                border: Border.all(
-                                  color: meta.$2.withAlpha((0.4 * 255).round()),
-                                ),
-                              ),
-                              child: Text(
-                                meta.$1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(
-                                      color: meta.$2,
-                                      fontWeight: FontWeight.w600,
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (load.isSuperLoad) ...[
+                                  const _SuperLoadBadge(),
+                                  const SizedBox(width: AppDimensions.xs),
+                                ],
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppDimensions.sm,
+                                    vertical: AppDimensions.xxs,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: meta.$2
+                                        .withAlpha((0.2 * 255).round()),
+                                    borderRadius: BorderRadius.circular(
+                                        AppDimensions.radiusSm),
+                                    border: Border.all(
+                                      color: meta.$2
+                                          .withAlpha((0.4 * 255).round()),
                                     ),
-                              ),
+                                  ),
+                                  child: Text(
+                                    meta.$1,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: meta.$2,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                ),
+                              ],
                             );
                           },
                         ),
@@ -437,6 +463,28 @@ class _LoadDetailTruckerScreenState
                         ),
                       ),
                     ],
+
+                    const SizedBox(height: AppDimensions.lg),
+                    supplierAsync.when(
+                      data: (supplier) {
+                        return SupplierCard(
+                          supplierId: supplier.id,
+                          supplierName: supplier.name,
+                          fullName: supplier.fullName,
+                          location: supplier.location,
+                          phoneNumber: supplier.phone,
+                          rating: supplier.rating,
+                          ratingCount: supplier.ratingCount,
+                          isVerified: supplier.isVerified,
+                          onTap: () => context.push(
+                            '/supplier-profile/${supplier.id}',
+                          ),
+                          onChatTap: canContact ? _openChatForLoad : null,
+                        );
+                      },
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, __) => const SizedBox.shrink(),
+                    ),
                     const SizedBox(height: AppDimensions.lg),
                     _DetailSection(
                       title: 'Route',
@@ -462,12 +510,7 @@ class _LoadDetailTruckerScreenState
                     _DetailSection(
                       title: 'Pricing',
                       children: [
-                        _DetailRow(
-                          label: 'Price',
-                          value: load.price != null
-                              ? Formatters.formatCurrency(load.price!)
-                              : 'Negotiable',
-                        ),
+                        PriceDisplayDetailed(priceData: priceData),
                         if (load.paymentTerms != null &&
                             load.paymentTerms!.isNotEmpty)
                           _DetailRow(
@@ -573,6 +616,49 @@ class _LoadDetailTruckerScreenState
         ],
       ),
       bottomNavigationBar: const AppBottomNavigation(),
+    );
+  }
+}
+
+class _SuperLoadBadge extends StatelessWidget {
+  const _SuperLoadBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.sm,
+        vertical: AppDimensions.xxs,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFFFFD54F),
+            Color(0xFFFFA000),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+        border: Border.all(
+          color: const Color(0xFFFFD54F),
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x33FFD54F),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Text(
+        'SUPER LOAD',
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Colors.black,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.4,
+            ),
+      ),
     );
   }
 }

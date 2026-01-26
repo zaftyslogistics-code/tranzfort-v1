@@ -53,10 +53,22 @@ class _AddTruckScreenState extends ConsumerState<AddTruckScreen> {
     _truckNumberController.text = truck.truckNumber;
     _capacityController.text = truck.capacity.toString();
     _selectedCapacityBucket = _bucketForCapacity(truck.capacity);
-    // TODO: Find matching specification based on truck.truckType
-    // For now, we'll set a default specification
-    _selectedSpecification =
-        TruckSpecification.getSmartIndianTruckSpecifications().first;
+    
+    // Find matching specification based on truck.truckType and capacity
+    final specs = TruckSpecification.getSmartIndianTruckSpecifications();
+    _selectedSpecification = specs.firstWhere(
+      (spec) => 
+        spec.bodyType == truck.truckType &&
+        truck.capacity >= spec.minCapacity &&
+        truck.capacity <= spec.maxCapacity,
+      orElse: () => specs.firstWhere(
+        (spec) => 
+          truck.capacity >= spec.minCapacity &&
+          truck.capacity <= spec.maxCapacity,
+        orElse: () => specs.first,
+      ),
+    );
+    
     _rcExpiryDate = truck.rcExpiryDate;
     _insuranceExpiryDate = truck.insuranceExpiryDate;
   }

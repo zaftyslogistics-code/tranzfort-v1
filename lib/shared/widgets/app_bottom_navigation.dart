@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_dimensions.dart';
-import '../../../../shared/widgets/glassmorphic_card.dart';
-import '../../../features/auth/presentation/providers/auth_provider.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_dimensions.dart';
+import '../../features/auth/presentation/providers/auth_provider.dart';
 
+/// Bottom Navigation Widget (MVP 2.0)
+/// 
+/// 4-tab navigation:
+/// - Supplier: Post Load | My Loads | Chats | Profile
+/// - Trucker: Find Loads | My Trips | Chats | Profile
 class AppBottomNavigation extends ConsumerWidget {
-  const AppBottomNavigation({super.key});
+  final int currentIndex;
+  
+  const AppBottomNavigation({
+    super.key,
+    this.currentIndex = 0,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,12 +24,11 @@ class AppBottomNavigation extends ConsumerWidget {
     final user = authState.user;
     final location = GoRouterState.of(context).uri.toString();
 
-    // Determine which navigation to show based on user role
     final isSupplier = user?.isSupplierEnabled ?? false;
     final isTrucker = user?.isTruckerEnabled ?? false;
 
     if (!isSupplier && !isTrucker) {
-      return const SizedBox.shrink(); // No navigation if no role selected
+      return const SizedBox.shrink();
     }
 
     return SafeArea(
@@ -37,85 +45,102 @@ class AppBottomNavigation extends ConsumerWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.md,
-            vertical: AppDimensions.sm,
+            horizontal: AppDimensions.paddingSmall,
+            vertical: AppDimensions.paddingSmall,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (isSupplier) ...[
-                _NavItem(
-                  icon: Icons.dashboard_outlined,
-                  label: 'Dashboard',
-                  isSelected: location == '/supplier-dashboard',
-                  onTap: () => context.go('/supplier-dashboard'),
-                ),
-                _NavItem(
-                  icon: Icons.chat_outlined,
-                  label: 'Chat',
-                  isSelected: location == '/chat-list',
-                  onTap: () => context.go('/chat-list'),
-                ),
-                _NavItem(
-                  icon: Icons.add_box_outlined,
-                  label: 'Post Load',
-                  isSelected: location == '/post-load-step1',
-                  onTap: () => context.go('/post-load-step1'),
-                ),
-                _NavItem(
-                  icon: Icons.list_alt_outlined,
-                  label: 'My Loads',
-                  isSelected: location == '/my-loads',
-                  onTap: () => context.go('/my-loads'),
-                ),
-              ] else if (isTrucker) ...[
-                _NavItem(
-                  icon: Icons.local_shipping_outlined,
-                  label: 'Find Loads',
-                  isSelected: location == '/trucker-feed',
-                  onTap: () => context.go('/trucker-feed'),
-                ),
-                _NavItem(
-                  icon: Icons.chat_outlined,
-                  label: 'Chat',
-                  isSelected: location == '/chat-list',
-                  onTap: () => context.go('/chat-list'),
-                ),
-                _NavItem(
-                  icon: Icons.directions_car_outlined,
-                  label: 'My Fleet',
-                  isSelected: location == '/fleet-management',
-                  onTap: () => context.go('/fleet-management'),
-                ),
-                _NavItem(
-                  icon: Icons.person_outline,
-                  label: 'Profile',
-                  isSelected: location == '/profile',
-                  onTap: () => context.go('/profile'),
-                ),
-              ],
-              _NavItem(
-                icon: Icons.settings_outlined,
-                label: 'Settings',
-                isSelected: location == '/settings',
-                onTap: () => context.go('/settings'),
-              ),
-            ],
+            children: isSupplier
+                ? _buildSupplierNav(context, location)
+                : _buildTruckerNav(context, location),
           ),
         ),
       ),
     );
   }
+
+  List<Widget> _buildSupplierNav(BuildContext context, String location) {
+    return [
+      _NavItem(
+        icon: Icons.add_box_outlined,
+        activeIcon: Icons.add_box,
+        label: 'Post Load',
+        isSelected: location.contains('/post-load'),
+        onTap: () => context.go('/post-load'),
+      ),
+      _NavItem(
+        icon: Icons.list_alt_outlined,
+        activeIcon: Icons.list_alt,
+        label: 'My Loads',
+        isSelected: location == '/my-loads' || location == '/supplier-dashboard',
+        onTap: () => context.go('/my-loads'),
+      ),
+      _NavItem(
+        icon: Icons.chat_bubble_outline,
+        activeIcon: Icons.chat_bubble,
+        label: 'Chats',
+        isSelected: location.contains('/chat'),
+        onTap: () => context.go('/chat-list'),
+      ),
+      _NavItem(
+        icon: Icons.person_outline,
+        activeIcon: Icons.person,
+        label: 'Profile',
+        isSelected: location == '/profile' || 
+                    location == '/settings' || 
+                    location == '/verification',
+        onTap: () => context.go('/profile'),
+      ),
+    ];
+  }
+
+  List<Widget> _buildTruckerNav(BuildContext context, String location) {
+    return [
+      _NavItem(
+        icon: Icons.search,
+        activeIcon: Icons.search,
+        label: 'Find Loads',
+        isSelected: location == '/trucker-feed' || location.contains('/filters'),
+        onTap: () => context.go('/trucker-feed'),
+      ),
+      _NavItem(
+        icon: Icons.route_outlined,
+        activeIcon: Icons.route,
+        label: 'My Trips',
+        isSelected: location == '/my-trips',
+        onTap: () => context.go('/my-trips'),
+      ),
+      _NavItem(
+        icon: Icons.chat_bubble_outline,
+        activeIcon: Icons.chat_bubble,
+        label: 'Chats',
+        isSelected: location.contains('/chat'),
+        onTap: () => context.go('/chat-list'),
+      ),
+      _NavItem(
+        icon: Icons.person_outline,
+        activeIcon: Icons.person,
+        label: 'Profile',
+        isSelected: location == '/profile' || 
+                    location == '/settings' || 
+                    location == '/verification' ||
+                    location == '/fleet-management',
+        onTap: () => context.go('/profile'),
+      ),
+    ];
+  }
 }
 
 class _NavItem extends StatelessWidget {
   final IconData icon;
+  final IconData? activeIcon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _NavItem({
     required this.icon,
+    this.activeIcon,
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -125,19 +150,19 @@ class _NavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+      borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSmall),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.sm,
-            vertical: AppDimensions.xs,
+            horizontal: AppDimensions.paddingSmall,
+            vertical: AppDimensions.paddingXSmall,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                icon,
+                isSelected ? (activeIcon ?? icon) : icon,
                 size: 24,
                 color: isSelected ? AppColors.primary : AppColors.textPrimary,
               ),

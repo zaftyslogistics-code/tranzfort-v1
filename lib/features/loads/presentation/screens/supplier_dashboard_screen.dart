@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/theme_mode_provider.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/app_bottom_navigation.dart';
+import '../../../../shared/widgets/app_background.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/load_card.dart';
@@ -53,6 +55,7 @@ class _SupplierDashboardScreenState
   @override
   Widget build(BuildContext context) {
     final loadsState = ref.watch(loadsNotifierProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return DefaultTabController(
       length: 3,
@@ -65,6 +68,21 @@ class _SupplierDashboardScreenState
               const RoleBadge(isSupplier: true),
             ],
           ),
+          actions: [
+            IconButton(
+              tooltip: 'Theme',
+              icon: Icon(
+                themeMode == ThemeMode.system
+                    ? Icons.brightness_auto
+                    : (themeMode == ThemeMode.dark
+                        ? Icons.dark_mode
+                        : Icons.light_mode),
+              ),
+              onPressed: () => ref
+                  .read(themeModeProvider.notifier)
+                  .toggleFromSystem(MediaQuery.platformBrightnessOf(context)),
+            ),
+          ],
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Active'),
@@ -77,16 +95,7 @@ class _SupplierDashboardScreenState
           children: [
             Positioned.fill(
               child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.darkBackground,
-                      AppColors.secondaryBackground,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+                decoration: appBackgroundDecoration(context),
               ),
             ),
             const Positioned(

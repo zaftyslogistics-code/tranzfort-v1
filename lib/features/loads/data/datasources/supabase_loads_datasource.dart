@@ -23,6 +23,19 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
     final dynamic loadingDateRaw =
         loadData['loadingDate'] ?? loadData['loading_date'];
 
+    final dynamic priceTypeRaw = loadData['priceType'] ?? loadData['price_type'];
+    final priceTypeStr = (priceTypeRaw is String ? priceTypeRaw : 'negotiable').trim();
+    final dynamic ratePerTonRaw = loadData['ratePerTon'] ?? loadData['rate_per_ton'];
+    final dynamic advanceRequiredRaw =
+        loadData['advanceRequired'] ?? loadData['advance_required'];
+    final dynamic advancePercentRaw =
+        loadData['advancePercent'] ?? loadData['advance_percent'];
+
+    final dynamic isSuperLoadRaw =
+        loadData['isSuperLoad'] ?? loadData['is_super_load'];
+    final dynamic postedByAdminIdRaw =
+        loadData['postedByAdminId'] ?? loadData['posted_by_admin_id'];
+
     // Map to database columns - note: DB has both old (material_type, truck_type)
     // and new (load_type, truck_type_required) columns, but old ones have NOT NULL constraints
     final materialType = loadData['loadType'] ??
@@ -72,8 +85,19 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
           'Missing pickup/drop state. Please fill in both states and try again.');
     }
 
+    if (priceTypeStr == 'per_ton') {
+      final double? rate = ratePerTonRaw is num
+          ? ratePerTonRaw.toDouble()
+          : double.tryParse(ratePerTonRaw?.toString() ?? '');
+      if (rate == null || rate <= 0) {
+        throw ServerException('Enter a valid rate per ton.');
+      }
+    }
+
     return {
       'supplier_id': supplierIdStr,
+      if (isSuperLoadRaw != null) 'is_super_load': isSuperLoadRaw,
+      if (postedByAdminIdRaw != null) 'posted_by_admin_id': postedByAdminIdRaw,
       'from_location': loadData['fromLocation'] ?? loadData['from_location'],
       'from_city': fromCityStr,
       'from_state': fromStateStr,
@@ -92,8 +116,10 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       'weight': loadData['weight'],
       'weight_in_tons': loadData['weight'], // Also populate old column
       'price': loadData['price'],
-      'price_type':
-          loadData['priceType'] ?? loadData['price_type'] ?? 'negotiable',
+      'price_type': priceTypeStr.isEmpty ? 'negotiable' : priceTypeStr,
+      'rate_per_ton': ratePerTonRaw,
+      'advance_required': advanceRequiredRaw,
+      'advance_percent': advancePercentRaw,
       'payment_terms': loadData['paymentTerms'] ?? loadData['payment_terms'],
       'loading_date': loadingDateRaw is DateTime
           ? loadingDateRaw.toIso8601String()
@@ -130,6 +156,9 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       'weight',
       'price',
       'price_type',
+      'rate_per_ton',
+      'advance_required',
+      'advance_percent',
       'payment_terms',
       'loading_date',
       'notes',
@@ -174,6 +203,14 @@ class SupabaseLoadsDataSource implements LoadsDataSource {
       if (updates.containsKey('price')) 'price': updates['price'],
       if (updates.containsKey('priceType') || updates.containsKey('price_type'))
         'price_type': updates['priceType'] ?? updates['price_type'],
+      if (updates.containsKey('ratePerTon') || updates.containsKey('rate_per_ton'))
+        'rate_per_ton': updates['ratePerTon'] ?? updates['rate_per_ton'],
+      if (updates.containsKey('advanceRequired') ||
+          updates.containsKey('advance_required'))
+        'advance_required':
+            updates['advanceRequired'] ?? updates['advance_required'],
+      if (updates.containsKey('advancePercent') || updates.containsKey('advance_percent'))
+        'advance_percent': updates['advancePercent'] ?? updates['advance_percent'],
       if (updates.containsKey('paymentTerms') ||
           updates.containsKey('payment_terms'))
         'payment_terms': updates['paymentTerms'] ?? updates['payment_terms'],

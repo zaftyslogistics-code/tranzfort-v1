@@ -5,11 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/theme_mode_provider.dart';
 import '../../../../core/services/ad_impression_tracker.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/conditional_ad_widget.dart';
 import '../../../../shared/widgets/app_bottom_navigation.dart';
+import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/truck_type_chip_bar.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/loads_provider.dart';
 import '../widgets/filter_chip_group.dart';
@@ -88,6 +91,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
     final loadsState = ref.watch(loadsNotifierProvider);
     final filteredLoads = _applyFilters(loadsState.loads);
     final user = ref.watch(authNotifierProvider).user;
+    final themeMode = ref.watch(themeModeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -100,6 +104,19 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
         ),
         actions: [
           IconButton(
+            tooltip: 'Theme',
+            icon: Icon(
+              themeMode == ThemeMode.system
+                  ? Icons.brightness_auto
+                  : (themeMode == ThemeMode.dark
+                      ? Icons.dark_mode
+                      : Icons.light_mode),
+            ),
+            onPressed: () => ref
+                .read(themeModeProvider.notifier)
+                .toggleFromSystem(MediaQuery.platformBrightnessOf(context)),
+          ),
+          IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () => context.push('/filters'),
           ),
@@ -110,16 +127,7 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
           const OfflineBanner(), // Show offline banner at top when offline
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.darkBackground,
-                    AppColors.secondaryBackground,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+              decoration: appBackgroundDecoration(context),
             ),
           ),
           ...GlowOrbPresets.getGlowOrbsForScreen('load'),
@@ -165,6 +173,19 @@ class _TruckerFeedScreenState extends ConsumerState<TruckerFeedScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+              // Truck Type Chip Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.md,
+                ),
+                child: TruckTypeChipBar(
+                  selection: ref.watch(truckTypeSelectionProvider),
+                  onSelectionChanged: (selection) {
+                    ref.read(truckTypeSelectionProvider.notifier).state = selection;
+                    _fetchLoads();
+                  },
                 ),
               ),
               Expanded(

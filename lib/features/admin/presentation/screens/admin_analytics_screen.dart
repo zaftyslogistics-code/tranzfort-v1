@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../providers/admin_analytics_provider.dart';
+import '../../../../shared/widgets/admin/admin_app_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class AdminAnalyticsScreen extends ConsumerStatefulWidget {
@@ -26,13 +27,16 @@ class _AdminAnalyticsScreenState extends ConsumerState<AdminAnalyticsScreen> {
     final state = ref.watch(adminAnalyticsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Analytics Dashboard'),
+      appBar: AdminAppBar(
+        title: 'Analytics Dashboard',
+        subtitle: 'System metrics and user insights',
+        showLogo: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () =>
                 ref.read(adminAnalyticsProvider.notifier).fetchAnalytics(),
+            color: AppColors.textPrimary,
           ),
         ],
       ),

@@ -1,0 +1,8 @@
+%% CI/CD Pipeline
+flowchart LR
+  Commit[Commit/PR] --> Lint[Lint]
+  Lint --> Tests[Tests]
+  Tests --> Build[Build APK/AAB]
+  Build --> Review[Manual Approval]
+  Review --> Release[Release + Notes]
+  Release --> Deploy[Upload/Distribute]

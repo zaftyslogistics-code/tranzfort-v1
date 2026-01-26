@@ -357,29 +357,40 @@ class _LoadDetailSupplierScreenState
                         Builder(
                           builder: (context) {
                             final meta = _statusMeta(load);
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppDimensions.sm,
-                                vertical: AppDimensions.xxs,
-                              ),
-                              decoration: BoxDecoration(
-                                color: meta.$2.withAlpha((0.2 * 255).round()),
-                                borderRadius: BorderRadius.circular(
-                                    AppDimensions.radiusSm),
-                                border: Border.all(
-                                  color: meta.$2.withAlpha((0.4 * 255).round()),
-                                ),
-                              ),
-                              child: Text(
-                                meta.$1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(
-                                      color: meta.$2,
-                                      fontWeight: FontWeight.w600,
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (load.isSuperLoad) ...[
+                                  const _SuperLoadBadge(),
+                                  const SizedBox(width: AppDimensions.xs),
+                                ],
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppDimensions.sm,
+                                    vertical: AppDimensions.xxs,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: meta.$2
+                                        .withAlpha((0.2 * 255).round()),
+                                    borderRadius: BorderRadius.circular(
+                                        AppDimensions.radiusSm),
+                                    border: Border.all(
+                                      color: meta.$2
+                                          .withAlpha((0.4 * 255).round()),
                                     ),
-                              ),
+                                  ),
+                                  child: Text(
+                                    meta.$1,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: meta.$2,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                ),
+                              ],
                             );
                           },
                         ),
@@ -651,6 +662,49 @@ class _LoadDetailSupplierScreenState
         ],
       ),
       bottomNavigationBar: const AppBottomNavigation(),
+    );
+  }
+}
+
+class _SuperLoadBadge extends StatelessWidget {
+  const _SuperLoadBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.sm,
+        vertical: AppDimensions.xxs,
+      ),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFFFFD54F),
+            Color(0xFFFFA000),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+        border: Border.all(
+          color: const Color(0xFFFFD54F),
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x33FFD54F),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Text(
+        'SUPER LOAD',
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Colors.black,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.4,
+            ),
+      ),
     );
   }
 }

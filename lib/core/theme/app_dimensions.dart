@@ -8,12 +8,24 @@ class AppDimensions {
   static const double xl = 32.0;
   static const double xxl = 48.0;
 
+  // Spacing Aliases (for consistency with new code)
+  static const double paddingXSmall = xs;
+  static const double paddingSmall = sm;
+  static const double paddingMedium = md;
+  static const double paddingLarge = lg;
+  static const double paddingXLarge = xl;
+
   // Border Radius
   static const double radiusSm = 8.0;
   static const double radiusMd = 12.0;
   static const double radiusLg = 16.0;
   static const double radiusXl = 20.0;
   static const double radiusFull = 9999.0;
+
+  // Border Radius Aliases
+  static const double borderRadiusSmall = radiusSm;
+  static const double borderRadiusMedium = radiusMd;
+  static const double borderRadiusLarge = radiusLg;
 
   // Elevation
   static const double elevation0 = 0.0;

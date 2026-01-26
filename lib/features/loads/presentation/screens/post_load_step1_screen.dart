@@ -18,10 +18,14 @@ import '../../domain/entities/material_type.dart' as material;
 
 class PostLoadStep1Screen extends ConsumerStatefulWidget {
   final Load? existingLoad;
+  final String nextRoutePath;
+  final bool showBottomNavigation;
 
   const PostLoadStep1Screen({
     super.key,
     this.existingLoad,
+    this.nextRoutePath = '/post-load-step2',
+    this.showBottomNavigation = true,
   });
 
   @override
@@ -107,7 +111,7 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
     };
 
     context.push(
-      '/post-load-step2',
+      widget.nextRoutePath,
       extra: {
         'loadData': loadData,
         'existingLoad': widget.existingLoad,
@@ -498,7 +502,8 @@ class _PostLoadStep1ScreenState extends ConsumerState<PostLoadStep1Screen> {
           ),
         ],
       ),
-      bottomNavigationBar: const AppBottomNavigation(),
+      bottomNavigationBar:
+          widget.showBottomNavigation ? const AppBottomNavigation() : null,
     );
   }
 }

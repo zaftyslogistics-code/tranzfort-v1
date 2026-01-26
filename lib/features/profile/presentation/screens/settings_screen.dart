@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/theme_mode_provider.dart';
 import '../../../../shared/widgets/glassmorphic_card.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/app_bottom_navigation.dart';
+import '../../../../shared/widgets/app_background.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -13,6 +15,51 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+
+    Future<void> showThemeDialog() async {
+      await showDialog<void>(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text('Theme'),
+            children: [
+              RadioListTile<ThemeMode>(
+                value: ThemeMode.system,
+                groupValue: themeMode,
+                title: const Text('System'),
+                onChanged: (value) {
+                  if (value == null) return;
+                  ref.read(themeModeProvider.notifier).setThemeMode(value);
+                  Navigator.of(context).pop();
+                },
+              ),
+              RadioListTile<ThemeMode>(
+                value: ThemeMode.light,
+                groupValue: themeMode,
+                title: const Text('Light'),
+                onChanged: (value) {
+                  if (value == null) return;
+                  ref.read(themeModeProvider.notifier).setThemeMode(value);
+                  Navigator.of(context).pop();
+                },
+              ),
+              RadioListTile<ThemeMode>(
+                value: ThemeMode.dark,
+                groupValue: themeMode,
+                title: const Text('Dark'),
+                onChanged: (value) {
+                  if (value == null) return;
+                  ref.read(themeModeProvider.notifier).setThemeMode(value);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -21,23 +68,13 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.darkBackground,
-                    AppColors.secondaryBackground,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+              decoration: appBackgroundDecoration(context),
             ),
           ),
           ListView(
             padding: const EdgeInsets.all(AppDimensions.lg),
             children: [
               GlassmorphicCard(
-                backgroundColor: AppColors.glassSurfaceStrong,
                 padding: const EdgeInsets.all(AppDimensions.lg),
                 showGlow: true,
                 child: Column(
@@ -54,7 +91,7 @@ class SettingsScreen extends ConsumerWidget {
                     Text(
                       'Manage your app preferences and account settings',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                     ),
                   ],
@@ -62,11 +99,19 @@ class SettingsScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppDimensions.lg),
               GlassmorphicCard(
-                backgroundColor: AppColors.glassSurfaceStrong,
                 padding: const EdgeInsets.all(AppDimensions.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    _SettingsItem(
+                      icon: Icons.palette_outlined,
+                      title: 'Theme',
+                      subtitle: themeMode == ThemeMode.system
+                          ? 'System'
+                          : (themeMode == ThemeMode.dark ? 'Dark' : 'Light'),
+                      onTap: showThemeDialog,
+                    ),
+                    const Divider(color: AppColors.glassBorder),
                     _SettingsItem(
                       icon: Icons.person_outline,
                       title: 'Profile',
@@ -117,7 +162,6 @@ class SettingsScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppDimensions.lg),
               GlassmorphicCard(
-                backgroundColor: AppColors.glassSurfaceStrong,
                 padding: const EdgeInsets.all(AppDimensions.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -187,22 +231,22 @@ class _SettingsItem extends StatelessWidget {
                     title,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
+                          color: Theme.of(context).textTheme.bodySmall?.color,
                         ),
                   ),
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right,
-              color: AppColors.textSecondary,
+              color: Theme.of(context).iconTheme.color,
             ),
           ],
         ),

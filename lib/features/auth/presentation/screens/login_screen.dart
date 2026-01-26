@@ -97,6 +97,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     // Record successful login
     _rateLimiter.recordSuccessfulLogin(email);
+    
+    // Check if user is an admin - user app must block admin accounts
+    final authState = ref.read(authNotifierProvider);
+    if (authState.admin != null) {
+      // Admin account detected - logout and show error
+      await ref.read(authNotifierProvider.notifier).logout();
+      if (!mounted) return;
+      setState(() {
+        _generalError = 'Admin accounts cannot use this app. Please use the Admin app.';
+      });
+      return;
+    }
+    
     context.go('/splash');
   }
 

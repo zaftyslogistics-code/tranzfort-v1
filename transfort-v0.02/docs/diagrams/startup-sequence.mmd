@@ -1,0 +1,14 @@
+%% Startup Sequence (v0.02)
+sequenceDiagram
+  participant OS as OS
+  participant App as Flutter App
+  participant Pref as Local Storage
+  participant SB as Supabase
+
+  OS->>App: Launch
+  App->>App: Render first frame (default theme)
+  App->>Pref: Load theme preference (async)
+  App->>SB: Restore session (async)
+  Pref-->>App: Theme mode
+  SB-->>App: Session state
+  App->>App: Route to correct home

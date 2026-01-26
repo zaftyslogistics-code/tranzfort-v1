@@ -14,6 +14,7 @@ class GlassmorphicCard extends StatelessWidget {
   final double borderWidth;
   final bool showGlow;
   final List<BoxShadow>? boxShadow;
+  final bool performanceMode;
 
   const GlassmorphicCard({
     super.key,
@@ -26,6 +27,7 @@ class GlassmorphicCard extends StatelessWidget {
     this.borderWidth = 1,
     this.showGlow = false,
     this.boxShadow,
+    this.performanceMode = false,
   });
 
   List<BoxShadow> _buildShadows() {
@@ -48,22 +50,41 @@ class GlassmorphicCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final resolvedBackground = (backgroundColor == AppColors.glassSurface)
+        ? (isDark ? AppColors.glassSurface : AppColors.lightGlassSurface)
+        : backgroundColor;
+
+    final resolvedBorder = (borderColor == AppColors.glassBorder)
+        ? (isDark ? AppColors.glassBorder : AppColors.lightGlassBorder)
+        : borderColor;
+
     final shadows = _buildShadows();
+
+    final container = Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        color: resolvedBackground,
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: Border.all(color: resolvedBorder, width: borderWidth),
+        boxShadow: shadows,
+      ),
+      child: child,
+    );
+
+    if (performanceMode) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: container,
+      );
+    }
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-        child: Container(
-          padding: padding,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(color: borderColor, width: borderWidth),
-            boxShadow: shadows,
-          ),
-          child: child,
-        ),
+        child: container,
       ),
     );
   }

@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../verification/data/models/verification_request_model.dart';
 import '../providers/admin_verification_provider.dart';
+import '../../../../shared/widgets/admin/admin_app_bar.dart';
 
 class AdminVerificationScreen extends ConsumerStatefulWidget {
   const AdminVerificationScreen({super.key});
@@ -70,19 +71,25 @@ class _AdminVerificationScreenState
     final filtered = _applyFilters(state.pendingRequests);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('KYC Verifications'),
+      appBar: AdminAppBar(
+        title: 'KYC Verifications',
+        subtitle: _dateRange != null 
+            ? '${_dateRange!.start.month}/${_dateRange!.start.day} - ${_dateRange!.end.month}/${_dateRange!.end.day}'
+            : 'All pending requests',
+        showLogo: true,
         actions: [
           IconButton(
             tooltip: 'Filter by date range',
             onPressed: _pickDateRange,
             icon: const Icon(Icons.date_range),
+            color: AppColors.textPrimary,
           ),
           if (_dateRange != null)
             IconButton(
               tooltip: 'Clear date filter',
               onPressed: () => setState(() => _dateRange = null),
               icon: const Icon(Icons.clear),
+              color: AppColors.textPrimary,
             ),
         ],
       ),
@@ -422,6 +429,7 @@ class _SignedImagePreviewState extends State<_SignedImagePreview> {
                             child: Image.network(
                               _url!,
                               fit: BoxFit.contain,
+                              cacheWidth: 1200,
                               errorBuilder: (context, error, stackTrace) {
                                 return const Center(
                                   child: Icon(Icons.broken_image,
@@ -468,6 +476,7 @@ class _SignedImagePreviewState extends State<_SignedImagePreview> {
                     child: Image.network(
                       _url!,
                       fit: BoxFit.cover,
+                      cacheWidth: 300,
                       errorBuilder: (context, error, stackTrace) {
                         return const Center(child: Icon(Icons.broken_image));
                       },

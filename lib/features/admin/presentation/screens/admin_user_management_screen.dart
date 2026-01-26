@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../providers/admin_users_provider.dart';
+import '../../../../shared/widgets/admin/admin_app_bar.dart';
 
 class AdminUserManagementScreen extends ConsumerStatefulWidget {
   const AdminUserManagementScreen({super.key});
@@ -16,6 +18,8 @@ class AdminUserManagementScreen extends ConsumerStatefulWidget {
 class _AdminUserManagementScreenState
     extends ConsumerState<AdminUserManagementScreen> {
   final _searchController = TextEditingController();
+  final ScrollController _horizontalScrollController = ScrollController();
+  final ScrollController _verticalScrollController = ScrollController();
 
   @override
   void initState() {
@@ -27,6 +31,8 @@ class _AdminUserManagementScreenState
   @override
   void dispose() {
     _searchController.dispose();
+    _horizontalScrollController.dispose();
+    _verticalScrollController.dispose();
     super.dispose();
   }
 
@@ -35,8 +41,10 @@ class _AdminUserManagementScreenState
     final state = ref.watch(adminUsersNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Management'),
+      appBar: AdminAppBar(
+        title: 'User Management',
+        subtitle: 'Search and manage user accounts',
+        showLogo: true,
         actions: [
           IconButton(
             onPressed: state.isLoading
@@ -46,6 +54,7 @@ class _AdminUserManagementScreenState
                           query: _searchController.text,
                         ),
             icon: const Icon(Icons.refresh),
+            color: AppColors.textPrimary,
           )
         ],
       ),
@@ -128,27 +137,38 @@ class _AdminUserManagementScreenState
         },
       );
     } else {
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+      return Scrollbar(
+        controller: _horizontalScrollController,
+        thumbVisibility: true,
         child: SingleChildScrollView(
-          child: DataTable(
-            headingRowColor:
-                MaterialStateProperty.all(AppColors.secondaryBackground),
-            headingTextStyle: const TextStyle(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
+          controller: _horizontalScrollController,
+          scrollDirection: Axis.horizontal,
+          child: Scrollbar(
+            controller: _verticalScrollController,
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              controller: _verticalScrollController,
+              child: DataTable(
+                headingRowColor:
+                    MaterialStateProperty.all(AppColors.secondaryBackground),
+                headingTextStyle: AppTextStyles.label.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+                dataTextStyle:
+                    AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+                columns: const [
+                  DataColumn(label: Text('ID')),
+                  DataColumn(label: Text('Mobile')),
+                  DataColumn(label: Text('Name')),
+                  DataColumn(label: Text('Supplier')),
+                  DataColumn(label: Text('Trucker')),
+                  DataColumn(label: Text('Supplier KYC')),
+                  DataColumn(label: Text('Trucker KYC')),
+                ],
+                rows: users.map((u) => _buildDataRow(context, u)).toList(),
+              ),
             ),
-            dataTextStyle: const TextStyle(color: AppColors.textPrimary),
-            columns: const [
-              DataColumn(label: Text('ID')),
-              DataColumn(label: Text('Mobile')),
-              DataColumn(label: Text('Name')),
-              DataColumn(label: Text('Supplier')),
-              DataColumn(label: Text('Trucker')),
-              DataColumn(label: Text('Supplier KYC')),
-              DataColumn(label: Text('Trucker KYC')),
-            ],
-            rows: users.map((u) => _buildDataRow(context, u)).toList(),
           ),
         ),
       );

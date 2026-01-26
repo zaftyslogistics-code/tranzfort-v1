@@ -49,22 +49,22 @@ jobs:
       run: flutter analyze
     
     - name: Build Android APK
-      run: flutter build apk --release --shrink
+      run: flutter build apk --release --shrink --flavor user -t lib/main_user.dart
     
     - name: Upload Android APK
       uses: actions/upload-artifact@v4
       with:
         name: android-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: build/app/outputs/flutter-apk/app-user-release.apk
     
     - name: Build Android App Bundle
-      run: flutter build appbundle --release --shrink
+      run: flutter build appbundle --release --shrink --flavor user -t lib/main_user.dart
     
     - name: Upload Android App Bundle
       uses: actions/upload-artifact@v4
       with:
         name: android-aab
-        path: build/app/outputs/bundle/release/app-release.aab
+        path: build/app/outputs/bundle/userRelease/app-user-release.aab
 
   security:
     runs-on: ubuntu-latest

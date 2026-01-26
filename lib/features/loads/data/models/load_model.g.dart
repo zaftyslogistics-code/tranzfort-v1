@@ -10,6 +10,8 @@ _$LoadModelImpl _$$LoadModelImplFromJson(Map<String, dynamic> json) =>
     _$LoadModelImpl(
       id: json['id'] as String,
       supplierId: json['supplier_id'] as String,
+      isSuperLoad: json['is_super_load'] as bool? ?? false,
+      postedByAdminId: json['posted_by_admin_id'] as String?,
       fromLocation: json['from_location'] as String,
       fromCity: json['from_city'] as String,
       fromState: json['from_state'] as String?,
@@ -25,6 +27,10 @@ _$LoadModelImpl _$$LoadModelImplFromJson(Map<String, dynamic> json) =>
       weight: (json['weight'] as num?)?.toDouble(),
       price: (json['price'] as num?)?.toDouble(),
       priceType: json['price_type'] as String? ?? 'negotiable',
+      ratePerTon: (json['rate_per_ton'] as num?)?.toDouble(),
+      advanceRequired: json['advance_required'] as bool? ?? true,
+      advancePercent: (json['advance_percent'] as num?)?.toInt() ?? 70,
+      chatCount: (json['chat_count'] as num?)?.toInt() ?? 0,
       paymentTerms: json['payment_terms'] as String?,
       loadingDate: json['loading_date'] == null
           ? null
@@ -43,6 +49,8 @@ Map<String, dynamic> _$$LoadModelImplToJson(_$LoadModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'supplier_id': instance.supplierId,
+      'is_super_load': instance.isSuperLoad,
+      'posted_by_admin_id': instance.postedByAdminId,
       'from_location': instance.fromLocation,
       'from_city': instance.fromCity,
       'from_state': instance.fromState,
@@ -58,6 +66,10 @@ Map<String, dynamic> _$$LoadModelImplToJson(_$LoadModelImpl instance) =>
       'weight': instance.weight,
       'price': instance.price,
       'price_type': instance.priceType,
+      'rate_per_ton': instance.ratePerTon,
+      'advance_required': instance.advanceRequired,
+      'advance_percent': instance.advancePercent,
+      'chat_count': instance.chatCount,
       'payment_terms': instance.paymentTerms,
       'loading_date': instance.loadingDate?.toIso8601String(),
       'notes': instance.notes,

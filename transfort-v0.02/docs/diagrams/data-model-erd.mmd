@@ -1,0 +1,12 @@
+%% Data Model ERD (High-level)
+flowchart TB
+  users[users/profiles]
+  loads[loads]
+  chats[chats]
+  messages[messages]
+  verif[verification_requests]
+
+  users --> loads
+  users --> chats
+  chats --> messages
+  users --> verif

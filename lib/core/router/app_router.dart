@@ -2,18 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
-import '../../features/admin/presentation/screens/admin_verification_screen.dart';
-import '../../features/admin/presentation/screens/admin_load_monitoring_screen.dart';
-import '../../features/admin/presentation/screens/admin_config_screen.dart';
-import '../../features/admin/presentation/screens/admin_user_management_screen.dart';
-import '../../features/admin/presentation/screens/admin_reports_screen.dart';
-import '../../features/admin/presentation/screens/admin_analytics_screen.dart';
-import '../../features/admin/presentation/screens/manage_admins_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../features/auth/presentation/screens/admin_account_not_allowed_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
-import '../../features/auth/presentation/screens/admin_email_password_login_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/auth/presentation/screens/intent_selection_screen.dart';
 import '../theme/app_colors.dart';
@@ -22,8 +15,11 @@ import '../../features/loads/presentation/screens/supplier_dashboard_screen.dart
 import '../../features/loads/presentation/screens/my_loads_screen.dart';
 import '../../features/fleet/presentation/screens/fleet_management_screen.dart';
 import '../../features/fleet/presentation/screens/add_truck_screen.dart';
+import '../../features/fleet/presentation/providers/fleet_provider.dart';
+import '../../features/fleet/domain/entities/truck.dart';
 import '../../features/loads/presentation/screens/post_load_step1_screen.dart';
 import '../../features/loads/presentation/screens/post_load_step2_screen.dart';
+import '../../features/loads/presentation/screens/post_load_screen.dart';
 import '../../features/loads/presentation/screens/trucker_feed_screen.dart';
 import '../../features/loads/presentation/screens/load_detail_supplier_screen.dart';
 import '../../features/loads/presentation/screens/load_detail_trucker_screen.dart';
@@ -35,17 +31,17 @@ import '../../features/saved_searches/presentation/screens/saved_searches_screen
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/settings_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/profile/presentation/screens/supplier_profile_screen.dart';
 import '../../features/ratings/presentation/screens/ratings_screen.dart';
+import '../../features/trips/presentation/screens/my_trips_screen.dart';
 import '../../shared/widgets/glassmorphic_button.dart';
 import '../../shared/widgets/glassmorphic_card.dart';
 import '../../shared/widgets/gradient_text.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authNotifier = ref.read(authNotifierProvider.notifier);
-
   return GoRouter(
     initialLocation: '/splash',
-    refreshListenable: GoRouterRefreshStream(authNotifier.stream),
+    refreshListenable: GoRouterRefreshNotifier(ref),
     redirect: (context, state) {
       final authState = ref.read(authNotifierProvider);
       final isAuthenticated = authState.isAuthenticated;
@@ -63,30 +59,19 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isOnLogin = state.matchedLocation == '/login';
       final isOnSignup = state.matchedLocation == '/signup';
       final isOnIntent = state.matchedLocation == '/intent-selection';
-      final isOnAdminLogin = state.matchedLocation == '/admin-login';
-
-      final isOnAdmin = state.matchedLocation.startsWith('/admin');
+      final isOnAdminAccountNotAllowed =
+          state.matchedLocation == '/admin-account-not-allowed';
 
       if (!isAuthenticated) {
-        return (isOnLogin || isOnSignup || isOnAdminLogin) ? null : '/login';
+        return (isOnLogin || isOnSignup) ? null : '/login';
       }
 
-      // Admin sessions always go to admin dashboard (even if user profile is missing)
+      // User app must not allow admin sessions.
       if (isAuthenticated && authState.admin != null) {
-        if (!isOnAdmin) {
-          return '/admin/dashboard';
-        }
-        return null;
+        return isOnAdminAccountNotAllowed ? null : '/admin-account-not-allowed';
       }
 
       if (isAuthenticated && user != null) {
-        // Authenticated but NOT an admin: block /admin routes
-        if (isOnAdmin) {
-          if (user.isSupplierEnabled) return '/supplier-dashboard';
-          if (user.isTruckerEnabled) return '/trucker-feed';
-          return '/intent-selection';
-        }
-
         final needsIntentSelection =
             !user.isSupplierEnabled && !user.isTruckerEnabled;
 
@@ -130,12 +115,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const SignupScreen(),
       ),
       GoRoute(
-        path: '/admin-login',
-        builder: (context, state) => const AdminEmailPasswordLoginScreen(),
-      ),
-      GoRoute(
         path: '/intent-selection',
         builder: (context, state) => const IntentSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/admin-account-not-allowed',
+        builder: (context, state) => const AdminAccountNotAllowedScreen(),
       ),
       GoRoute(
         path: '/home',
@@ -165,14 +150,54 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/edit-truck/:truckId',
         name: 'edit-truck',
         builder: (context, state) {
-          // TODO: Fetch truck data and pass to AddTruckScreen
-          return const AddTruckScreen();
+          final truckId = state.pathParameters['truckId'];
+          return Consumer(
+            builder: (context, ref, _) {
+              final fleetState = ref.watch(fleetNotifierProvider);
+
+              Truck? truck;
+              if (truckId != null) {
+                for (final t in fleetState.trucks) {
+                  if (t.id == truckId) {
+                    truck = t;
+                    break;
+                  }
+                }
+              }
+
+              if (truck == null && !fleetState.isLoading) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ref.read(fleetNotifierProvider.notifier).fetchTrucks();
+                });
+              }
+
+              if (truckId != null && truck == null) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              return AddTruckScreen(truck: truck);
+            },
+          );
         },
       ),
       GoRoute(
         path: '/trucker-feed',
         name: 'trucker-feed',
         builder: (context, state) => const TruckerFeedScreen(),
+      ),
+      GoRoute(
+        path: '/my-trips',
+        name: 'my-trips',
+        builder: (context, state) => const MyTripsScreen(),
+      ),
+      GoRoute(
+        path: '/post-load',
+        name: 'post-load',
+        builder: (context, state) => PostLoadScreen(
+          existingLoad: state.extra as dynamic,
+        ),
       ),
       GoRoute(
         path: '/post-load-step1',
@@ -229,44 +254,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const RatingsScreen(),
       ),
       GoRoute(
-        path: '/admin/dashboard',
-        builder: (context, state) => const AdminDashboardScreen(),
-      ),
-      GoRoute(
-        path: '/admin/verifications',
-        builder: (context, state) => const AdminVerificationScreen(),
-      ),
-      GoRoute(
-        path: '/admin/loads',
-        builder: (context, state) => const AdminLoadMonitoringScreen(),
-      ),
-      GoRoute(
-        path: '/admin/config',
-        builder: (context, state) => const AdminConfigScreen(),
-      ),
-      GoRoute(
-        path: '/admin/users',
-        builder: (context, state) => const AdminUserManagementScreen(),
-      ),
-      GoRoute(
-        path: '/admin/reports',
-        builder: (context, state) => const AdminReportsScreen(),
-      ),
-      GoRoute(
-        path: '/admin/analytics',
-        builder: (context, state) => const AdminAnalyticsScreen(),
-      ),
-      GoRoute(
-        path: '/admin/manage-admins',
-        builder: (context, state) => const ManageAdminsScreen(),
-      ),
-      GoRoute(
         path: '/verification',
         builder: (context, state) => const VerificationCenterScreen(),
       ),
       GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/supplier-profile/:supplierId',
+        name: 'supplier-profile',
+        builder: (context, state) {
+          final supplierId = state.pathParameters['supplierId']!;
+          return SupplierProfileScreen(supplierId: supplierId);
+        },
       ),
       GoRoute(
         path: '/privacy',
@@ -309,68 +310,28 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-class SplashScreen extends ConsumerStatefulWidget {
-  const SplashScreen({super.key});
+class GoRouterRefreshNotifier extends ChangeNotifier {
+  GoRouterRefreshNotifier(this._ref) {
+    _ref.listen<AuthState>(
+      authNotifierProvider,
+      (previous, next) {
+        notifyListeners();
+      },
+    );
 
-  @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends ConsumerState<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      _checkAuth();
-    });
-  }
-
-  Future<void> _checkAuth() async {
-    await ref.read(authNotifierProvider.notifier).checkAuthStatus();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.local_shipping,
-              size: 100,
-              color: Color(0xFF3B82F6),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Transfort',
-              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    color: const Color(0xFF3B82F6),
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 48),
-            const CircularProgressIndicator(),
-          ],
-        ),
-      ),
+    _authSubscription = sb.Supabase.instance.client.auth.onAuthStateChange.listen(
+      (_) {
+        notifyListeners();
+      },
     );
   }
-}
 
-class GoRouterRefreshStream extends ChangeNotifier {
-  GoRouterRefreshStream(Stream<dynamic> stream) {
-    _subscription = stream.listen((_) {
-      notifyListeners();
-    });
-  }
-
-  late final StreamSubscription<dynamic> _subscription;
+  final Ref _ref;
+  late final StreamSubscription<dynamic> _authSubscription;
 
   @override
   void dispose() {
-    _subscription.cancel();
+    _authSubscription.cancel();
     super.dispose();
   }
 }

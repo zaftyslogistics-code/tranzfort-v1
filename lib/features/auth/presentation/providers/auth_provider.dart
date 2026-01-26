@@ -93,7 +93,7 @@ class AuthState {
   });
 
   AuthState copyWith({
-    domain.User? user,
+    Object? user = _unset,
     Object? admin = _unset,
     bool? isLoading,
     String? error,
@@ -101,7 +101,7 @@ class AuthState {
     bool? hasCheckedAuth,
   }) {
     return AuthState(
-      user: user ?? this.user,
+      user: identical(user, _unset) ? this.user : user as domain.User?,
       admin: identical(admin, _unset) ? this.admin : admin as domain.Admin?,
       isLoading: isLoading ?? this.isLoading,
       error: error,
@@ -122,6 +122,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final SupabaseClient supabaseClient;
 
   Timer? _sessionTimer;
+  Future<void>? _authCheckInFlight;
+  static const Duration _authTimeout = Duration(seconds: 8);
 
   AuthNotifier({
     required this.signUpWithEmailPasswordUseCase,
@@ -134,6 +136,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required this.supabaseClient,
   }) : super(AuthState()) {
     _startSessionTimer(); // Start initial timer (will be cancelled if not authenticated)
+    // Automatically check auth status on initialization
+    checkAuthStatus();
   }
 
   void _startSessionTimer() {
@@ -150,63 +154,128 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> checkAuthStatus({bool force = false}) async {
-    if (!force && state.hasCheckedAuth) return;
-    if (state.isLoading) return;
-    state = state.copyWith(isLoading: true, error: null, admin: null);
+    Logger.info('🔍 AuthNotifier: checkAuthStatus called - force=$force, hasCheckedAuth=${state.hasCheckedAuth}, isLoading=${state.isLoading}');
+    
+    if (!force && state.hasCheckedAuth) {
+      Logger.info('🔍 AuthNotifier: Already checked auth, skipping');
+      return;
+    }
 
-    final result = await getCurrentUserUseCase();
+    final inFlight = _authCheckInFlight;
+    if (inFlight != null) {
+      Logger.info('🔍 AuthNotifier: Auth check already in-flight, awaiting');
+      await inFlight;
+      return;
+    }
 
-    await result.fold(
-      (failure) async {
-        _cancelSessionTimer(); // No active session
-        state = state.copyWith(
-          isLoading: false,
-          isAuthenticated: false,
-          user: null,
-          admin: null,
-          error: failure.message,
-          hasCheckedAuth: true,
-        );
-      },
-      (user) async {
-        if (user != null) {
-          AnalyticsService().setUserId(user.id);
-          // If user exists, check for admin profile
-          final adminResult = await getAdminProfileUseCase(user.id);
-          adminResult.fold(
-            (_) {
-              _startSessionTimer(); // Start session timer for regular user
-              state = state.copyWith(
-                user: user,
-                admin: null,
-                isLoading: false,
-                isAuthenticated: true,
-                hasCheckedAuth: true,
-              );
-            },
-            (admin) {
-              _startSessionTimer(); // Start session timer for admin
-              state = state.copyWith(
-                user: user,
-                admin: admin,
-                isLoading: false,
-                isAuthenticated: true,
-                hasCheckedAuth: true,
-              );
-            },
-          );
-        } else {
-          _cancelSessionTimer(); // No user found
+    _authCheckInFlight = _checkAuthStatusInternal(force: force).whenComplete(() {
+      _authCheckInFlight = null;
+    });
+
+    await _authCheckInFlight;
+  }
+
+  Future<void> _checkAuthStatusInternal({required bool force}) async {
+    
+    Logger.info('🔍 AuthNotifier: Starting auth check...');
+    state = state.copyWith(
+      isLoading: true,
+      error: null,
+      user: null,
+      admin: null,
+    );
+
+    try {
+      Logger.info('🔍 AuthNotifier: Calling getCurrentUserUseCase...');
+      final result = await getCurrentUserUseCase().timeout(_authTimeout);
+      Logger.info('🔍 AuthNotifier: getCurrentUserUseCase completed');
+
+      await result.fold(
+        (failure) async {
+          Logger.error('🔍 AuthNotifier: getCurrentUser failed - ${failure.message}');
+          _cancelSessionTimer(); // No active session
           state = state.copyWith(
             isLoading: false,
             isAuthenticated: false,
             user: null,
             admin: null,
+            error: failure.message,
             hasCheckedAuth: true,
           );
-        }
-      },
-    );
+        },
+        (user) async {
+          Logger.info('🔍 AuthNotifier: Got user - ${user != null ? user.id : "null"}');
+          if (user != null) {
+            AnalyticsService().setUserId(user.id);
+
+            // If user exists, check for admin profile
+            Logger.info('🔍 AuthNotifier: Checking admin profile...');
+            final adminResult =
+                await getAdminProfileUseCase(user.id).timeout(_authTimeout);
+            Logger.info('🔍 AuthNotifier: Admin profile check completed');
+            
+            adminResult.fold(
+              (failure) {
+                Logger.warning('🔍 AuthNotifier: Admin profile failed - ${failure.message}');
+                _startSessionTimer(); // Start session timer for regular user
+                state = state.copyWith(
+                  user: user,
+                  admin: null,
+                  isLoading: false,
+                  isAuthenticated: true,
+                  hasCheckedAuth: true,
+                );
+              },
+              (admin) {
+                Logger.info('🔍 AuthNotifier: Admin profile found - ${admin?.role}');
+                _startSessionTimer(); // Start session timer for admin
+                state = state.copyWith(
+                  user: user,
+                  admin: admin,
+                  isLoading: false,
+                  isAuthenticated: true,
+                  hasCheckedAuth: true,
+                );
+              },
+            );
+          } else {
+            Logger.info('🔍 AuthNotifier: No user found');
+            _cancelSessionTimer(); // No user found
+            state = state.copyWith(
+              isLoading: false,
+              isAuthenticated: false,
+              user: null,
+              admin: null,
+              hasCheckedAuth: true,
+            );
+          }
+        },
+      );
+    } on TimeoutException catch (e, st) {
+      Logger.error('🔍 AuthNotifier: Auth check timed out', error: e, stackTrace: st);
+      _cancelSessionTimer();
+      state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: false,
+        user: null,
+        admin: null,
+        error: 'Auth check timed out',
+        hasCheckedAuth: true,
+      );
+    } catch (e, st) {
+      Logger.error('🔍 AuthNotifier: Auth check failed unexpectedly', error: e, stackTrace: st);
+      _cancelSessionTimer();
+      state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: false,
+        user: null,
+        admin: null,
+        error: e.toString(),
+        hasCheckedAuth: true,
+      );
+    }
+    
+    Logger.info('🔍 AuthNotifier: Auth check completed - isAuthenticated=${state.isAuthenticated}, hasCheckedAuth=${state.hasCheckedAuth}');
   }
 
   Future<bool> signUpWithEmailPassword(String email, String password) async {

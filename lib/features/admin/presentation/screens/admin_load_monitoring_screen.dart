@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/formatters.dart';
 import '../providers/admin_monitoring_provider.dart';
 
@@ -15,6 +16,16 @@ class AdminLoadMonitoringScreen extends ConsumerStatefulWidget {
 
 class _AdminLoadMonitoringScreenState
     extends ConsumerState<AdminLoadMonitoringScreen> {
+  final ScrollController _horizontalScrollController = ScrollController();
+  final ScrollController _verticalScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _horizontalScrollController.dispose();
+    _verticalScrollController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,38 +65,54 @@ class _AdminLoadMonitoringScreenState
     } else {
       return Padding(
         padding: const EdgeInsets.all(AppDimensions.md),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
+        child: Scrollbar(
+          controller: _horizontalScrollController,
+          thumbVisibility: true,
           child: SingleChildScrollView(
-            child: DataTable(
-              headingRowColor:
-                  MaterialStateProperty.all(AppColors.secondaryBackground),
-              columns: const [
-                DataColumn(label: Text('ID')),
-                DataColumn(label: Text('From')),
-                DataColumn(label: Text('To')),
-                DataColumn(label: Text('Type')),
-                DataColumn(label: Text('Status')),
-                DataColumn(label: Text('Posted')),
-                DataColumn(label: Text('Actions')),
-              ],
-              rows: loads.map((load) {
-                return DataRow(cells: [
-                  DataCell(Text(load.id.substring(0, 8))),
-                  DataCell(Text(load.fromCity)),
-                  DataCell(Text(load.toCity)),
-                  DataCell(Text(load.loadType)),
-                  DataCell(_StatusBadge(status: load.status)),
-                  DataCell(Text(Formatters.formatDate(load.createdAt))),
-                  DataCell(
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline,
-                          color: AppColors.danger),
-                      onPressed: () => _confirmDelete(context, load.id),
-                    ),
+            controller: _horizontalScrollController,
+            scrollDirection: Axis.horizontal,
+            child: Scrollbar(
+              controller: _verticalScrollController,
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                controller: _verticalScrollController,
+                child: DataTable(
+                  headingRowColor:
+                      MaterialStateProperty.all(AppColors.secondaryBackground),
+                  headingTextStyle: AppTextStyles.label.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w600,
                   ),
-                ]);
-              }).toList(),
+                  dataTextStyle: AppTextStyles.body
+                      .copyWith(color: AppColors.textPrimary),
+                  columns: const [
+                    DataColumn(label: Text('ID')),
+                    DataColumn(label: Text('From')),
+                    DataColumn(label: Text('To')),
+                    DataColumn(label: Text('Type')),
+                    DataColumn(label: Text('Status')),
+                    DataColumn(label: Text('Posted')),
+                    DataColumn(label: Text('Actions')),
+                  ],
+                  rows: loads.map((load) {
+                    return DataRow(cells: [
+                      DataCell(Text(load.id.substring(0, 8))),
+                      DataCell(Text(load.fromCity)),
+                      DataCell(Text(load.toCity)),
+                      DataCell(Text(load.loadType)),
+                      DataCell(_StatusBadge(status: load.status)),
+                      DataCell(Text(Formatters.formatDate(load.createdAt))),
+                      DataCell(
+                        IconButton(
+                          icon: const Icon(Icons.delete_outline,
+                              color: AppColors.danger),
+                          onPressed: () => _confirmDelete(context, load.id),
+                        ),
+                      ),
+                    ]);
+                  }).toList(),
+                ),
+              ),
             ),
           ),
         ),

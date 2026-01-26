@@ -31,6 +31,23 @@ android {
         multiDexEnabled = true
     }
 
+    flavorDimensions += "app"
+
+    productFlavors {
+        create("user") {
+            dimension = "app"
+            resValue("string", "app_name", "Transfort")
+            manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
+        }
+
+        create("admin") {
+            dimension = "app"
+            applicationIdSuffix = ".admin"
+            resValue("string", "app_name", "Transfort Admin")
+            manifestPlaceholders["admobAppId"] = ""
+        }
+    }
+
     val keystoreProperties = Properties()
     val keystorePropertiesFile = rootProject.file("key.properties")
     val hasReleaseKeystore = keystorePropertiesFile.exists()
@@ -59,8 +76,8 @@ android {
             }
             
             // These lines optimize the app size (keep them if they are there)
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

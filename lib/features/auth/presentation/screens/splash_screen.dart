@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
-import '../../../../shared/widgets/cyan_glow_container.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../providers/auth_provider.dart';
 

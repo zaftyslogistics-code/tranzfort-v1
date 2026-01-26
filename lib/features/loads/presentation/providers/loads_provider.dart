@@ -15,6 +15,9 @@ import '../../domain/usecases/delete_load.dart';
 import '../../domain/usecases/get_truck_types.dart';
 import '../../domain/usecases/get_material_types.dart';
 import '../../../../core/services/offline_cache_service.dart';
+import '../../../../core/constants/truck_categories.dart';
+import '../../../../core/constants/material_types.dart';
+import '../../../../shared/models/truck_type.dart' as new_truck;
 
 import '../../../../core/utils/logger.dart';
 
@@ -162,6 +165,22 @@ class LoadsNotifier extends StateNotifier<LoadsState> {
     );
   }
 
+  Future<Load?> createLoadReturningLoad(Map<String, dynamic> loadData) async {
+    state = state.copyWith(isLoading: true, error: null);
+    final result = await createLoadUseCase(loadData);
+    return result.fold(
+      (failure) {
+        state = state.copyWith(isLoading: false, error: failure.message);
+        return null;
+      },
+      (load) {
+        final updatedLoads = [load, ...state.loads];
+        state = state.copyWith(loads: updatedLoads, isLoading: false);
+        return load;
+      },
+    );
+  }
+
   Future<bool> updateLoad(String id, Map<String, dynamic> updates) async {
     state = state.copyWith(isLoading: true, error: null);
     final result = await updateLoadUseCase(id, updates);
@@ -180,6 +199,31 @@ class LoadsNotifier extends StateNotifier<LoadsState> {
           isLoading: false,
         );
         return true;
+      },
+    );
+  }
+
+  Future<Load?> updateLoadReturningLoad(
+    String id,
+    Map<String, dynamic> updates,
+  ) async {
+    state = state.copyWith(isLoading: true, error: null);
+    final result = await updateLoadUseCase(id, updates);
+    return result.fold(
+      (failure) {
+        state = state.copyWith(isLoading: false, error: failure.message);
+        return null;
+      },
+      (updatedLoad) {
+        final updatedLoads = state.loads.map((load) {
+          return load.id == id ? updatedLoad : load;
+        }).toList();
+        state = state.copyWith(
+          loads: updatedLoads,
+          selectedLoad: updatedLoad,
+          isLoading: false,
+        );
+        return updatedLoad;
       },
     );
   }
@@ -251,6 +295,51 @@ final materialTypesProvider = FutureProvider<List<MaterialType>>((ref) async {
     return <MaterialType>[];
   }
 });
+
+// ============================================
+// NEW MVP 2.0 PROVIDERS - Using Constants
+// ============================================
+
+/// Provider for truck categories (replaces old truckTypesProvider for UI)
+final truckCategoriesProvider = Provider<List<TruckCategoryData>>((ref) {
+  return kTruckCategories;
+});
+
+/// Provider for primary truck categories (shown in chip bar)
+final primaryTruckCategoriesProvider = Provider<List<TruckCategoryData>>((ref) {
+  return kPrimaryTruckCategories
+      .map((id) => getTruckCategoryById(id))
+      .whereType<TruckCategoryData>()
+      .toList();
+});
+
+/// Provider for secondary truck categories (shown in "More" sheet)
+final secondaryTruckCategoriesProvider = Provider<List<TruckCategoryData>>((ref) {
+  return kSecondaryTruckCategories
+      .map((id) => getTruckCategoryById(id))
+      .whereType<TruckCategoryData>()
+      .toList();
+});
+
+/// Provider for material types (uses constants - fixes loading error)
+final commonMaterialTypesProvider = Provider<List<MaterialTypeData>>((ref) {
+  return kCommonMaterialTypes;
+});
+
+/// State provider for truck type selection in filters
+final truckTypeSelectionProvider = StateProvider<new_truck.TruckTypeSelection>((ref) {
+  return const new_truck.TruckTypeSelection();
+});
+
+/// State provider for selected material type in post load form
+final selectedMaterialTypeProvider = StateProvider<String?>((ref) => null);
+
+/// State provider for custom material name (when "Other" is selected)
+final customMaterialNameProvider = StateProvider<String?>((ref) => null);
+
+// ============================================
+// END MVP 2.0 PROVIDERS
+// ============================================
 
 // Offline loads provider - shows cached data when offline
 final offlineLoadsProvider = FutureProvider<List<Load>>((ref) async {

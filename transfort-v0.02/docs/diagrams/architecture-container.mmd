@@ -1,0 +1,20 @@
+%% Transfort v0.02 - Container Diagram
+flowchart TB
+  subgraph Mobile[Flutter]
+    UserApp[User App]
+    AdminApp[Admin App]
+  end
+
+  subgraph Backend[Supabase]
+    Auth[Auth]
+    DB[(Postgres + RLS)]
+    Functions[Edge Functions / RPC]
+    Storage[Storage]
+  end
+
+  UserApp --> Auth
+  UserApp --> DB
+  AdminApp --> Auth
+  AdminApp --> Functions
+  Functions --> DB
+  DB --> Storage

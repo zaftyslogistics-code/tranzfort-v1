@@ -251,30 +251,76 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               const SizedBox(height: AppDimensions.lg),
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GlassmorphicButton(
-                  variant: GlassmorphicButtonVariant.primary,
-                  onPressed: () => context.push('/verification'),
-                  child: const Text('Verification Center'),
+              // Quick Actions
+              GlassmorphicCard(
+                backgroundColor: AppColors.glassSurfaceStrong,
+                padding: const EdgeInsets.all(AppDimensions.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Quick Actions',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                    ),
+                    const SizedBox(height: AppDimensions.md),
+                    _QuickActionTile(
+                      icon: Icons.verified_user,
+                      title: 'Verification Center',
+                      subtitle: 'Manage your documents',
+                      onTap: () => context.push('/verification'),
+                    ),
+                    _QuickActionTile(
+                      icon: Icons.star_outline,
+                      title: 'Ratings & Reviews',
+                      subtitle: 'See your ratings',
+                      onTap: () => context.push('/ratings'),
+                    ),
+                    if (user?.isTruckerEnabled == true)
+                      _QuickActionTile(
+                        icon: Icons.local_shipping,
+                        title: 'Fleet Management',
+                        subtitle: 'Manage your trucks',
+                        onTap: () => context.push('/fleet-management'),
+                      ),
+                    _QuickActionTile(
+                      icon: Icons.settings,
+                      title: 'Settings',
+                      subtitle: 'App preferences',
+                      onTap: () => context.push('/settings'),
+                    ),
+                    _QuickActionTile(
+                      icon: Icons.help_outline,
+                      title: 'Help & Support',
+                      subtitle: 'Get assistance',
+                      onTap: () => context.push('/help'),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: AppDimensions.sm),
+              const SizedBox(height: AppDimensions.lg),
+
+              // Logout button
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GlassmorphicButton(
-                  showGlow: false,
-                  onPressed: () => context.push('/ratings'),
-                  child: const Text('Ratings'),
-                ),
-              ),
-              const SizedBox(height: AppDimensions.sm),
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GlassmorphicButton(
-                  showGlow: false,
-                  onPressed: () => context.go('/home'),
-                  child: const Text('Back to Home'),
+                  variant: GlassmorphicButtonVariant.ghost,
+                  onPressed: () async {
+                    await ref.read(authNotifierProvider.notifier).logout();
+                    if (context.mounted) {
+                      context.go('/login');
+                    }
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.logout, size: 18),
+                      SizedBox(width: 8),
+                      Text('Sign Out'),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -373,6 +419,54 @@ class _StatusPill extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _QuickActionTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _QuickActionTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(icon, color: AppColors.primary, size: 20),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          fontSize: 12,
+          color: AppColors.textSecondary,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.chevron_right,
+        color: AppColors.textSecondary,
+      ),
+      onTap: onTap,
     );
   }
 }

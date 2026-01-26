@@ -1,0 +1,29 @@
+%% Admin Chat Systems (v0.02)
+flowchart TB
+  subgraph UserApp[User App]
+    USupport[Support Center]
+    UTickets[My Support Tickets]
+    UTicket[Support Thread]
+    UChat[Marketplace Chat]
+  end
+
+  subgraph AdminApp[Admin App]
+    ASupportInbox[Support Inbox]
+    ASupportThread[Support Ticket Thread]
+    ASuperLoads[Super Loads]
+    ASuperLoadDetail[Super Load Detail]
+    ASuperChats[Super Load Chats]
+    ASuperChat[Super Load Negotiation Chat]
+  end
+
+  USupport --> UTickets --> UTicket
+  ASupportInbox --> ASupportThread
+
+  ASuperLoads --> ASuperLoadDetail --> ASuperChats --> ASuperChat
+  UChat --> ASuperChat
+
+  note1[Support Chat is isolated from Marketplace Chat]
+  note2[Super Load Chat is scoped to a load + super_admin only]
+
+  note1 --- ASupportInbox
+  note2 --- ASuperChat

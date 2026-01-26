@@ -100,13 +100,13 @@ jobs:
         run: flutter pub get
       
       - name: Build APK
-        run: flutter build apk --release --dart-define=ENV_FILE=assets/env/production.env
+        run: flutter build apk --release --flavor user -t lib/main_user.dart --dart-define=ENV_FILE=assets/env/production.env
       
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-user-release.apk
 
   security-scan:
     name: Security Scan

@@ -60,6 +60,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
         );
       },
       onAdFailedToLoad: (ad, error) {
+        ad.dispose();
         setState(() {
           _isAdFailed = true;
         });

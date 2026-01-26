@@ -1,0 +1,6 @@
+%% Transfort v0.02 - Context Diagram
+flowchart LR
+  User[User App] -->|Auth/Data| Supabase[(Supabase)]
+  Admin[Admin App] -->|Privileged ops| Supabase
+  Supabase --> Storage[Storage]
+  Supabase --> DB[(Postgres)]

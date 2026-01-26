@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 class Load extends Equatable {
   final String id;
   final String supplierId;
+  final bool isSuperLoad;
+  final String? postedByAdminId;
   final String fromLocation;
   final String fromCity;
   final String? fromState;
@@ -18,6 +20,10 @@ class Load extends Equatable {
   final double? weight;
   final double? price;
   final String priceType;
+  final double? ratePerTon;
+  final bool advanceRequired;
+  final int advancePercent;
+  final int chatCount;
   final String? paymentTerms;
   final DateTime? loadingDate;
   final String? notes;
@@ -32,6 +38,8 @@ class Load extends Equatable {
   const Load({
     required this.id,
     required this.supplierId,
+    required this.isSuperLoad,
+    this.postedByAdminId,
     required this.fromLocation,
     required this.fromCity,
     this.fromState,
@@ -47,6 +55,10 @@ class Load extends Equatable {
     this.weight,
     this.price,
     required this.priceType,
+    this.ratePerTon,
+    this.advanceRequired = true,
+    this.advancePercent = 70,
+    this.chatCount = 0,
     this.paymentTerms,
     this.loadingDate,
     this.notes,
@@ -81,6 +93,8 @@ class Load extends Equatable {
     return Load(
       id: json['id'] as String,
       supplierId: json['supplier_id'] as String,
+      isSuperLoad: json['is_super_load'] as bool? ?? false,
+      postedByAdminId: json['posted_by_admin_id'] as String?,
       fromLocation: json['from_location'] as String,
       fromCity: json['from_city'] as String,
       fromState: json['from_state'] as String?,
@@ -95,7 +109,11 @@ class Load extends Equatable {
       truckTypeRequired: json['truck_type_required'] as String,
       weight: json['weight'] as double?,
       price: json['price'] as double?,
-      priceType: json['price_type'] as String,
+      priceType: json['price_type'] as String? ?? 'negotiable',
+      ratePerTon: asDouble(json['rate_per_ton']),
+      advanceRequired: json['advance_required'] as bool? ?? true,
+      advancePercent: json['advance_percent'] as int? ?? 70,
+      chatCount: json['chat_count'] as int? ?? 0,
       paymentTerms: json['payment_terms'] as String?,
       loadingDate: json['loading_date'] != null
           ? DateTime.parse(json['loading_date'] as String)
@@ -115,6 +133,8 @@ class Load extends Equatable {
     return {
       'id': id,
       'supplier_id': supplierId,
+      'is_super_load': isSuperLoad,
+      'posted_by_admin_id': postedByAdminId,
       'from_location': fromLocation,
       'from_city': fromCity,
       'from_state': fromState,
@@ -130,6 +150,10 @@ class Load extends Equatable {
       'weight': weight,
       'price': price,
       'price_type': priceType,
+      'rate_per_ton': ratePerTon,
+      'advance_required': advanceRequired,
+      'advance_percent': advancePercent,
+      'chat_count': chatCount,
       'payment_terms': paymentTerms,
       'loading_date': loadingDate?.toIso8601String(),
       'notes': notes,
@@ -147,6 +171,8 @@ class Load extends Equatable {
   List<Object?> get props => [
         id,
         supplierId,
+        isSuperLoad,
+        postedByAdminId,
         fromLocation,
         fromCity,
         fromState,
@@ -162,6 +188,10 @@ class Load extends Equatable {
         weight,
         price,
         priceType,
+        ratePerTon,
+        advanceRequired,
+        advancePercent,
+        chatCount,
         paymentTerms,
         loadingDate,
         notes,

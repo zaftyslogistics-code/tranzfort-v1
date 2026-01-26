@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../providers/admin_config_provider.dart';
+import '../../../../shared/widgets/admin/admin_app_bar.dart';
 
 class AdminConfigScreen extends ConsumerStatefulWidget {
   const AdminConfigScreen({super.key});
@@ -26,8 +27,10 @@ class _AdminConfigScreenState extends ConsumerState<AdminConfigScreen> {
     final notifier = ref.read(adminConfigNotifierProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('System Configuration'),
+      appBar: AdminAppBar(
+        title: 'System Configuration',
+        subtitle: 'Manage system settings and features',
+        showLogo: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.xl),

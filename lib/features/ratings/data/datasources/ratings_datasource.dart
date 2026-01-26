@@ -35,14 +35,12 @@ class RatingsDataSource {
 
       final rows = await _supabase
           .from('ratings')
-          .select('rating')
+          .select('rating_value')
           .eq('rated_user_id', userId);
 
       final list = (rows as List)
-          .cast<Map<String, dynamic>>()
-          .map((r) => (r['rating'] as num?)?.toInt())
-          .whereType<int>()
-          .toList(growable: false);
+          .map((r) => (r['rating_value'] as num?)?.toInt() ?? 0)
+          .toList();
 
       final breakdown = <String, int>{
         '1': 0,

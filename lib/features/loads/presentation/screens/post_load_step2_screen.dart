@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/utils/validators.dart';
@@ -15,11 +16,17 @@ import '../widgets/load_form_field.dart';
 class PostLoadStep2Screen extends ConsumerStatefulWidget {
   final Map<String, dynamic> loadData;
   final Load? existingLoad;
+  final String onSuccessRoute;
+  final bool showBottomNavigation;
+  final bool forceSuperLoad;
 
   const PostLoadStep2Screen({
     super.key,
     required this.loadData,
     this.existingLoad,
+    this.onSuccessRoute = '/supplier-dashboard',
+    this.showBottomNavigation = true,
+    this.forceSuperLoad = false,
   });
 
   @override
@@ -81,6 +88,8 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
     final payload = {
       ...widget.loadData,
       'supplierId': user.id,
+      if (widget.forceSuperLoad) 'isSuperLoad': true,
+      if (widget.forceSuperLoad) 'postedByAdminId': user.id,
       'price': double.tryParse(_priceController.text),
       'paymentTerms': _paymentTermsController.text.isEmpty
           ? null
@@ -91,11 +100,41 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
       'contactPreferencesChat': _allowChat,
     };
 
-    final success = _isEdit
-        ? await ref
-            .read(loadsNotifierProvider.notifier)
-            .updateLoad(widget.existingLoad!.id, payload)
-        : await ref.read(loadsNotifierProvider.notifier).createLoad(payload);
+    final loadsNotifier = ref.read(loadsNotifierProvider.notifier);
+
+    bool success;
+    String? auditEntityId;
+
+    if (widget.forceSuperLoad) {
+      if (_isEdit) {
+        final updated = await loadsNotifier.updateLoadReturningLoad(
+          widget.existingLoad!.id,
+          payload,
+        );
+        success = updated != null;
+        auditEntityId = updated?.id;
+        if (success) {
+          await _logSuperLoadAudit(
+            action: 'super_load_updated',
+            entityId: auditEntityId!,
+          );
+        }
+      } else {
+        final created = await loadsNotifier.createLoadReturningLoad(payload);
+        success = created != null;
+        auditEntityId = created?.id;
+        if (success) {
+          await _logSuperLoadAudit(
+            action: 'super_load_created',
+            entityId: auditEntityId!,
+          );
+        }
+      }
+    } else {
+      success = _isEdit
+          ? await loadsNotifier.updateLoad(widget.existingLoad!.id, payload)
+          : await loadsNotifier.createLoad(payload);
+    }
 
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -105,12 +144,31 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
               : 'Load posted successfully'),
         ),
       );
-      context.go('/supplier-dashboard');
+      context.go(widget.onSuccessRoute);
     } else if (mounted) {
       final error = ref.read(loadsNotifierProvider).error;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error ?? 'Failed to post load')),
       );
+    }
+  }
+
+  Future<void> _logSuperLoadAudit({
+    required String action,
+    required String entityId,
+  }) async {
+    try {
+      final adminId = ref.read(authNotifierProvider).user?.id;
+      if (adminId == null) return;
+
+      await Supabase.instance.client.from('audit_logs').insert({
+        'admin_id': adminId,
+        'action': action,
+        'entity_type': 'load',
+        'entity_id': entityId,
+      });
+    } catch (_) {
+      // Best-effort only.
     }
   }
 
@@ -258,7 +316,8 @@ class _PostLoadStep2ScreenState extends ConsumerState<PostLoadStep2Screen> {
           ),
         ],
       ),
-      bottomNavigationBar: const AppBottomNavigation(),
+      bottomNavigationBar:
+          widget.showBottomNavigation ? const AppBottomNavigation() : null,
     );
   }
 }

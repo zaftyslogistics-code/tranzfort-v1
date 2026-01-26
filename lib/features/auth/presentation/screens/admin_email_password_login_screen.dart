@@ -85,7 +85,11 @@ class _AdminEmailPasswordLoginScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Login')),
+      appBar: AppBar(
+        title: const Text('Admin Login'),
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -102,10 +106,20 @@ class _AdminEmailPasswordLoginScreenState
               ),
             ),
           ),
-          ListView(
-            padding: const EdgeInsets.all(AppDimensions.lg),
-            children: [
-              GlassmorphicCard(
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(AppDimensions.lg),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.admin_panel_settings,
+                      size: 80,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(height: AppDimensions.lg),
+                    GlassmorphicCard(
                 padding: const EdgeInsets.all(AppDimensions.lg),
                 showGlow: true,
                 child: Column(
@@ -153,7 +167,10 @@ class _AdminEmailPasswordLoginScreenState
                   ],
                 ),
               ),
-            ],
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),

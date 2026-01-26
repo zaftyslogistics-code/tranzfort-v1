@@ -23,6 +23,10 @@ mixin _$LoadModel {
   String get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'supplier_id')
   String get supplierId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_super_load')
+  bool get isSuperLoad => throw _privateConstructorUsedError;
+  @JsonKey(name: 'posted_by_admin_id')
+  String? get postedByAdminId => throw _privateConstructorUsedError;
   @JsonKey(name: 'from_location')
   String get fromLocation => throw _privateConstructorUsedError;
   @JsonKey(name: 'from_city')
@@ -51,6 +55,14 @@ mixin _$LoadModel {
   double? get price => throw _privateConstructorUsedError;
   @JsonKey(name: 'price_type')
   String get priceType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'rate_per_ton')
+  double? get ratePerTon => throw _privateConstructorUsedError;
+  @JsonKey(name: 'advance_required')
+  bool get advanceRequired => throw _privateConstructorUsedError;
+  @JsonKey(name: 'advance_percent')
+  int get advancePercent => throw _privateConstructorUsedError;
+  @JsonKey(name: 'chat_count')
+  int get chatCount => throw _privateConstructorUsedError;
   @JsonKey(name: 'payment_terms')
   String? get paymentTerms => throw _privateConstructorUsedError;
   @JsonKey(name: 'loading_date')
@@ -88,6 +100,8 @@ abstract class $LoadModelCopyWith<$Res> {
   $Res call(
       {String id,
       @JsonKey(name: 'supplier_id') String supplierId,
+      @JsonKey(name: 'is_super_load') bool isSuperLoad,
+      @JsonKey(name: 'posted_by_admin_id') String? postedByAdminId,
       @JsonKey(name: 'from_location') String fromLocation,
       @JsonKey(name: 'from_city') String fromCity,
       @JsonKey(name: 'from_state') String? fromState,
@@ -103,6 +117,10 @@ abstract class $LoadModelCopyWith<$Res> {
       double? weight,
       double? price,
       @JsonKey(name: 'price_type') String priceType,
+      @JsonKey(name: 'rate_per_ton') double? ratePerTon,
+      @JsonKey(name: 'advance_required') bool advanceRequired,
+      @JsonKey(name: 'advance_percent') int advancePercent,
+      @JsonKey(name: 'chat_count') int chatCount,
       @JsonKey(name: 'payment_terms') String? paymentTerms,
       @JsonKey(name: 'loading_date') DateTime? loadingDate,
       String? notes,
@@ -132,6 +150,8 @@ class _$LoadModelCopyWithImpl<$Res, $Val extends LoadModel>
   $Res call({
     Object? id = null,
     Object? supplierId = null,
+    Object? isSuperLoad = null,
+    Object? postedByAdminId = freezed,
     Object? fromLocation = null,
     Object? fromCity = null,
     Object? fromState = freezed,
@@ -147,6 +167,10 @@ class _$LoadModelCopyWithImpl<$Res, $Val extends LoadModel>
     Object? weight = freezed,
     Object? price = freezed,
     Object? priceType = null,
+    Object? ratePerTon = freezed,
+    Object? advanceRequired = null,
+    Object? advancePercent = null,
+    Object? chatCount = null,
     Object? paymentTerms = freezed,
     Object? loadingDate = freezed,
     Object? notes = freezed,
@@ -167,6 +191,14 @@ class _$LoadModelCopyWithImpl<$Res, $Val extends LoadModel>
           ? _value.supplierId
           : supplierId // ignore: cast_nullable_to_non_nullable
               as String,
+      isSuperLoad: null == isSuperLoad
+          ? _value.isSuperLoad
+          : isSuperLoad // ignore: cast_nullable_to_non_nullable
+              as bool,
+      postedByAdminId: freezed == postedByAdminId
+          ? _value.postedByAdminId
+          : postedByAdminId // ignore: cast_nullable_to_non_nullable
+              as String?,
       fromLocation: null == fromLocation
           ? _value.fromLocation
           : fromLocation // ignore: cast_nullable_to_non_nullable
@@ -227,6 +259,22 @@ class _$LoadModelCopyWithImpl<$Res, $Val extends LoadModel>
           ? _value.priceType
           : priceType // ignore: cast_nullable_to_non_nullable
               as String,
+      ratePerTon: freezed == ratePerTon
+          ? _value.ratePerTon
+          : ratePerTon // ignore: cast_nullable_to_non_nullable
+              as double?,
+      advanceRequired: null == advanceRequired
+          ? _value.advanceRequired
+          : advanceRequired // ignore: cast_nullable_to_non_nullable
+              as bool,
+      advancePercent: null == advancePercent
+          ? _value.advancePercent
+          : advancePercent // ignore: cast_nullable_to_non_nullable
+              as int,
+      chatCount: null == chatCount
+          ? _value.chatCount
+          : chatCount // ignore: cast_nullable_to_non_nullable
+              as int,
       paymentTerms: freezed == paymentTerms
           ? _value.paymentTerms
           : paymentTerms // ignore: cast_nullable_to_non_nullable
@@ -282,6 +330,8 @@ abstract class _$$LoadModelImplCopyWith<$Res>
   $Res call(
       {String id,
       @JsonKey(name: 'supplier_id') String supplierId,
+      @JsonKey(name: 'is_super_load') bool isSuperLoad,
+      @JsonKey(name: 'posted_by_admin_id') String? postedByAdminId,
       @JsonKey(name: 'from_location') String fromLocation,
       @JsonKey(name: 'from_city') String fromCity,
       @JsonKey(name: 'from_state') String? fromState,
@@ -297,6 +347,10 @@ abstract class _$$LoadModelImplCopyWith<$Res>
       double? weight,
       double? price,
       @JsonKey(name: 'price_type') String priceType,
+      @JsonKey(name: 'rate_per_ton') double? ratePerTon,
+      @JsonKey(name: 'advance_required') bool advanceRequired,
+      @JsonKey(name: 'advance_percent') int advancePercent,
+      @JsonKey(name: 'chat_count') int chatCount,
       @JsonKey(name: 'payment_terms') String? paymentTerms,
       @JsonKey(name: 'loading_date') DateTime? loadingDate,
       String? notes,
@@ -324,6 +378,8 @@ class __$$LoadModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? supplierId = null,
+    Object? isSuperLoad = null,
+    Object? postedByAdminId = freezed,
     Object? fromLocation = null,
     Object? fromCity = null,
     Object? fromState = freezed,
@@ -339,6 +395,10 @@ class __$$LoadModelImplCopyWithImpl<$Res>
     Object? weight = freezed,
     Object? price = freezed,
     Object? priceType = null,
+    Object? ratePerTon = freezed,
+    Object? advanceRequired = null,
+    Object? advancePercent = null,
+    Object? chatCount = null,
     Object? paymentTerms = freezed,
     Object? loadingDate = freezed,
     Object? notes = freezed,
@@ -359,6 +419,14 @@ class __$$LoadModelImplCopyWithImpl<$Res>
           ? _value.supplierId
           : supplierId // ignore: cast_nullable_to_non_nullable
               as String,
+      isSuperLoad: null == isSuperLoad
+          ? _value.isSuperLoad
+          : isSuperLoad // ignore: cast_nullable_to_non_nullable
+              as bool,
+      postedByAdminId: freezed == postedByAdminId
+          ? _value.postedByAdminId
+          : postedByAdminId // ignore: cast_nullable_to_non_nullable
+              as String?,
       fromLocation: null == fromLocation
           ? _value.fromLocation
           : fromLocation // ignore: cast_nullable_to_non_nullable
@@ -419,6 +487,22 @@ class __$$LoadModelImplCopyWithImpl<$Res>
           ? _value.priceType
           : priceType // ignore: cast_nullable_to_non_nullable
               as String,
+      ratePerTon: freezed == ratePerTon
+          ? _value.ratePerTon
+          : ratePerTon // ignore: cast_nullable_to_non_nullable
+              as double?,
+      advanceRequired: null == advanceRequired
+          ? _value.advanceRequired
+          : advanceRequired // ignore: cast_nullable_to_non_nullable
+              as bool,
+      advancePercent: null == advancePercent
+          ? _value.advancePercent
+          : advancePercent // ignore: cast_nullable_to_non_nullable
+              as int,
+      chatCount: null == chatCount
+          ? _value.chatCount
+          : chatCount // ignore: cast_nullable_to_non_nullable
+              as int,
       paymentTerms: freezed == paymentTerms
           ? _value.paymentTerms
           : paymentTerms // ignore: cast_nullable_to_non_nullable
@@ -469,6 +553,8 @@ class _$LoadModelImpl implements _LoadModel {
   const _$LoadModelImpl(
       {required this.id,
       @JsonKey(name: 'supplier_id') required this.supplierId,
+      @JsonKey(name: 'is_super_load') this.isSuperLoad = false,
+      @JsonKey(name: 'posted_by_admin_id') this.postedByAdminId,
       @JsonKey(name: 'from_location') required this.fromLocation,
       @JsonKey(name: 'from_city') required this.fromCity,
       @JsonKey(name: 'from_state') this.fromState,
@@ -484,6 +570,10 @@ class _$LoadModelImpl implements _LoadModel {
       this.weight,
       this.price,
       @JsonKey(name: 'price_type') this.priceType = 'negotiable',
+      @JsonKey(name: 'rate_per_ton') this.ratePerTon,
+      @JsonKey(name: 'advance_required') this.advanceRequired = true,
+      @JsonKey(name: 'advance_percent') this.advancePercent = 70,
+      @JsonKey(name: 'chat_count') this.chatCount = 0,
       @JsonKey(name: 'payment_terms') this.paymentTerms,
       @JsonKey(name: 'loading_date') this.loadingDate,
       this.notes,
@@ -505,6 +595,12 @@ class _$LoadModelImpl implements _LoadModel {
   @override
   @JsonKey(name: 'supplier_id')
   final String supplierId;
+  @override
+  @JsonKey(name: 'is_super_load')
+  final bool isSuperLoad;
+  @override
+  @JsonKey(name: 'posted_by_admin_id')
+  final String? postedByAdminId;
   @override
   @JsonKey(name: 'from_location')
   final String fromLocation;
@@ -549,6 +645,18 @@ class _$LoadModelImpl implements _LoadModel {
   @JsonKey(name: 'price_type')
   final String priceType;
   @override
+  @JsonKey(name: 'rate_per_ton')
+  final double? ratePerTon;
+  @override
+  @JsonKey(name: 'advance_required')
+  final bool advanceRequired;
+  @override
+  @JsonKey(name: 'advance_percent')
+  final int advancePercent;
+  @override
+  @JsonKey(name: 'chat_count')
+  final int chatCount;
+  @override
   @JsonKey(name: 'payment_terms')
   final String? paymentTerms;
   @override
@@ -580,7 +688,7 @@ class _$LoadModelImpl implements _LoadModel {
 
   @override
   String toString() {
-    return 'LoadModel(id: $id, supplierId: $supplierId, fromLocation: $fromLocation, fromCity: $fromCity, fromState: $fromState, fromLat: $fromLat, fromLng: $fromLng, toLocation: $toLocation, toCity: $toCity, toState: $toState, toLat: $toLat, toLng: $toLng, loadType: $loadType, truckTypeRequired: $truckTypeRequired, weight: $weight, price: $price, priceType: $priceType, paymentTerms: $paymentTerms, loadingDate: $loadingDate, notes: $notes, contactPreferencesCall: $contactPreferencesCall, contactPreferencesChat: $contactPreferencesChat, status: $status, expiresAt: $expiresAt, viewCount: $viewCount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'LoadModel(id: $id, supplierId: $supplierId, isSuperLoad: $isSuperLoad, postedByAdminId: $postedByAdminId, fromLocation: $fromLocation, fromCity: $fromCity, fromState: $fromState, fromLat: $fromLat, fromLng: $fromLng, toLocation: $toLocation, toCity: $toCity, toState: $toState, toLat: $toLat, toLng: $toLng, loadType: $loadType, truckTypeRequired: $truckTypeRequired, weight: $weight, price: $price, priceType: $priceType, ratePerTon: $ratePerTon, advanceRequired: $advanceRequired, advancePercent: $advancePercent, chatCount: $chatCount, paymentTerms: $paymentTerms, loadingDate: $loadingDate, notes: $notes, contactPreferencesCall: $contactPreferencesCall, contactPreferencesChat: $contactPreferencesChat, status: $status, expiresAt: $expiresAt, viewCount: $viewCount, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -591,6 +699,10 @@ class _$LoadModelImpl implements _LoadModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.supplierId, supplierId) ||
                 other.supplierId == supplierId) &&
+            (identical(other.isSuperLoad, isSuperLoad) ||
+                other.isSuperLoad == isSuperLoad) &&
+            (identical(other.postedByAdminId, postedByAdminId) ||
+                other.postedByAdminId == postedByAdminId) &&
             (identical(other.fromLocation, fromLocation) ||
                 other.fromLocation == fromLocation) &&
             (identical(other.fromCity, fromCity) ||
@@ -613,6 +725,14 @@ class _$LoadModelImpl implements _LoadModel {
             (identical(other.price, price) || other.price == price) &&
             (identical(other.priceType, priceType) ||
                 other.priceType == priceType) &&
+            (identical(other.ratePerTon, ratePerTon) ||
+                other.ratePerTon == ratePerTon) &&
+            (identical(other.advanceRequired, advanceRequired) ||
+                other.advanceRequired == advanceRequired) &&
+            (identical(other.advancePercent, advancePercent) ||
+                other.advancePercent == advancePercent) &&
+            (identical(other.chatCount, chatCount) ||
+                other.chatCount == chatCount) &&
             (identical(other.paymentTerms, paymentTerms) ||
                 other.paymentTerms == paymentTerms) &&
             (identical(other.loadingDate, loadingDate) ||
@@ -639,6 +759,8 @@ class _$LoadModelImpl implements _LoadModel {
         runtimeType,
         id,
         supplierId,
+        isSuperLoad,
+        postedByAdminId,
         fromLocation,
         fromCity,
         fromState,
@@ -654,6 +776,10 @@ class _$LoadModelImpl implements _LoadModel {
         weight,
         price,
         priceType,
+        ratePerTon,
+        advanceRequired,
+        advancePercent,
+        chatCount,
         paymentTerms,
         loadingDate,
         notes,
@@ -686,6 +812,8 @@ abstract class _LoadModel implements LoadModel {
   const factory _LoadModel(
           {required final String id,
           @JsonKey(name: 'supplier_id') required final String supplierId,
+          @JsonKey(name: 'is_super_load') final bool isSuperLoad,
+          @JsonKey(name: 'posted_by_admin_id') final String? postedByAdminId,
           @JsonKey(name: 'from_location') required final String fromLocation,
           @JsonKey(name: 'from_city') required final String fromCity,
           @JsonKey(name: 'from_state') final String? fromState,
@@ -702,6 +830,10 @@ abstract class _LoadModel implements LoadModel {
           final double? weight,
           final double? price,
           @JsonKey(name: 'price_type') final String priceType,
+          @JsonKey(name: 'rate_per_ton') final double? ratePerTon,
+          @JsonKey(name: 'advance_required') final bool advanceRequired,
+          @JsonKey(name: 'advance_percent') final int advancePercent,
+          @JsonKey(name: 'chat_count') final int chatCount,
           @JsonKey(name: 'payment_terms') final String? paymentTerms,
           @JsonKey(name: 'loading_date') final DateTime? loadingDate,
           final String? notes,
@@ -724,6 +856,12 @@ abstract class _LoadModel implements LoadModel {
   @override
   @JsonKey(name: 'supplier_id')
   String get supplierId;
+  @override
+  @JsonKey(name: 'is_super_load')
+  bool get isSuperLoad;
+  @override
+  @JsonKey(name: 'posted_by_admin_id')
+  String? get postedByAdminId;
   @override
   @JsonKey(name: 'from_location')
   String get fromLocation;
@@ -767,6 +905,18 @@ abstract class _LoadModel implements LoadModel {
   @override
   @JsonKey(name: 'price_type')
   String get priceType;
+  @override
+  @JsonKey(name: 'rate_per_ton')
+  double? get ratePerTon;
+  @override
+  @JsonKey(name: 'advance_required')
+  bool get advanceRequired;
+  @override
+  @JsonKey(name: 'advance_percent')
+  int get advancePercent;
+  @override
+  @JsonKey(name: 'chat_count')
+  int get chatCount;
   @override
   @JsonKey(name: 'payment_terms')
   String? get paymentTerms;

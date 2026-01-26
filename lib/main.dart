@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'core/config/env_config.dart';
 import 'core/config/app_config.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/app_colors.dart';
+import 'core/theme/theme_mode_provider.dart';
 import 'core/utils/logger.dart';
 import 'core/router/app_router.dart';
 import 'core/services/ad_service.dart';
@@ -14,7 +16,7 @@ import 'core/services/analytics_service.dart';
 import 'core/services/offline_cache_service.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Set up error boundary for production
@@ -64,6 +66,7 @@ void main() async {
       'ENV_FILE',
       defaultValue: 'assets/env/production.env',
     );
+
     await dotenv.load(fileName: envFile);
     Logger.info('Loaded $envFile file');
     Logger.info('Environment loaded: ${EnvConfig.environment}');
@@ -126,15 +129,7 @@ void main() async {
                   ElevatedButton(
                     onPressed: () {
                       // Restart app (not perfect, but better than crash)
-                      runApp(
-                        MaterialApp(
-                          home: Scaffold(
-                            body: const Center(
-                              child: Text('Restarting...'),
-                            ),
-                          ),
-                        ),
-                      );
+                      SystemNavigator.pop();
                       // In a real app, you'd use a proper restart mechanism
                     },
                     child: const Text('Restart App'),
@@ -176,12 +171,14 @@ class TransfortApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
       title: AppConfig.appName,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
       routerConfig: router,
     );
   }

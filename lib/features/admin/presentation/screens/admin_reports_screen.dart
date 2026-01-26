@@ -4,6 +4,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../providers/admin_reports_provider.dart';
+import '../../../../shared/widgets/admin/admin_app_bar.dart';
 import '../../data/models/user_report_model.dart';
 
 class AdminReportsScreen extends ConsumerStatefulWidget {
@@ -26,8 +27,10 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
     final state = ref.watch(adminReportsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Reports & Moderation'),
+      appBar: AdminAppBar(
+        title: 'User Reports & Moderation',
+        subtitle: 'Review and moderate user reports',
+        showLogo: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -37,6 +40,7 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                           ? null
                           : state.currentFilter,
                     ),
+            color: AppColors.textPrimary,
           ),
         ],
       ),

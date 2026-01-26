@@ -18,6 +18,7 @@ analyzer:
     unused_import: ignore
     prefer_initializing_formals: ignore
     constant_identifier_names: ignore
+    dangling_library_doc_comments: ignore
 
 linter:
   # The lint rules applied to this project can be customized in the

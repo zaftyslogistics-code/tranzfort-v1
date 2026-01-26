@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/theme_mode_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/admin_dashboard_metrics_provider.dart';
+import '../../../../shared/widgets/admin/admin_app_bar.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
@@ -12,22 +14,40 @@ class AdminDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final admin = ref.watch(authNotifierProvider).admin;
+    final themeMode = ref.watch(themeModeProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth > 1024;
     final isTablet = screenWidth > 768 && screenWidth <= 1024;
     final isMobile = screenWidth <= 768;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Dashboard'),
+      appBar: AdminAppBar(
+        title: 'Admin Dashboard',
+        subtitle: 'Welcome back, ${admin?.fullName ?? 'Admin'}',
+        showLogo: true,
         actions: [
+          IconButton(
+            tooltip: 'Theme',
+            icon: Icon(
+              themeMode == ThemeMode.system
+                  ? Icons.brightness_auto
+                  : (themeMode == ThemeMode.dark
+                      ? Icons.dark_mode
+                      : Icons.light_mode),
+            ),
+            onPressed: () => ref
+                .read(themeModeProvider.notifier)
+                .toggleFromSystem(MediaQuery.platformBrightnessOf(context)),
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => ref.read(authNotifierProvider.notifier).logout(),
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ],
       ),
-      drawer: isMobile ? _buildDrawer(context) : null,
+      drawer: isMobile ? _buildDrawer(context, ref, admin) : null,
       body: isDesktop || isTablet
           ? Row(
               children: [
@@ -35,7 +55,8 @@ class AdminDashboardScreen extends ConsumerWidget {
                 Container(
                   width: isDesktop ? 250 : 200,
                   color: AppColors.secondaryBackground,
-                  child: _buildSidebarContent(context, isDrawer: false),
+                  child:
+                      _buildSidebarContent(context, ref, admin, isDrawer: false),
                 ),
                 // Main Content
                 Expanded(child: _buildMainContent(context, ref, admin)),
@@ -46,15 +67,20 @@ class AdminDashboardScreen extends ConsumerWidget {
   }
 
   // Build mobile drawer
-  Widget _buildDrawer(BuildContext context) {
+  Widget _buildDrawer(BuildContext context, WidgetRef ref, dynamic admin) {
     return Drawer(
       backgroundColor: AppColors.secondaryBackground,
-      child: _buildSidebarContent(context, isDrawer: true),
+      child: _buildSidebarContent(context, ref, admin, isDrawer: true),
     );
   }
 
   // Build sidebar content for both drawer and desktop sidebar
-  Widget _buildSidebarContent(BuildContext context, {required bool isDrawer}) {
+  Widget _buildSidebarContent(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic admin, {
+    required bool isDrawer,
+  }) {
     return Column(
       children: [
         const SizedBox(height: AppDimensions.xl),
@@ -106,6 +132,24 @@ class AdminDashboardScreen extends ConsumerWidget {
             context.push('/admin/loads');
           },
         ),
+        if (admin?.isSuperAdmin ?? false) ...[
+          _SidebarItem(
+            icon: Icons.star_border,
+            label: 'Super Loads',
+            onTap: () {
+              if (isDrawer) Navigator.of(context).pop();
+              context.push('/admin/super-loads');
+            },
+          ),
+          _SidebarItem(
+            icon: Icons.add_circle_outline,
+            label: 'Create Super Load',
+            onTap: () {
+              if (isDrawer) Navigator.of(context).pop();
+              context.push('/admin/super-loads/create-step1');
+            },
+          ),
+        ],
         _SidebarItem(
           icon: Icons.admin_panel_settings,
           label: 'Manage Admins',
